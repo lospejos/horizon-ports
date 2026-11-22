@@ -1,7 +1,7 @@
 # SDD STATE (keep <= 20 lines)
-Feature: worldmap step 2, waypoints (plan in .sdd/features/worldmap/)
-Task: none (T14 done, CI green on 45063306458, checked in game)
-Next: T15 teleport to a waypoint (check the wasm API for running a command). Every key-adding task: check Options > Controls for conflicts (spec). M reserved for the world map. gh needs -R lospejos/horizon-ports. Game clicks (game_click_at) take GUI coords, game_ui lists widgets; game_key digit taps do not type into fields.
+Feature: none
+Task: none
+Next: run /sdd-new <feature description> (ideas: fullscreen map on M, jerky scroll fix; step 2 waypoints done, untagged)
 Blockers: none
 Open questions: none
 Last ADR: 0002
