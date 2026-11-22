@@ -1,0 +1,11 @@
+# fullmap: plan (branch worldmap-wasm, folder worldmap/)
+
+- [x] T1: Probe host limits: the `data_files` per-file size cap, whether a mod screen can draw the `mod_image` sprite full size, and whether a biome can be read at a far column (done when: the three answers are written into spec.md; covers A16, A18, A21)
+- [ ] T2: Tile store as pure logic in `tiles.rs`: 64x64 tiles, 4 bytes a column, world to tile maths, serialise/parse, memory LRU, stale rule (done when: unit tests for maths, round trip, broken input and LRU pass in CI; covers A17, A18)
+- [ ] T3: Explorer scan into the store: budget 2048 columns a tick, unknown tiles nearest first, rescan near and old (done when: unit tests for the order and budget pass; in game a walk fills tiles beyond the minimap area; covers A16, A17)
+- [ ] T4: Persistence: load a tile on demand, write dirty tiles every few seconds and on close, per world and dimension folder (done when: after a restart the tiles of the last session exist; a corrupt file is ignored; covers A18)
+- [ ] T5: Fullscreen screen on `M`: key, screen, image of the visible tiles in `mod_image`, player marker, dark unknown area, close on M/Esc/button (done when: user opens the map in game and sees explored terrain; Controls check for M; covers A15, A16)
+- [ ] T6: Pan, zoom and recentre: drag, wheel (1/2/4/8), centre button and key; the view redraws only when it changes (done when: user pans and zooms without lag; covers A19)
+- [ ] T7: Waypoints on the map: draw them, click opens the edit screen, right click makes one at the cursor (done when: user makes and edits a waypoint from the map; covers A20)
+- [ ] T8: Cursor info and teleport: X Z Y (and biome if T1 says possible) under the cursor, click then Teleport sends `/tp @s` same dimension only (done when: user lands at the clicked point; covers A21, A22)
+- [ ] T9: README, version 0.3.0 (done when: README describes M, the cache and its disk use; tag only on the user's word; covers A15-A22)
