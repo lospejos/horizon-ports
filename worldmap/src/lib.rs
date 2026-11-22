@@ -53,6 +53,10 @@ struct State {
     want_close: bool,
     /// A teleport asked by a screen button; the next client tick sends it (input hooks only read).
     tp: Option<[i32; 3]>,
+    /// That teleport came from a map click, whose stored height may be stale or of unloaded terrain.
+    tp_map: bool,
+    /// After a map teleport: column to put on the real surface once it is loaded, and ticks waited.
+    settle: Option<(i32, i32, u32)>,
     /// Explored terrain of the world and dimension in `scope` (ADR 0003), kept on disk.
     store: tiles::Store,
     /// Overview of every tile seen in `scope` (ADR 0004).
@@ -104,6 +108,8 @@ impl Default for Mod {
             back_map: None,
             want_close: false,
             tp: None,
+            tp_map: false,
+            settle: None,
             store: tiles::Store::new(tiles::CAPACITY),
             mip: tiles::Mip::new(),
             scope: (None, String::new()),
@@ -278,6 +284,7 @@ fn screen_input(m: &Mutex<State>, host: &dyn ClientHost, input: impl FnOnce(&mut
     s.want_close |= act.close;
     if act.teleport.is_some() {
         s.tp = act.teleport;
+        s.tp_map = matches!(s.view, Some(View::Map(_)));
         s.want_close = true;
     }
     if outcome.handled() { Flow::Cancel } else { Flow::Continue }
@@ -473,6 +480,21 @@ impl Hooks for Mod {
             let cmd = format!("/tp @s {:.1} {y} {:.1}", x as f64 + 0.5, z as f64 + 0.5);
             if host.send_chat(&cmd).is_err() {
                 let _ = host.chat_line(Text::translate("worldmap.wp.tp.fail", Vec::new()));
+            }
+            // The player falls through terrain that is not loaded yet; settle on the real surface below. The Nether has a roof, so no.
+            if std::mem::take(&mut s.tp_map) && host.dimension() != "minecraft:the_nether" {
+                s.settle = Some((x, z, 0));
+            }
+        }
+        if let Some((x, z, waited)) = s.settle {
+            let h: &dyn ClientHost = &*host;
+            let base: &dyn Host = h;
+            let loaded = h.camera().is_some_and(|c| h.level(h.dimension()).and_then(|l| l.client_biome(base, [x, c.position[1].floor() as i32, z])).is_some());
+            if loaded || waited >= 200 {
+                s.settle = None;
+                let _ = host.send_chat(&format!("/execute positioned {:.1} 0 {:.1} positioned over motion_blocking run tp @s ~ ~ ~", x as f64 + 0.5, z as f64 + 0.5));
+            } else {
+                s.settle = Some((x, z, waited + 1));
             }
         }
         // The key counts only while no screen is open.
