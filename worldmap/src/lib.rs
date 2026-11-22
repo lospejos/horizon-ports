@@ -204,9 +204,7 @@ impl Hooks for Mod {
             SettingSpec::choice("scale", "worldmap.setting.scale", ["worldmap.scale.1", "worldmap.scale.2", "worldmap.scale.4"], 0),
             SettingSpec::choice("shape", "worldmap.setting.shape", ["worldmap.shape.square", "worldmap.shape.round"], 0),
         ];
-        if let Err(e) = registrar.register_key_mapping(KeyRegistration::new("waypoints", "key.keyboard.b").label("worldmap.key.waypoints")) {
-            eprintln!("[worldmap] key refused: {e:?}");
-        }
+        registrar.register_key_mapping(KeyRegistration::new("waypoints", "key.keyboard.b").label("worldmap.key.waypoints"));
         for s in settings {
             if let Err(e) = registrar.register_setting(s) {
                 eprintln!("[worldmap] setting refused: {e:?}");
