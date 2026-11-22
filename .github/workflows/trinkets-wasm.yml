@@ -1,0 +1,36 @@
+name: trinkets-wasm
+
+# Push a tag like `trinkets-wasm-v0.5.0` to build trinkets.hmod (WebAssembly) and attach it to a release.
+on:
+  push:
+    tags: ["trinkets-wasm-v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  # The SDK build pinned in trinkets/Cargo.toml ([package.metadata.horizon] sdk).
+  SDK_REV: dd67b76ff23e28c6d8e21859df600d31572f81a0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install rustup toolchain (the tool then installs the pinned one itself)
+        run: rustup toolchain install stable --profile minimal
+      - name: Install cargo-horizon-mod from the SDK commit
+        run: cargo install --locked --git https://github.com/horizon-rust/horizon --rev "$SDK_REV" cargo-horizon-mod
+      - name: Build
+        working-directory: trinkets
+        run: cargo horizon-mod build --wasm
+      - uses: actions/upload-artifact@v4
+        with:
+          name: trinkets-hmod
+          path: trinkets/target/horizon-mod/trinkets.hmod
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" trinkets/target/horizon-mod/trinkets.hmod --title "$GITHUB_REF_NAME" --notes "Trinkets, WebAssembly build: no worn-totem save and no death drop."

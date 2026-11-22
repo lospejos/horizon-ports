@@ -5,57 +5,13 @@
 # the id of a compiled mod.
 # - src/lib.rs (mod_api::Hooks): the menu (G key -> `trinkets:open` payload -> server menu,
 #   menu_clicked / menu_closed), right-click wear (right_click_item), the tooltip (item_tooltip).
-# - src/runtime.rs + mixins: the game-side halves no hook covers: a worn totem (update_totem_ready,
-#   apply_totem, as native-next/inventorytotem) and the death drop (drop_inventory, after
-#   universalgraves).
+# - WebAssembly build: no mixins, so no worn-totem save and no death drop (the worn trinkets are kept
+#   through death, `copy_on_death`).
 id = "trinkets"
 name = "Trinkets"
-version = "0.4.2"
+version = "0.5.0"
 description = "The player's extra equipment slots (Trinkets 3.7.2 by Emi, MIT)"
 authors = []
 api = "0.2"
 side = "both"
 capabilities = ["registries"]
-
-[native]
-game = "26.3"
-horizon = "dd67b76ff23e28c6d8e21859df600d31572f81a0"
-mixins = "e59da9094f0c2fdda6c627fe9eff22dec6a906f0"
-
-[[native.module]]
-id = "runtime"
-file = "crates/horizon-client/src/game.rs"
-name = "trinkets"
-source = "src/runtime.rs"
-
-# Player.dropInventory: the trinkets drop too (after universalgraves, priority 100, which puts
-# them in the grave).
-[[native.mixin]]
-id = "death"
-kind = "HEAD"
-priority = 10
-target = "horizon_client::game::item_entities::Game<'_>::drop_inventory"
-helper = "src/mixins/death.rs"
-bindings = [
-  { name = "game", ty = "&mut Game<'_>", value = "&mut *self" },
-  { name = "at", ty = "[f64; 3]", value = "at" },
-]
-
-# A worn Totem of Undying (Friends & Foes' charm slot) saves the player, after inventorytotem.
-[[native.mixin]]
-id = "totem_ready"
-kind = "HEAD"
-cancellable = true
-priority = 90
-target = "horizon_client::game::totem::Game<'_>::update_totem_ready"
-helper = "src/mixins/totem_ready.rs"
-bindings = [{ name = "game", ty = "&mut Game<'_>", value = "&mut *self" }]
-
-[[native.mixin]]
-id = "totem"
-kind = "HEAD"
-cancellable = true
-priority = 90
-target = "horizon_client::game::totem::Game<'_>::apply_totem"
-helper = "src/mixins/totem.rs"
-bindings = [{ name = "game", ty = "&mut Game<'_>", value = "&mut *self" }]

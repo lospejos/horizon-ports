@@ -11,7 +11,7 @@
 //!   off. Server menus move nothing on their own: `menu_clicked` does the moves.
 //! - A right click with a trinket wears it in the first empty slot that takes it (TrinketItem.use).
 //! - The tooltip names the slots an item fits.
-//! - The death drop and a worn totem are game-side (runtime.rs and its mixins).
+//! - WebAssembly build: no death drop and no worn-totem save (both need engine mixins).
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 
