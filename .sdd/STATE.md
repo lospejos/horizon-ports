@@ -1,7 +1,7 @@
 # SDD STATE (keep <= 20 lines)
 Feature: worldmap step 3, fullscreen map (plan in .sdd/features/fullmap/)
-Task: T6 pan/zoom/recentre (code written, ADR 0004 done, spec line added; NOT ticked: CI + in-game check pending)
-Next: finish T6: push, wait CI green (last error was f64 vs f32 in zoom, fixed), install build (gh run download <id> -R lospejos/horizon-ports -n worldmap-hmod -D C:/Users/User/AppData/Roaming/horizon/horizon-mods after deleting worldmap.hmod), play Horizon/worldmap-test, check drag, wheel 1/2/4/8, Centre button, game_screenshot; then tick T6 in plan.md and commit. After: T7 waypoints on map. Every key-adding task: Controls check. Tests: write python edit scripts to the scratchpad with the Write tool, not bash heredocs with quotes.
+Task: none (T6 done, verified in game)
+Next: T7 waypoints on map (draw, click edit, right click make). Every key-adding task: Controls check. Tests: write python edit scripts to the scratchpad with the Write tool, not bash heredocs with quotes. Game test: game_key needs action=tap; game_drag_at points="x1 y1 x2 y2"; game_scroll_at x,y,steps (neg = zoom out); game_click_button label.
 Blockers: none
 Open questions: none
 Last ADR: 0004
