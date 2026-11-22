@@ -29,3 +29,6 @@ Constraints: wasm only, no mixins (ADR 0002). SDK pin 2b77287de099c9316278ba7ac4
 - T7 check (2026-11-22, agent in game): offsets 64 and 60 moved the map and its text; reset to 4 afterwards.
 - T8: toggles info_coords (default on), info_biome, info_time (clock, 0 ticks = 06:00), info_light (block / sky at the camera block), info_dimension, off by default but coords; lines stack under the map for top corners, above it for bottom ones. Biome and dimension names use the game's translation, else the id made readable. Not done: weather, FPS, speed.
 - T8 check (2026-11-22, agent in game): all five lines shown (169 71 161, Forest, 07:28, Light 0 / 15, Overworld); toggles reset afterwards.
+- T9 check (2026-11-22): CI green on abaf385f; worldmap.hmod holds icon.png (crop of the map itself) and version 0.1.0. Not tagged: a tag needs the user's word (`worldmap-wasm-v0.1.0`).
+- Final audit (2026-11-22): A1-A10 met and checked in CI or in game (A7: LICENSE MIT, NOTICE credits Eternity World Map ideas; ADR 0001 and 0002 followed). Not verified: ru lang in game, settings kept after a restart, icon shown in the launcher.
+- Follow-ups (not in this plan): jerky scroll (draw the image offset by camera minus pass centre each frame, needs clipping); weather/FPS info lines; drag-to-move editor; fullscreen map, waypoints, radar (non-goals of step 1).
