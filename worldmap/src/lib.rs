@@ -162,6 +162,7 @@ impl Hooks for Mod {
         event.batch.fill([tx - 1.5, ty - 1.5, 3.0, 3.0], 0xFFFF2020);
         let pos = cam.position.map(|v| v.floor() as i32);
         let on = |key: &str, default: bool| host.setting_bool(key).unwrap_or(default);
+        let base: &dyn Host = host;
         let level = host.level(host.dimension());
         let name = |prefix: &str, id: String| host.translate(&format!("{prefix}.{}", id.replacen(':', ".", 1))).unwrap_or_else(|| pretty_id(&id));
         let mut lines: Vec<String> = Vec::new();
@@ -169,17 +170,17 @@ impl Hooks for Mod {
             lines.push(format!("{} {} {}", pos[0], pos[1], pos[2]));
         }
         if on("info_biome", false) {
-            if let Some(b) = level.and_then(|l| host.level_client_biome(l, pos)) {
+            if let Some(b) = level.and_then(|l| l.client_biome(base, pos)) {
                 lines.push(name("biome", b));
             }
         }
         if on("info_time", false) {
-            if let Some(t) = level.and_then(|l| host.level_day_time(l)) {
+            if let Some(t) = level.and_then(|l| l.day_time(base)) {
                 lines.push(clock(t));
             }
         }
         if on("info_light", false) {
-            let light = |layer| level.and_then(|l| host.level_brightness(l, layer, pos));
+            let light = |layer| level.and_then(|l| l.brightness(base, layer, pos));
             if let (Some(b), Some(s)) = (light(LightLayer::Block), light(LightLayer::Sky)) {
                 lines.push(format!("Light {b} / {s}"));
             }
