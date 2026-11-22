@@ -15,6 +15,15 @@ pub const FILE_LEN: usize = MAGIC.len() + COLUMNS * BYTES_PER_COLUMN;
 /// A known tile is rescanned only when older than this many ticks (30 s, ADR 0003).
 pub const RESCAN_TICKS: u64 = 600;
 
+/// Columns the explorer scans per tick (spec A17).
+pub const BUDGET: usize = 2048;
+/// How far from the player's tile unknown tiles are looked for; (2 * RADIUS + 1)^2 stays under the store capacity.
+pub const RADIUS: i32 = 7;
+/// Tiles within this distance of the player's tile count as near, so they are rescanned when old.
+pub const NEAR: i32 = 2;
+/// Tiles kept in memory (16 KB each).
+pub const CAPACITY: usize = 256;
+
 /// Tile coordinates (tile column, tile row).
 pub type Key = (i32, i32);
 
@@ -95,6 +104,11 @@ impl Tile {
         self.dirty = true;
     }
 
+    /// Stored surface level north of `(x, z)` inside the same tile; None on the tile's first row or when unscanned.
+    pub fn north_height(&self, x: i32, z: i32) -> Option<i32> {
+        (z.rem_euclid(SIDE as i32) > 0).then(|| self.get(x, z - 1)).filter(|c| c.shade != 0).map(|c| i32::from(c.height))
+    }
+
     /// True when every column has been scanned.
     pub fn is_complete(&self) -> bool {
         self.data.chunks_exact(BYTES_PER_COLUMN).all(|c| c[1] != 0)
@@ -171,6 +185,50 @@ impl Store {
     /// Keys of the dirty tiles.
     pub fn dirty(&self) -> Vec<Key> {
         self.tiles.iter().filter(|(_, (t, _))| t.dirty).map(|(k, _)| *k).collect()
+    }
+}
+
+/// The tile to scan next for a player at world column `player`: an unknown tile, or a near one that is old,
+/// nearest first. None when everything within `RADIUS` is known and fresh.
+pub fn pick(store: &Store, player: (i32, i32), now: u64) -> Option<Key> {
+    let (px, pz) = tile_of(player.0, player.1);
+    let offsets = (-RADIUS..=RADIUS).flat_map(|dz| (-RADIUS..=RADIUS).map(move |dx| (dx, dz)));
+    offsets
+        .filter(|&(dx, dz)| {
+            let near = dx.abs().max(dz.abs()) <= NEAR;
+            store.peek((px + dx, pz + dz)).is_none_or(|t| t.needs_rescan(now, near))
+        })
+        .min_by_key(|&(dx, dz)| (dx * dx + dz * dz, dz, dx))
+        .map(|(dx, dz)| (px + dx, pz + dz))
+}
+
+/// One tile being scanned, `BUDGET` columns at a time, row by row.
+pub struct Job {
+    pub key: Key,
+    next: usize,
+}
+
+impl Job {
+    pub fn new(key: Key) -> Self {
+        Self { key, next: 0 }
+    }
+
+    /// The next column indices of this tile, at most `BUDGET`.
+    pub fn batch(&mut self) -> std::ops::Range<usize> {
+        let start = self.next;
+        self.next = (start + BUDGET).min(COLUMNS);
+        start..self.next
+    }
+
+    /// True once every column was handed out.
+    pub fn done(&self) -> bool {
+        self.next >= COLUMNS
+    }
+
+    /// World column of index `i`.
+    pub fn column(&self, i: usize) -> (i32, i32) {
+        let (ox, oz) = origin(self.key);
+        (ox + (i % SIDE) as i32, oz + (i / SIDE) as i32)
     }
 }
 
@@ -280,5 +338,63 @@ mod tests {
         s.insert((1, 1), Tile::default());
         assert_eq!(s.len(), 1);
         assert!(s.peek((1, 1)).is_some());
+    }
+
+    fn scanned(at: u64) -> Tile {
+        Tile { scanned_at: Some(at), ..Tile::default() }
+    }
+
+    #[test]
+    fn pick_goes_nearest_first_and_skips_known() {
+        let mut s = Store::new(CAPACITY);
+        assert_eq!(pick(&s, (10, 10), 0), Some((0, 0)));
+        s.insert((0, 0), scanned(0));
+        assert_eq!(pick(&s, (10, 10), 1), Some((0, -1)), "tie on distance goes north first");
+        s.insert((0, -1), scanned(0));
+        assert_eq!(pick(&s, (10, 10), 1), Some((-1, 0)));
+        // negative player coordinates pick their own tile
+        assert_eq!(pick(&Store::new(1), (-1, -1), 0), Some((-1, -1)));
+    }
+
+    #[test]
+    fn pick_rescans_only_near_old_tiles_and_stops_when_all_known() {
+        let mut s = Store::new(CAPACITY);
+        for dz in -RADIUS..=RADIUS {
+            for dx in -RADIUS..=RADIUS {
+                s.insert((dx, dz), scanned(100));
+            }
+        }
+        assert_eq!(pick(&s, (0, 0), 100 + RESCAN_TICKS - 1), None);
+        assert_eq!(pick(&s, (0, 0), 100 + RESCAN_TICKS), Some((0, 0)));
+        // a player far west: the old tiles back east are not near, so only the player's own tile is rescanned
+        s.get_mut((0, 0)).unwrap().scanned_at = Some(100 + RESCAN_TICKS);
+        let far = pick(&s, (-64 * RADIUS, 0), 100 + RESCAN_TICKS);
+        assert_eq!(far, Some((-RADIUS, 0)), "the player's own tile is near and old");
+        assert!(RADIUS > NEAR);
+    }
+
+    #[test]
+    fn job_hands_out_every_column_within_budget() {
+        let mut j = Job::new((-1, 2));
+        let mut seen = 0;
+        while !j.done() {
+            let r = j.batch();
+            assert!(r.len() <= BUDGET);
+            seen += r.len();
+        }
+        assert_eq!(seen, COLUMNS);
+        assert_eq!(j.column(0), (-64, 128));
+        assert_eq!(j.column(COLUMNS - 1), (-1, 191));
+        assert_eq!(tile_of(j.column(65).0, j.column(65).1), (-1, 2));
+    }
+
+    #[test]
+    fn north_height_stays_inside_the_tile() {
+        let mut t = Tile::default();
+        t.set(5, 9, Column { color: 1, shade: 3, height: 70 });
+        assert_eq!(t.north_height(5, 10), Some(70));
+        assert_eq!(t.north_height(5, 11), None, "unscanned north");
+        assert_eq!(t.north_height(5, 64), None, "first row of a tile");
+        assert_eq!(t.north_height(5, 0), None);
     }
 }

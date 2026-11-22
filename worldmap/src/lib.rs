@@ -6,7 +6,7 @@ mod screen;
 mod tiles;
 mod waypoints;
 use mod_api::*;
-use sampler::{clamp_to_map, clock, map_rgba, pretty_id, marker_cell, slope_brightness, water_brightness, Scan, WATER};
+use sampler::{clamp_to_map, clock, map_rgba, marker_cell, pretty_id, shade, Scan};
 use mod_api::client::widgets::Outcome;
 use waypoints::{dist2, Waypoints};
 use std::collections::HashMap;
@@ -46,6 +46,13 @@ struct State {
     want_close: bool,
     /// A teleport asked by a screen button; the next client tick sends it (input hooks only read).
     tp: Option<[i32; 3]>,
+    /// Explored terrain of the world and dimension in `scope` (ADR 0003); disk comes in T4.
+    store: tiles::Store,
+    scope: (Option<String>, String),
+    /// The tile being scanned.
+    job: Option<tiles::Job>,
+    /// Client ticks since the mod started; the clock of the rescan rule.
+    tick: u64,
 }
 
 /// The two views of the waypoint screen.
@@ -82,6 +89,10 @@ impl Default for Mod {
             open: None,
             want_close: false,
             tp: None,
+            store: tiles::Store::new(tiles::CAPACITY),
+            scope: (None, String::new()),
+            job: None,
+            tick: 0,
         }))
     }
 }
@@ -92,6 +103,50 @@ fn lock(m: &Mutex<State>) -> std::sync::MutexGuard<'_, State> {
 
 /// This mod's id: names its screen and its key mapping.
 const ID: &str = "worldmap";
+
+/// Block id to map colour id, asked from the host once per block.
+fn map_color(host: &dyn ClientHost, colors: &mut HashMap<String, u8>, block: String) -> u8 {
+    if let Some(&id) = colors.get(&block) {
+        return id;
+    }
+    let id = host.block_state_id(&block).and_then(|b| host.block_states().map_color(b)).unwrap_or(0);
+    colors.insert(block, id);
+    id
+}
+
+/// Scans part of one tile into the store (spec A17): a new tile when none is running, else the next
+/// `tiles::BUDGET` columns of the running one. A column the host cannot read keeps what is stored.
+fn explore(host: &dyn ClientHost, s: &mut State, player: (i32, i32)) {
+    s.tick += 1;
+    let scope = (s.world.clone(), host.dimension().to_string());
+    if s.scope != scope {
+        s.scope = scope;
+        s.store = tiles::Store::new(tiles::CAPACITY);
+        s.job = None;
+    }
+    if s.job.is_none() {
+        s.job = tiles::pick(&s.store, player, s.tick).map(tiles::Job::new);
+    }
+    let Some(job) = s.job.as_mut() else { return };
+    let range = job.batch();
+    let cols: Vec<(i32, i32)> = range.map(|i| job.column(i)).collect();
+    let Ok(found) = host.client_far_surface(&cols) else { return };
+    if s.store.peek(job.key).is_none() {
+        // shortcut: a dirty tile pushed out here is lost until T4 writes it.
+        let _ = s.store.insert(job.key, tiles::Tile::default());
+    }
+    let Some(tile) = s.store.get_mut(job.key) else { return };
+    for (&(x, z), col) in cols.iter().zip(found) {
+        let Some(c) = col else { continue };
+        let id = map_color(host, &mut s.colors, c.block);
+        let (id, brightness, level) = shade(id, c.height, c.water, tile.north_height(x, z));
+        tile.set(x, z, tiles::Column { color: id, shade: tiles::shade_of(brightness), height: level.clamp(i16::MIN.into(), i16::MAX.into()) as i16 });
+    }
+    if job.done() {
+        tile.scanned_at = Some(s.tick);
+        s.job = None;
+    }
+}
 
 /// Writes the world's waypoint file; a failure is logged and the list stays in memory.
 fn save_waypoints(host: &dyn ClientHost, s: &State) {
@@ -257,6 +312,7 @@ impl Hooks for Mod {
         let Some(pos) = host.camera().map(|c| c.position) else { return };
         let mut s = lock(&self.0);
         load_waypoints(host, &mut s);
+        explore(host, &mut s, (pos[0].floor() as i32, pos[2].floor() as i32));
         let range = s.scan.batch(BUDGET);
         if range.start == 0 {
             s.centre = (pos[0].floor() as i32, pos[2].floor() as i32);
@@ -268,26 +324,12 @@ impl Hooks for Mod {
         for (i, col) in range.clone().zip(found) {
             let px = match col {
                 Some(c) => {
-                    let id = match s.colors.get(&c.block) {
-                        Some(&id) => id,
-                        None => {
-                            let id = host.block_state_id(&c.block).and_then(|b| host.block_states().map_color(b)).unwrap_or(0);
-                            s.colors.insert(c.block, id);
-                            id
-                        }
-                    };
-                    match c.water {
-                        Some(w) => {
-                            s.heights[i as usize] = Some(w);
-                            map_rgba(WATER, water_brightness(w - c.height))
-                        }
-                        None => {
-                            s.heights[i as usize] = Some(c.height);
-                            // Row 0 and an unread north neighbour stay flat.
-                            let north = i.checked_sub(SIDE).and_then(|n| s.heights[n as usize]);
-                            map_rgba(id, slope_brightness(c.height, north))
-                        }
-                    }
+                    let id = map_color(host, &mut s.colors, c.block);
+                    // Row 0 and an unread north neighbour stay flat.
+                    let north = i.checked_sub(SIDE).and_then(|n| s.heights[n as usize]);
+                    let (id, brightness, level) = shade(id, c.height, c.water, north);
+                    s.heights[i as usize] = Some(level);
+                    map_rgba(id, brightness)
                 }
                 None => {
                     s.heights[i as usize] = None;

@@ -44,6 +44,15 @@ pub fn slope_brightness(height: i32, north: Option<i32>) -> u32 {
     }
 }
 
+/// Map colour id, brightness and surface level of a far-surface column: water shows its depth, dry land its
+/// slope against the level of the column to its north.
+pub fn shade(color: u8, height: i32, water: Option<i32>, north: Option<i32>) -> (u8, u32, i32) {
+    match water {
+        Some(w) => (WATER, water_brightness(w - height), w),
+        None => (color, slope_brightness(height, north), height),
+    }
+}
+
 /// Position along one map axis, in cells from the map's low edge, of world coordinate `pos` on a map
 /// centred on block `centre` with `half` cells to each side and `scale` blocks per cell.
 pub fn marker_cell(pos: f64, centre: i32, scale: i32, half: u32) -> f32 {
@@ -137,6 +146,12 @@ mod tests {
         assert_eq!(water_brightness(4), 220);
         assert_eq!(water_brightness(9), 180);
         assert_eq!(water_brightness(30), 135);
+    }
+
+    #[test]
+    fn shade_picks_water_or_slope() {
+        assert_eq!(shade(1, 60, Some(63), None), (WATER, 220, 63));
+        assert_eq!(shade(1, 70, None, Some(68)), (1, 255, 70));
     }
 
     #[test]
