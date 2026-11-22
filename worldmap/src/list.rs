@@ -16,7 +16,7 @@ pub const PAGER_Y: f32 = TOP + PAGE as f32 * ROW + 4.0;
 const BOTTOM_Y: f32 = PAGER_Y + 24.0;
 /// Name button: its offset from the left edge and its width.
 pub const NAME_DX: f32 = 30.0;
-pub const NAME_W: f32 = 198.0;
+pub const NAME_W: f32 = 168.0;
 
 #[derive(Clone, Copy)]
 pub struct Row {
@@ -26,6 +26,7 @@ pub struct Row {
     pub rect: [f32; 4],
     vis: WidgetId,
     name: WidgetId,
+    tp: WidgetId,
     del: WidgetId,
 }
 
@@ -90,7 +91,7 @@ impl List {
         let mut act = Act::default();
         let Outcome::Pressed(id) = outcome else { return act };
         let pending = self.confirm.take();
-        let row = self.ids.rows.iter().find(|r| r.vis == id || r.name == id || r.del == id).copied();
+        let row = self.ids.rows.iter().find(|r| r.vis == id || r.name == id || r.tp == id || r.del == id).copied();
         if id == self.ids.prev {
             self.page = (self.page + self.pages - 1) % self.pages;
         } else if id == self.ids.next {
@@ -105,6 +106,8 @@ impl List {
         } else if let Some(r) = row {
             if r.name == id {
                 act.open = Some(Some(r.index));
+            } else if r.tp == id {
+                act.teleport = wps.list().get(r.index).map(|w| w.pos);
             } else if r.vis == id {
                 if let Some(mut w) = wps.list().get(r.index).cloned() {
                     w.visible = !w.visible;
@@ -149,8 +152,12 @@ fn layout(v: &mut View, wps: &Waypoints) -> (Widgets, Ids, usize) {
             let vis = w.add_button(Button::new([x, y, 28.0, 20.0], label(if on { "worldmap.wp.on" } else { "worldmap.wp.off" })));
             let rect = [x + NAME_DX, y, NAME_W, 20.0];
             let name = w.add_button(Button::new(rect, Text::literal("")));
+            let same = list[index].dimension == v.dimension;
+            let mut tp = Button::new([x + 202.0, y, 28.0, 20.0], Text::literal("TP"));
+            tp.active = same;
+            let tp = w.add_button(tp);
             let del = w.add_button(Button::new([x + 232.0, y, 28.0, 20.0], Text::literal(if v.confirm == Some(index) { "?" } else { "X" })));
-            Row { index, rect, vis, name, del }
+            Row { index, rect, vis, name, tp, del }
         })
         .collect();
     let prev = w.add_button(Button::new([x, PAGER_Y, 20.0, 20.0], Text::literal("<")));

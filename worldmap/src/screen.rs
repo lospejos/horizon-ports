@@ -23,6 +23,9 @@ pub struct Screen {
     save: WidgetId,
     delete: WidgetId,
     back: WidgetId,
+    tp: WidgetId,
+    /// Dimension of the waypoint shown (the current one for a new waypoint).
+    wp_dim: String,
     /// The waypoint being edited; None is a new one.
     index: Option<usize>,
     /// Delete was pressed once and waits for a second press.
@@ -42,6 +45,8 @@ pub struct Act {
     pub open: Option<Option<usize>>,
     /// Go from the edit screen back to the list.
     pub back: bool,
+    /// Teleport the player here (same dimension; the mod sends the command).
+    pub teleport: Option<[i32; 3]>,
 }
 
 fn label(key: &str) -> Text {
@@ -73,8 +78,9 @@ impl Screen {
             .collect();
         let save = w.add_button(Button::new([x, 248.0, 98.0, 20.0], label("worldmap.wp.save")));
         let delete = w.add_button(Button::new([x + 102.0, 248.0, 98.0, 20.0], label("worldmap.wp.delete")));
-        let back = w.add_button(Button::new([x, 273.0, 200.0, 20.0], label("worldmap.wp.back")));
-        let mut s = Self { widgets: w, name, xyz, hex, swatches, icon_buttons, color: DEFAULT_COLOR, icon: icons::canonical(""), save, delete, back, index: None, confirm: false, here, dimension };
+        let tp = w.add_button(Button::new([x, 273.0, 98.0, 20.0], label("worldmap.wp.tp")));
+        let back = w.add_button(Button::new([x + 102.0, 273.0, 98.0, 20.0], label("worldmap.wp.back")));
+        let mut s = Self { widgets: w, name, xyz, hex, swatches, icon_buttons, color: DEFAULT_COLOR, icon: icons::canonical(""), save, delete, back, tp, wp_dim: String::new(), index: None, confirm: false, here, dimension };
         s.show(index, wps);
         s
     }
@@ -92,8 +98,10 @@ impl Screen {
     fn show(&mut self, i: Option<usize>, wps: &Waypoints) {
         self.index = i;
         self.confirm = false;
+        self.wp_dim = self.dimension.clone();
         let (name, pos) = match i.and_then(|i| wps.list().get(i)) {
             Some(w) => {
+                self.wp_dim = w.dimension.clone();
                 self.color = w.color;
                 self.icon = icons::canonical(&w.icon);
                 (w.name.clone(), w.pos)
@@ -208,6 +216,10 @@ impl Screen {
                 act.save = true;
                 act.back = true;
             }
+        } else if id == self.tp {
+            if self.wp_dim == self.dimension {
+                act.teleport = self.coords();
+            }
         } else if id == self.back {
             act.back = true;
         }
@@ -217,8 +229,12 @@ impl Screen {
     /// Save is greyed out while a coordinate is not a number.
     pub fn refresh(&mut self) {
         let ok = self.coords().is_some();
+        let same = self.wp_dim == self.dimension;
         if let Some(b) = self.widgets.button_mut(self.save) {
             b.active = ok;
+        }
+        if let Some(b) = self.widgets.button_mut(self.tp) {
+            b.active = ok && same;
         }
     }
 }

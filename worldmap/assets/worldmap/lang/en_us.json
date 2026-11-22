@@ -37,5 +37,7 @@
   "worldmap.wp.sort.created": "Sort: age",
   "worldmap.wp.sort.name": "Sort: name",
   "worldmap.wp.sort.distance": "Sort: dist.",
-  "worldmap.wp.icon": "Icon"
+  "worldmap.wp.icon": "Icon",
+  "worldmap.wp.tp": "Teleport",
+  "worldmap.wp.tp.fail": "Could not send the teleport command."
 }

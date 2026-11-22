@@ -43,6 +43,8 @@ struct State {
     open: Option<Option<usize>>,
     /// A button asked to close the screen; the next client tick does it (input hooks only read).
     want_close: bool,
+    /// A teleport asked by a screen button; the next client tick sends it (input hooks only read).
+    tp: Option<[i32; 3]>,
 }
 
 /// The two views of the waypoint screen.
@@ -78,6 +80,7 @@ impl Default for Mod {
             view: None,
             open: None,
             want_close: false,
+            tp: None,
         }))
     }
 }
@@ -125,6 +128,10 @@ fn screen_input(m: &Mutex<State>, host: &dyn ClientHost, input: impl FnOnce(&mut
         s.open = act.open;
     }
     s.want_close |= act.close;
+    if act.teleport.is_some() {
+        s.tp = act.teleport;
+        s.want_close = true;
+    }
     if outcome.handled() { Flow::Cancel } else { Flow::Continue }
 }
 
@@ -227,6 +234,13 @@ impl Hooks for Mod {
         let mut s = lock(&self.0);
         if std::mem::take(&mut s.want_close) {
             host.mod_screen_close(ID);
+        }
+        if let Some([x, y, z]) = s.tp.take() {
+            // Block centre; the server answers a missing permission in chat.
+            let cmd = format!("/tp @s {:.1} {y} {:.1}", x as f64 + 0.5, z as f64 + 0.5);
+            if host.send_chat(&cmd).is_err() {
+                let _ = host.chat_line(Text::translate("worldmap.wp.tp.fail", Vec::new()));
+            }
         }
         // The key counts only while no screen is open.
         if host.consume_click(ID, "waypoints") {

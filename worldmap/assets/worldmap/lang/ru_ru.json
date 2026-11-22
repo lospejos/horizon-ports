@@ -37,5 +37,7 @@
   "worldmap.wp.sort.created": "Порядок: дата",
   "worldmap.wp.sort.name": "Порядок: имя",
   "worldmap.wp.sort.distance": "Порядок: даль",
-  "worldmap.wp.icon": "Значок"
+  "worldmap.wp.icon": "Значок",
+  "worldmap.wp.tp": "Телепорт",
+  "worldmap.wp.tp.fail": "Не удалось отправить команду телепорта."
 }
