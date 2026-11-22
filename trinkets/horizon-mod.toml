@@ -9,7 +9,7 @@
 #   through death, `copy_on_death`).
 id = "trinkets"
 name = "Trinkets"
-version = "0.5.0"
+version = "0.5.1"
 description = "The player's extra equipment slots (Trinkets 3.7.2 by Emi, MIT)"
 authors = []
 api = "0.2"

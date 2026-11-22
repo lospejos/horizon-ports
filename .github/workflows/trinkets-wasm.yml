@@ -11,13 +11,24 @@ permissions:
 
 env:
   # The SDK build pinned in trinkets/Cargo.toml ([package.metadata.horizon] sdk).
-  SDK_REV: dd67b76ff23e28c6d8e21859df600d31572f81a0
+  SDK_REV: 2b77287de099c9316278ba7ac4d83590fdb7ef30
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+      - uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/bin
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.rustup
+            trinkets/target
+            trinkets/.horizon
+          key: trinkets-wasm-${{ env.SDK_REV }}-${{ hashFiles('trinkets/Cargo.lock') }}
+          restore-keys: trinkets-wasm-${{ env.SDK_REV }}-
       - name: Install rustup toolchain (the tool then installs the pinned one itself)
         run: rustup toolchain install stable --profile minimal
       - name: Install cargo-horizon-mod from the SDK commit
@@ -25,7 +36,7 @@ jobs:
       - name: Build
         working-directory: trinkets
         run: cargo horizon-mod build --wasm
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: trinkets-hmod
           path: trinkets/target/horizon-mod/trinkets.hmod
