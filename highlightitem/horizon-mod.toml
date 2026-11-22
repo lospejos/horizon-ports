@@ -1,0 +1,13 @@
+# highlightitem: HighLightItem 3.1.0 (elmital, GPL-3.0) for Horizon, as a WebAssembly mod.
+# Over an item in an inventory or container screen, every slot holding a matching item is lit.
+# - src/lib.rs (mod_api::Hooks): `screen_render_foreground` draws the highlights, `input_key` handles the
+#   toggle and comparator keys; the options are Horizon settings (Options > Mods) and key mappings.
+# - Not ported: the colour-picker screen, /highlightitem commands and ModMenu (use Options > Mods),
+#   notifications, the keybind that colours the hovered slot.
+id = "highlightitem"
+name = "HighLightItem"
+version = "0.1.0"
+description = "Highlights inventory items similar to the one hovered over (HighLightItem by elmital)"
+authors = []
+api = "0.2"
+side = "client"

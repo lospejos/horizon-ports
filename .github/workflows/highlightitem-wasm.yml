@@ -1,0 +1,51 @@
+name: highlightitem-wasm
+
+# Push a tag like `highlightitem-wasm-v0.1.0` to build highlightitem.hmod (WebAssembly) and attach it to a release.
+on:
+  push:
+    tags: ["highlightitem-wasm-v*"]
+    # A push to the branch builds the .hmod as an artifact (no release): the compile check.
+    branches: ["highlightitem-wasm"]
+    paths: ["highlightitem/**", ".github/workflows/highlightitem-wasm.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  # The SDK build pinned in highlightitem/Cargo.toml ([package.metadata.horizon] sdk).
+  SDK_REV: 2b77287de099c9316278ba7ac4d83590fdb7ef30
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/bin
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.rustup
+            highlightitem/target
+            highlightitem/.horizon
+          key: highlightitem-wasm-${{ env.SDK_REV }}-${{ hashFiles('highlightitem/Cargo.lock') }}
+          restore-keys: highlightitem-wasm-${{ env.SDK_REV }}-
+      - name: Install rustup toolchain (the tool then installs the pinned one itself)
+        run: rustup toolchain install stable --profile minimal
+      - name: Install cargo-horizon-mod from the SDK commit
+        run: cargo install --locked --git https://github.com/horizon-rust/horizon --rev "$SDK_REV" cargo-horizon-mod
+      - name: Build
+        working-directory: highlightitem
+        run: cargo horizon-mod build --wasm
+      - uses: actions/upload-artifact@v7
+        with:
+          name: highlightitem-hmod
+          path: highlightitem/target/horizon-mod/highlightitem.hmod
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" highlightitem/target/horizon-mod/highlightitem.hmod --title "$GITHUB_REF_NAME" --notes "HighLightItem, WebAssembly build."
