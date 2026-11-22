@@ -1,12 +1,13 @@
 //! Worldmap for Horizon: a minimap drawn over the GUI.
 mod icons;
+mod list;
 mod sampler;
 mod screen;
 mod waypoints;
 use mod_api::*;
 use sampler::{clamp_to_map, clock, map_rgba, pretty_id, marker_cell, slope_brightness, water_brightness, Scan, WATER};
 use mod_api::client::widgets::Outcome;
-use waypoints::Waypoints;
+use waypoints::{dist2, Waypoints};
 use std::collections::HashMap;
 use std::sync::Mutex;
 
@@ -36,10 +37,27 @@ struct State {
     /// Waypoints of the world in `world` (the key their file is named by).
     waypoints: Waypoints,
     world: Option<String>,
-    /// The waypoint screen while it is open.
-    screen: Option<screen::Screen>,
+    /// The waypoint screen while it is open; None builds the list when the screen draws.
+    view: Option<View>,
+    /// The list asked to open the edit screen (needs the screen width, known when drawing).
+    open: Option<Option<usize>>,
     /// A button asked to close the screen; the next client tick does it (input hooks only read).
     want_close: bool,
+}
+
+/// The two views of the waypoint screen.
+enum View {
+    List(list::List),
+    Edit(screen::Screen),
+}
+
+impl View {
+    fn widgets(&mut self) -> &mut mod_api::client::widgets::Widgets {
+        match self {
+            View::List(l) => &mut l.widgets,
+            View::Edit(e) => &mut e.widgets,
+        }
+    }
 }
 
 struct Mod(Mutex<State>);
@@ -57,7 +75,8 @@ impl Default for Mod {
             ready: false,
             waypoints: Waypoints::default(),
             world: None,
-            screen: None,
+            view: None,
+            open: None,
             want_close: false,
         }))
     }
@@ -86,12 +105,24 @@ fn screen_input(m: &Mutex<State>, host: &dyn ClientHost, input: impl FnOnce(&mut
     }
     let mut guard = lock(m);
     let s = &mut *guard;
-    let Some(screen) = s.screen.as_mut() else { return Flow::Continue };
-    let outcome = input(&mut screen.widgets);
-    let act = screen.act(outcome, &mut s.waypoints);
-    screen.refresh();
+    let Some(view) = s.view.as_mut() else { return Flow::Continue };
+    let outcome = input(view.widgets());
+    let act = match view {
+        View::List(l) => l.act(outcome, &mut s.waypoints),
+        View::Edit(e) => {
+            let act = e.act(outcome, &mut s.waypoints);
+            e.refresh();
+            act
+        }
+    };
     if act.save {
         save_waypoints(host, s);
+    }
+    if act.back {
+        s.view = None;
+    }
+    if act.open.is_some() {
+        s.open = act.open;
     }
     s.want_close |= act.close;
     if outcome.handled() { Flow::Cancel } else { Flow::Continue }
@@ -118,6 +149,78 @@ fn load_waypoints(host: &dyn ClientHost, s: &mut State) {
     s.world = key;
 }
 
+fn draw_edit(host: &dyn ClientHost, event: &mut ScreenRenderPostEvent<'_>, screen: &mut screen::Screen, width: f32) {
+    let x = (width / 2.0 - 100.0).floor();
+    event.draw.fill([x - 6.0, 20.0, 212.0, 280.0], 0x80000000);
+    let tr = |key: &str, fallback: &str| host.translate(key).unwrap_or_else(|| fallback.to_owned());
+    let title = tr(if screen.is_new() { "worldmap.wp.fresh" } else { "worldmap.wp.edit" }, "Waypoint");
+    let tw = event.draw.text_width(&title);
+    event.draw.text(&title, [x + (200.0 - tw) / 2.0, 36.0], 0xFFFFFFFF, true);
+    for (text, dx, y) in screen::Screen::CAPTIONS {
+        let text = match text {
+            "" => tr("worldmap.wp.name", "Name"),
+            "worldmap.wp.colour" => tr(text, "Colour"),
+            "worldmap.wp.icon" => tr(text, "Icon"),
+            _ => text.to_owned(),
+        };
+        event.draw.text(&text, [x + dx, y], 0xFFA0A0A0, true);
+    }
+    // A refused label is not drawn; the screen stays usable.
+    let _ = screen.widgets.draw(&mut *event.draw, host, event.screen.mouse);
+    // Swatches, the colour preview and the icons go over their (blank) buttons.
+    let sel = |on: bool| if on { 0xFFFFFFFF } else { 0xFF000000 };
+    for (_, [bx, by, bw, bh], c) in &screen.swatches {
+        event.draw.fill([bx + 1.0, by + 1.0, bw - 2.0, bh - 2.0], sel(*c == screen.color));
+        event.draw.fill([bx + 2.0, by + 2.0, bw - 4.0, bh - 4.0], 0xFF000000 | c);
+    }
+    event.draw.fill([x + 70.0, 140.0, 20.0, 20.0], 0xFF000000);
+    event.draw.fill([x + 71.0, 141.0, 18.0, 18.0], 0xFF000000 | screen.color);
+    for (_, [bx, by, bw, bh], id) in &screen.icon_buttons {
+        if *id == screen.icon {
+            event.draw.fill([bx - 1.0, by - 1.0, bw + 2.0, bh + 2.0], 0xFFFFFFFF);
+            event.draw.fill([*bx, *by, *bw, *bh], 0xFF303030);
+        }
+        icons::draw(&mut |r, argb| event.draw.fill(r, argb), id, [bx + bw / 2.0, by + bh / 2.0], screen.color);
+    }
+}
+
+/// `text` cut with `..` so it fits `max` GUI pixels.
+fn fit(event: &mut ScreenRenderPostEvent<'_>, text: &str, max: f32) -> String {
+    if event.draw.text_width(text) <= max {
+        return text.to_owned();
+    }
+    let mut out: String = text.to_owned();
+    while !out.is_empty() && event.draw.text_width(&format!("{out}..")) > max {
+        out.pop();
+    }
+    format!("{out}..")
+}
+
+fn draw_list(host: &dyn ClientHost, event: &mut ScreenRenderPostEvent<'_>, l: &mut list::List, wps: &Waypoints) {
+    let x = l.left();
+    event.draw.fill([x - 6.0, 20.0, list::WIDTH + 12.0, list::PAGER_Y + 52.0 - 20.0], 0x80000000);
+    let title = host.translate("worldmap.wp.list").unwrap_or_else(|| "Waypoints".to_owned());
+    let tw = event.draw.text_width(&title);
+    event.draw.text(&title, [x + (list::WIDTH - tw) / 2.0, 30.0], 0xFFFFFFFF, true);
+    // A refused label is not drawn; the screen stays usable.
+    let _ = l.widgets.draw(&mut *event.draw, host, event.screen.mouse);
+    for row in l.rows() {
+        let Some(w) = wps.list().get(row.index) else { continue };
+        let [bx, by, bw, _] = row.rect;
+        icons::draw(&mut |r, argb| event.draw.fill(r, argb), &w.icon, [bx + 10.0, by + 10.0], w.color);
+        let far = if w.dimension == l.dimension { format!("{:.0} m", (dist2(w.pos, l.here) as f64).sqrt()) } else { pretty_id(&w.dimension) };
+        let fw = event.draw.text_width(&far);
+        let name = fit(event, &w.name, bw - 24.0 - fw - 6.0);
+        let tint = if w.visible { 0xFFFFFFFF } else { 0xFF808080 };
+        event.draw.text(&name, [bx + 20.0, by + 6.0], tint, true);
+        event.draw.text(&far, [bx + bw - fw - 4.0, by + 6.0], 0xFFA0A0A0, true);
+    }
+    let (page, pages) = l.page();
+    let label = format!("{page} / {pages}");
+    let lw = event.draw.text_width(&label);
+    event.draw.text(&label, [x + (list::WIDTH - lw) / 2.0, list::PAGER_Y + 6.0], 0xFFFFFFFF, true);
+}
+
 #[mod_api::horizon_mod]
 impl Hooks for Mod {
     fn client_tick_pre(&self, host: &mut dyn ClientHost, _: &mut ClientTickPreEvent) {
@@ -127,7 +230,7 @@ impl Hooks for Mod {
         }
         // The key counts only while no screen is open.
         if host.consume_click(ID, "waypoints") {
-            s.screen = None;
+            s.view = None;
             host.mod_screen_open(ID);
         }
     }
@@ -220,44 +323,15 @@ impl Hooks for Mod {
         let [width, _] = event.draw.size();
         let mut guard = lock(&self.0);
         let s = &mut *guard;
-        let screen = s.screen.get_or_insert_with(|| {
-            let here = host.camera().map_or([0; 3], |c| c.position.map(|v| v.floor() as i32));
-            screen::Screen::new(width, here, host.dimension().to_string())
-        });
-        let x = (width / 2.0 - 100.0).floor();
-        event.draw.fill([x - 6.0, 20.0, 212.0, 280.0], 0x80000000);
-        let tr = |key: &str, fallback: &str| host.translate(key).unwrap_or_else(|| fallback.to_owned());
-        let title = match screen.number() {
-            Some(n) => format!("{n} / {}", s.waypoints.list().len()),
-            None => tr("worldmap.wp.fresh", "New waypoint"),
-        };
-        let tw = event.draw.text_width(&title);
-        event.draw.text(&title, [x + (200.0 - tw) / 2.0, 36.0], 0xFFFFFFFF, true);
-        for (text, dx, y) in screen::Screen::CAPTIONS {
-            let text = match text {
-                "" => tr("worldmap.wp.name", "Name"),
-                "worldmap.wp.colour" => tr(text, "Colour"),
-                "worldmap.wp.icon" => tr(text, "Icon"),
-                _ => text.to_owned(),
-            };
-            event.draw.text(&text, [x + dx, y], 0xFFA0A0A0, true);
+        let here = host.camera().map_or([0; 3], |c| c.position.map(|v| v.floor() as i32));
+        let dimension = host.dimension().to_string();
+        if let Some(i) = s.open.take() {
+            s.view = Some(View::Edit(screen::Screen::new(width, here, dimension.clone(), i, &s.waypoints)));
         }
-        // A refused label is not drawn; the screen stays usable.
-        let _ = screen.widgets.draw(&mut *event.draw, host, event.screen.mouse);
-        // Swatches, the colour preview and the icons go over their (blank) buttons.
-        let sel = |on: bool| if on { 0xFFFFFFFF } else { 0xFF000000 };
-        for (_, [bx, by, bw, bh], c) in &screen.swatches {
-            event.draw.fill([bx + 1.0, by + 1.0, bw - 2.0, bh - 2.0], sel(*c == screen.color));
-            event.draw.fill([bx + 2.0, by + 2.0, bw - 4.0, bh - 4.0], 0xFF000000 | c);
-        }
-        event.draw.fill([x + 70.0, 140.0, 20.0, 20.0], 0xFF000000);
-        event.draw.fill([x + 71.0, 141.0, 18.0, 18.0], 0xFF000000 | screen.color);
-        for (_, [bx, by, bw, bh], id) in &screen.icon_buttons {
-            if *id == screen.icon {
-                event.draw.fill([bx - 1.0, by - 1.0, bw + 2.0, bh + 2.0], 0xFFFFFFFF);
-                event.draw.fill([*bx, *by, *bw, *bh], 0xFF303030);
-            }
-            icons::draw(&mut |r, argb| event.draw.fill(r, argb), id, [bx + bw / 2.0, by + bh / 2.0], screen.color);
+        let view = s.view.get_or_insert_with(|| View::List(list::List::new(width, here, dimension, &s.waypoints)));
+        match view {
+            View::Edit(screen) => draw_edit(host, event, screen, width),
+            View::List(l) => draw_list(host, event, l, &s.waypoints),
         }
     }
 

@@ -29,5 +29,13 @@
   "worldmap.wp.name": "Название",
   "worldmap.wp.fresh": "Новая метка",
   "worldmap.wp.colour": "Цвет (RRGGBB)",
+  "worldmap.wp.back": "Назад",
+  "worldmap.wp.edit": "Правка метки",
+  "worldmap.wp.list": "Метки",
+  "worldmap.wp.on": "Вкл",
+  "worldmap.wp.off": "Выкл",
+  "worldmap.wp.sort.created": "Порядок: дата",
+  "worldmap.wp.sort.name": "Порядок: имя",
+  "worldmap.wp.sort.distance": "Порядок: даль",
   "worldmap.wp.icon": "Значок"
 }

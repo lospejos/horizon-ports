@@ -1,6 +1,6 @@
-//! The waypoint screen (T11): browse waypoints with the arrows, make a new one, edit, delete.
+//! The waypoint edit screen (T11): edit one waypoint or make a new one; the list screen (T14) opens it.
 use crate::icons;
-use crate::waypoints::{parse_color, step, Waypoint, Waypoints, PALETTE};
+use crate::waypoints::{parse_color, Waypoint, Waypoints, PALETTE};
 use mod_api::client::widgets::{Button, Outcome, TextField, WidgetId, Widgets};
 use mod_api::Text;
 
@@ -20,12 +20,9 @@ pub struct Screen {
     /// Colour and icon shown on the screen; Save writes them.
     pub color: u32,
     pub icon: &'static str,
-    prev: WidgetId,
-    next: WidgetId,
-    new: WidgetId,
     save: WidgetId,
     delete: WidgetId,
-    close: WidgetId,
+    back: WidgetId,
     /// The waypoint being edited; None is a new one.
     index: Option<usize>,
     /// Delete was pressed once and waits for a second press.
@@ -41,6 +38,10 @@ pub struct Act {
     /// The list changed: write the file.
     pub save: bool,
     pub close: bool,
+    /// Go from the list to the edit screen: Some(None) is a new waypoint.
+    pub open: Option<Option<usize>>,
+    /// Go from the edit screen back to the list.
+    pub back: bool,
 }
 
 fn label(key: &str) -> Text {
@@ -48,12 +49,10 @@ fn label(key: &str) -> Text {
 }
 
 impl Screen {
-    /// Widgets centred on a screen `width` GUI pixels wide, a new waypoint at `here`.
-    pub fn new(width: f32, here: [i32; 3], dimension: String) -> Self {
+    /// Widgets centred on a screen `width` GUI pixels wide, editing waypoint `index` (None: a new one at `here`).
+    pub fn new(width: f32, here: [i32; 3], dimension: String, index: Option<usize>, wps: &Waypoints) -> Self {
         let x = (width / 2.0 - 100.0).floor();
         let mut w = Widgets::new();
-        let prev = w.add_button(Button::new([x, 30.0, 20.0, 20.0], Text::literal("<")));
-        let next = w.add_button(Button::new([x + 180.0, 30.0, 20.0, 20.0], Text::literal(">")));
         let name = w.add_text_field(TextField::new([x, 70.0, 200.0, 20.0], 32));
         let xyz = [0.0, 68.0, 136.0].map(|dx| w.add_text_field(TextField::new([x + dx, 105.0, 64.0, 20.0], 9)));
         let hex = w.add_text_field(TextField::new([x, 140.0, 64.0, 20.0], 6));
@@ -72,12 +71,11 @@ impl Screen {
                 (w.add_button(Button::new(rect, Text::literal(""))), rect, id)
             })
             .collect();
-        let new = w.add_button(Button::new([x, 248.0, 98.0, 20.0], label("worldmap.wp.new")));
-        let save = w.add_button(Button::new([x + 102.0, 248.0, 98.0, 20.0], label("worldmap.wp.save")));
-        let delete = w.add_button(Button::new([x, 273.0, 98.0, 20.0], label("worldmap.wp.delete")));
-        let close = w.add_button(Button::new([x + 102.0, 273.0, 98.0, 20.0], label("worldmap.wp.close")));
-        let mut s = Self { widgets: w, name, xyz, hex, swatches, icon_buttons, color: DEFAULT_COLOR, icon: icons::canonical(""), prev, next, new, save, delete, close, index: None, confirm: false, here, dimension };
-        s.show(None, &Waypoints::default());
+        let save = w.add_button(Button::new([x, 248.0, 98.0, 20.0], label("worldmap.wp.save")));
+        let delete = w.add_button(Button::new([x + 102.0, 248.0, 98.0, 20.0], label("worldmap.wp.delete")));
+        let back = w.add_button(Button::new([x, 273.0, 200.0, 20.0], label("worldmap.wp.back")));
+        let mut s = Self { widgets: w, name, xyz, hex, swatches, icon_buttons, color: DEFAULT_COLOR, icon: icons::canonical(""), save, delete, back, index: None, confirm: false, here, dimension };
+        s.show(index, wps);
         s
     }
 
@@ -85,9 +83,9 @@ impl Screen {
     pub const CAPTIONS: [(&'static str, f32, f32); 6] =
         [("", 0.0, 59.0), ("X", 0.0, 94.0), ("Y", 68.0, 94.0), ("Z", 136.0, 94.0), ("worldmap.wp.colour", 0.0, 129.0), ("worldmap.wp.icon", 0.0, 207.0)];
 
-    /// The waypoint number for the header, 1-based; None for a new one.
-    pub fn number(&self) -> Option<usize> {
-        self.index.map(|i| i + 1)
+    /// True while the screen shows a new waypoint, not a saved one.
+    pub fn is_new(&self) -> bool {
+        self.index.is_none()
     }
 
     /// Fills the fields from waypoint `i`, or blank for a new one at the player.
@@ -172,18 +170,13 @@ impl Screen {
             }
             return act;
         };
-        if id == self.prev || id == self.next {
-            let to = step(self.index, wps.list().len(), id == self.next);
-            self.show(to, wps);
-        } else if let Some(&(_, _, c)) = self.swatches.iter().find(|b| b.0 == id) {
+        if let Some(&(_, _, c)) = self.swatches.iter().find(|b| b.0 == id) {
             self.color = c;
             self.set_hex();
             act.save = self.apply_style(wps);
         } else if let Some(&(_, _, i)) = self.icon_buttons.iter().find(|b| b.0 == id) {
             self.icon = i;
             act.save = self.apply_style(wps);
-        } else if id == self.new {
-            self.show(None, wps);
         } else if id == self.save {
             let Some(pos) = self.coords() else { return act };
             let typed = self.widgets.text_field(self.name).map(|f| f.value().trim().to_owned()).unwrap_or_default();
@@ -212,12 +205,11 @@ impl Screen {
                 self.set_delete_label();
             } else {
                 wps.remove(i);
-                let len = wps.list().len();
-                self.show((len > 0).then(|| i.min(len - 1)), wps);
                 act.save = true;
+                act.back = true;
             }
-        } else if id == self.close {
-            act.close = true;
+        } else if id == self.back {
+            act.back = true;
         }
         act
     }

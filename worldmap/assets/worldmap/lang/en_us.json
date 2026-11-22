@@ -29,5 +29,13 @@
   "worldmap.wp.name": "Name",
   "worldmap.wp.fresh": "New waypoint",
   "worldmap.wp.colour": "Colour (RRGGBB)",
+  "worldmap.wp.back": "Back",
+  "worldmap.wp.edit": "Edit waypoint",
+  "worldmap.wp.list": "Waypoints",
+  "worldmap.wp.on": "On",
+  "worldmap.wp.off": "Off",
+  "worldmap.wp.sort.created": "Sort: age",
+  "worldmap.wp.sort.name": "Sort: name",
+  "worldmap.wp.sort.distance": "Sort: dist.",
   "worldmap.wp.icon": "Icon"
 }

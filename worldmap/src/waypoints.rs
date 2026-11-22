@@ -129,18 +129,39 @@ pub fn parse_color(s: &str) -> Option<u32> {
     }
 }
 
-/// The waypoint shown after a step: `None` is the blank "new" entry. From a waypoint it moves to the next or
-/// previous one, wrapping; from the blank entry, forward goes to the first and back to the last.
-pub fn step(index: Option<usize>, len: usize, forward: bool) -> Option<usize> {
-    if len == 0 {
-        return None;
+/// How the list screen orders waypoints.
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
+pub enum Sort {
+    #[default]
+    Created,
+    Name,
+    Distance,
+}
+
+impl Sort {
+    pub fn next(self) -> Self {
+        match self {
+            Sort::Created => Sort::Name,
+            Sort::Name => Sort::Distance,
+            Sort::Distance => Sort::Created,
+        }
     }
-    Some(match (index, forward) {
-        (None, true) => 0,
-        (None, false) => len - 1,
-        (Some(i), true) => (i + 1) % len,
-        (Some(i), false) => (i + len - 1) % len,
-    })
+}
+
+/// Squared distance between two block positions.
+pub fn dist2(a: [i32; 3], b: [i32; 3]) -> i64 {
+    (0..3).map(|i| (i64::from(a[i]) - i64::from(b[i])).pow(2)).sum()
+}
+
+/// Indices of `list` in display order. Distance puts other dimensions last; ties keep creation order.
+pub fn order(list: &[Waypoint], sort: Sort, here: [i32; 3], dimension: &str) -> Vec<usize> {
+    let mut idx: Vec<usize> = (0..list.len()).collect();
+    match sort {
+        Sort::Created => {}
+        Sort::Name => idx.sort_by_key(|&i| list[i].name.to_lowercase()),
+        Sort::Distance => idx.sort_by_key(|&i| (list[i].dimension != dimension, dist2(list[i].pos, here))),
+    }
+    idx
 }
 
 /// A file name for a world key (a save folder or a server address): safe characters stay, the rest become `_`.
@@ -204,12 +225,13 @@ mod tests {
     }
 
     #[test]
-    fn step_wraps() {
-        assert_eq!(step(None, 0, true), None);
-        assert_eq!(step(None, 3, true), Some(0));
-        assert_eq!(step(None, 3, false), Some(2));
-        assert_eq!(step(Some(2), 3, true), Some(0));
-        assert_eq!(step(Some(0), 3, false), Some(2));
+    fn order_sorts_by_name_and_distance() {
+        let at = |name: &str, x: i32, dim: &str| Waypoint { name: name.into(), pos: [x, 0, 0], dimension: dim.into(), ..wp("") };
+        let list = [at("b", 100, "o"), at("A", 5, "n"), at("c", 10, "o"), at("d", 50, "o")];
+        assert_eq!(order(&list, Sort::Created, [0; 3], "o"), [0, 1, 2, 3]);
+        assert_eq!(order(&list, Sort::Name, [0; 3], "o"), [1, 0, 2, 3]);
+        assert_eq!(order(&list, Sort::Distance, [0; 3], "o"), [2, 3, 0, 1]);
+        assert_eq!(Sort::Distance.next(), Sort::Created);
     }
 
     #[test]
