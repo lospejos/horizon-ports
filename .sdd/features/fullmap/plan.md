@@ -6,6 +6,6 @@
 - [x] T4: Persistence: load a tile on demand, write dirty tiles every few seconds and on close, per world and dimension folder (done when: after a restart the tiles of the last session exist; a corrupt file is ignored; covers A18)
 - [x] T5: Fullscreen screen on `M`: key, screen, image of the visible tiles in `mod_image`, player marker, dark unknown area, close on M/Esc/button (done when: user opens the map in game and sees explored terrain; Controls check for M; covers A15, A16)
 - [x] T6: Pan, zoom and recentre: drag, wheel (1/2/4/8), centre button and key; the view redraws only when it changes (done when: user pans and zooms without lag; covers A19)
-- [ ] T7: Waypoints on the map: draw them, click opens the edit screen, right click makes one at the cursor (done when: user makes and edits a waypoint from the map; covers A20)
+- [x] T7: Waypoints on the map: draw them, click opens the edit screen, right click makes one at the cursor (done when: user makes and edits a waypoint from the map; covers A20)
 - [ ] T8: Cursor info and teleport: X Z Y (and biome if T1 says possible) under the cursor, click then Teleport sends `/tp @s` same dimension only (done when: user lands at the clicked point; covers A21, A22)
 - [ ] T9: README, version 0.3.0 (done when: README describes M, the cache and its disk use; tag only on the user's word; covers A15-A22)
