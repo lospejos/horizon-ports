@@ -259,8 +259,8 @@ mod tests {
 
     #[test]
     fn folder_is_a_valid_distinct_path() {
-        let a = folder("my world/..\x", "minecraft:the_nether");
-        assert!(a.split('/').all(|n| !n.is_empty() && !n.contains([':', '\', '?'])), "{a}");
+        let a = folder("my world/..\\x", "minecraft:the_nether");
+        assert!(a.split('/').all(|n| !n.is_empty() && !n.contains([':', '\\', '?'])), "{a}");
         assert_ne!(folder("w", "minecraft:overworld"), folder("w", "minecraft:the_end"));
         assert_eq!(folder("w", "d"), folder("w", "d"));
     }
