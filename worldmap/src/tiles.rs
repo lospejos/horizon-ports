@@ -1,5 +1,5 @@
 //! Explored-terrain tiles as pure logic (ADR 0003): 64x64 columns, 4 bytes a column, file format, memory LRU, stale rule.
-// shortcut: the scan, disk and screen that use these come in T3-T8, so some items are unused until then.
+// shortcut: the screen that uses some of these comes in T5-T8, so some items are unused until then.
 #![allow(dead_code)]
 
 use std::collections::HashMap;
@@ -45,6 +45,11 @@ pub fn origin(key: Key) -> (i32, i32) {
 /// File name of a tile inside its world and dimension folder.
 pub fn file_name(key: Key) -> String {
     format!("t_{}_{}.bin", key.0, key.1)
+}
+
+/// Data folder of a world and dimension (ADR 0003); the name of a tile file goes after it.
+pub fn folder(world: &str, dimension: &str) -> String {
+    format!("tiles/{}/{}", crate::waypoints::slug(world), crate::waypoints::slug(dimension))
 }
 
 /// What is stored for one column. `shade` 0 means not scanned yet; 1..=4 are the vanilla brightness steps.
@@ -250,6 +255,14 @@ mod tests {
         assert_eq!(index(-1, -1), COLUMNS - 1);
         assert_eq!(index(64, 64), 0);
         assert_eq!(file_name((-1, 2)), "t_-1_2.bin");
+    }
+
+    #[test]
+    fn folder_is_a_valid_distinct_path() {
+        let a = folder("my world/..\x", "minecraft:the_nether");
+        assert!(a.split('/').all(|n| !n.is_empty() && !n.contains([':', '\', '?'])), "{a}");
+        assert_ne!(folder("w", "minecraft:overworld"), folder("w", "minecraft:the_end"));
+        assert_eq!(folder("w", "d"), folder("w", "d"));
     }
 
     #[test]

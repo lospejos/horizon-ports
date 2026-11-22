@@ -167,9 +167,14 @@ pub fn order(list: &[Waypoint], sort: Sort, here: [i32; 3], dimension: &str) -> 
 /// A file name for a world key (a save folder or a server address): safe characters stay, the rest become `_`.
 /// The key's FNV-1a hash is appended so two keys that differ only in unsafe characters keep separate files.
 pub fn file_name(key: &str) -> String {
+    format!("waypoints-{}.txt", slug(key))
+}
+
+/// The safe-characters-plus-hash part of a file or folder name for `key`.
+pub fn slug(key: &str) -> String {
     let safe: String = key.chars().take(40).map(|c| if c.is_ascii_alphanumeric() || matches!(c, '-' | '_') { c } else { '_' }).collect();
     let hash = key.bytes().fold(0xcbf29ce484222325_u64, |h, b| (h ^ u64::from(b)).wrapping_mul(0x100000001b3));
-    format!("waypoints-{safe}-{hash:016x}.txt")
+    format!("{safe}-{hash:016x}")
 }
 
 #[cfg(test)]

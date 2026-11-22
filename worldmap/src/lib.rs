@@ -16,6 +16,8 @@ use std::sync::Mutex;
 const SIDE: u32 = 128;
 /// Columns read per tick (spec A6).
 const BUDGET: u32 = 4096;
+/// Dirty tiles are written this often (5 s).
+const FLUSH_TICKS: u64 = 100;
 /// The HUD atlas slot `native_mod_image` fills.
 /// Default gap to the screen edge in GUI pixels (the offset settings' default).
 const MARGIN: f32 = 4.0;
@@ -46,7 +48,7 @@ struct State {
     want_close: bool,
     /// A teleport asked by a screen button; the next client tick sends it (input hooks only read).
     tp: Option<[i32; 3]>,
-    /// Explored terrain of the world and dimension in `scope` (ADR 0003); disk comes in T4.
+    /// Explored terrain of the world and dimension in `scope` (ADR 0003), kept on disk.
     store: tiles::Store,
     scope: (Option<String>, String),
     /// The tile being scanned.
@@ -114,35 +116,91 @@ fn map_color(host: &dyn ClientHost, colors: &mut HashMap<String, u8>, block: Str
     id
 }
 
+/// Disk path of a tile of `scope`; None when the world is unknown (nothing is kept then).
+fn tile_path(scope: &(Option<String>, String), key: tiles::Key) -> Option<ConfigPath> {
+    let world = scope.0.as_deref()?;
+    ConfigPath::new(&format!("{}/{}", tiles::folder(world, &scope.1), tiles::file_name(key))).ok()
+}
+
+fn write_tile(host: &dyn ClientHost, scope: &(Option<String>, String), key: tiles::Key, tile: &tiles::Tile) -> bool {
+    let Some(path) = tile_path(scope, key) else { return true };
+    let ok = host.data_files().write(&path, &tile.serialize());
+    if let Err(e) = &ok {
+        eprintln!("[worldmap] tile {key:?} not saved: {e:?}");
+    }
+    ok.is_ok()
+}
+
+/// Writes every dirty tile; one that fails stays dirty for the next round.
+fn flush(host: &dyn ClientHost, s: &mut State) {
+    for key in s.store.dirty() {
+        if let Some(t) = s.store.get_mut(key) {
+            if write_tile(host, &s.scope, key, t) {
+                t.dirty = false;
+            }
+        }
+    }
+}
+
+/// Puts a tile in memory and writes the dirty ones this pushes out.
+fn put(host: &dyn ClientHost, s: &mut State, key: tiles::Key, tile: tiles::Tile) {
+    for (k, t) in s.store.insert(key, tile) {
+        write_tile(host, &s.scope, k, &t);
+    }
+}
+
 /// Scans part of one tile into the store (spec A17): a new tile when none is running, else the next
 /// `tiles::BUDGET` columns of the running one. A column the host cannot read keeps what is stored.
+/// Tiles come from disk first (spec A18) and dirty ones are written every `FLUSH_TICKS`.
 fn explore(host: &dyn ClientHost, s: &mut State, player: (i32, i32)) {
     s.tick += 1;
     let scope = (s.world.clone(), host.dimension().to_string());
     if s.scope != scope {
+        flush(host, s);
         s.scope = scope;
         s.store = tiles::Store::new(tiles::CAPACITY);
         s.job = None;
     }
-    if s.job.is_none() {
-        s.job = tiles::pick(&s.store, player, s.tick).map(tiles::Job::new);
+    // Tiles on disk count as known: load the picked one, and pick again unless it must be rescanned (few reads a tick).
+    for _ in 0..4 {
+        if s.job.is_some() {
+            break;
+        }
+        let Some(key) = tiles::pick(&s.store, player, s.tick) else { break };
+        let loaded = tile_path(&s.scope, key).and_then(|p| host.data_files().read(&p).ok()).and_then(|b| tiles::Tile::parse(&b));
+        match loaded {
+            Some(tile) => {
+                let (px, pz) = tiles::tile_of(player.0, player.1);
+                let near = (key.0 - px).abs().max((key.1 - pz).abs()) <= tiles::NEAR;
+                let rescan = tile.needs_rescan(s.tick, near);
+                put(host, s, key, tile);
+                if rescan {
+                    s.job = Some(tiles::Job::new(key));
+                }
+            }
+            None => s.job = Some(tiles::Job::new(key)),
+        }
+    }
+    if s.tick % FLUSH_TICKS == 0 {
+        flush(host, s);
     }
     let Some(job) = s.job.as_mut() else { return };
+    let key = job.key;
     let range = job.batch();
     let cols: Vec<(i32, i32)> = range.map(|i| job.column(i)).collect();
+    let done = job.done();
     let Ok(found) = host.client_far_surface(&cols) else { return };
-    if s.store.peek(job.key).is_none() {
-        // shortcut: a dirty tile pushed out here is lost until T4 writes it.
-        let _ = s.store.insert(job.key, tiles::Tile::default());
+    if s.store.peek(key).is_none() {
+        put(host, s, key, tiles::Tile::default());
     }
-    let Some(tile) = s.store.get_mut(job.key) else { return };
+    let Some(tile) = s.store.get_mut(key) else { return };
     for (&(x, z), col) in cols.iter().zip(found) {
         let Some(c) = col else { continue };
         let id = map_color(host, &mut s.colors, c.block);
         let (id, brightness, level) = shade(id, c.height, c.water, tile.north_height(x, z));
         tile.set(x, z, tiles::Column { color: id, shade: tiles::shade_of(brightness), height: level.clamp(i16::MIN.into(), i16::MAX.into()) as i16 });
     }
-    if job.done() {
+    if done {
         tile.scanned_at = Some(s.tick);
         s.job = None;
     }
@@ -309,8 +367,12 @@ impl Hooks for Mod {
         if host.setting_bool("enabled") == Some(false) {
             return;
         }
-        let Some(pos) = host.camera().map(|c| c.position) else { return };
         let mut s = lock(&self.0);
+        let Some(pos) = host.camera().map(|c| c.position) else {
+            // Out of a world (menu, disconnect): write what is left.
+            flush(host, &mut s);
+            return;
+        };
         load_waypoints(host, &mut s);
         explore(host, &mut s, (pos[0].floor() as i32, pos[2].floor() as i32));
         let range = s.scan.batch(BUDGET);
