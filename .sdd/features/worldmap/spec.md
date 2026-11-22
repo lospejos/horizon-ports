@@ -22,3 +22,4 @@ Constraints: wasm only, no mixins (ADR 0002). SDK pin 2b77287de099c9316278ba7ac4
 - In game T3 check (2026-11-22): terrain shows and follows the player, but the image moves in jumps (refresh ~5 per second, no offset between refreshes); lakes show as ocean-floor grey until T4.
 - T4 check (2026-11-22): user sees sea (depth shades) and slopes in game.
 - Settings (T5): enabled, corner (4), size 64-256 px step 16, scale 1\/2\/4 blocks per cell, shape square\/round; grid stays 128x128 cells. Scale and shape apply from the next pass (about 8 ticks), others at once. Round shape clears corner pixels in the buffer.
+- T5 check (2026-11-22, agent in game via horizon MCP, test world worldmap-test): corner, size, scale 4, shape round and enabled off each changed the live map; settings reset to defaults afterwards. Settings page: Options > Mods > Worldmap > Config.

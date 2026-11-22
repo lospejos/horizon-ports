@@ -4,7 +4,7 @@
 - [x] T2: Terrain sampler as pure logic: columns around player to RGBA buffer via client_surface_heights + map_color (done when: unit tests pass in CI; covers A2, A6)
 - [x] T3: Draw buffer with mod_image and sprite in a corner, refresh on movement (done when: user sees terrain in game and it follows the player; covers A2, A6)
 - [x] T4: Shading: water from ocean-floor vs surface heights, height difference light/dark (done when: unit tests for shading pass; user sees sea and slopes; covers A3)
-- [ ] T5: Settings enabled, corner, size, scale, shape (done when: each changes the live map; round clips via quads or mask; covers A4)
+- [x] T5: Settings enabled, corner, size, scale, shape (done when: each changes the live map; round clips via quads or mask; covers A4)
 - [ ] T6: Player marker and coordinates text (done when: visible in game; covers A5)
 - [ ] T7: Custom position: settings offset X and Y from the chosen corner, so the map can sit below the item popup (done when: user moves the map by the offsets and it stays on screen; covers A9)
 - [ ] T8: Info lines under the map, each a toggle: coordinates, biome, time of day, light level, dimension (done when: the user sees each enabled line; what the API cannot give is dropped and noted in spec; covers A10)
