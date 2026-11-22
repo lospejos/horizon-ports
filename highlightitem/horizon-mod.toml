@@ -6,7 +6,7 @@
 #   notifications, the keybind that colours the hovered slot.
 id = "highlightitem"
 name = "HighLightItem"
-version = "0.1.0"
+version = "0.1.1"
 description = "Highlights inventory items similar to the one hovered over (HighLightItem by elmital)"
 authors = []
 api = "0.2"
