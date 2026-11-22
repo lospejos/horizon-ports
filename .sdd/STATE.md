@@ -1,7 +1,7 @@
 # SDD STATE (keep <= 20 lines)
 Feature: worldmap step 2, waypoints (plan in .sdd/features/worldmap/)
-Task: T13 coded (icons.rs, screen.rs, lib.rs), waiting for CI and an in-game check, then tick plan.md
-Next: T13 custom icons and colours. Every key-adding task: check Options > Controls for conflicts (spec). M reserved for the world map. gh needs -R lospejos/horizon-ports.
+Task: none (T13 done, CI green on 45062720375, checked in game)
+Next: T14 waypoint list screen. Every key-adding task: check Options > Controls for conflicts (spec). M reserved for the world map. gh needs -R lospejos/horizon-ports. Game clicks (game_click_at) take GUI coords, game_ui lists widgets; game_key digit taps do not type into fields.
 Blockers: none
 Open questions: none
 Last ADR: 0002
