@@ -15,3 +15,4 @@ Acceptance criteria:
 - A8: README has install and update lines; package icon present.
 
 Constraints: wasm only, no mixins (ADR 0002). SDK pin 2b77287de099c9316278ba7ac4d83590fdb7ef30. No local cargo: verify in CI. No commit, push or tag without the user's word.
+- Block names come from client_far_surface (TerrainColumn: block, height, water), since no client block read exists; far terrain (LOD Distance) must be on, else columns stay empty. Map colour: block_state_id(name) then block_state_map_color.

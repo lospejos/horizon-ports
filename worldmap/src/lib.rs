@@ -1,4 +1,5 @@
 //! Worldmap for Horizon: a minimap drawn over the GUI. T1 scaffold: one test rectangle.
+mod sampler;
 use mod_api::{ClientHost, GuiRenderPostEvent, Hooks};
 
 #[derive(Default)]

@@ -1,6 +1,6 @@
 # SDD STATE (keep <= 20 lines)
 Feature: worldmap (.sdd/features/worldmap/)
-Task: none
+Task: T2 (code written, CI cargo test not yet run)
 Next: T2 terrain sampler (pure logic + unit tests; CI must run cargo test, add a step)
 Blockers: none
 Open questions: MOD_IMAGE_SIZE not read yet (check in T3); in-game check of the T1 test rectangle by the user (not done)

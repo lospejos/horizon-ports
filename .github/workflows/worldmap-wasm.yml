@@ -39,6 +39,9 @@ jobs:
       - name: Build
         working-directory: worldmap
         run: cargo horizon-mod build --wasm
+      - name: Unit tests
+        working-directory: worldmap
+        run: cargo test
       - uses: actions/upload-artifact@v7
         with:
           name: worldmap-hmod
