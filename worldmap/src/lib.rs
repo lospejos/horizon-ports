@@ -51,6 +51,8 @@ struct State {
     tp: Option<[i32; 3]>,
     /// Explored terrain of the world and dimension in `scope` (ADR 0003), kept on disk.
     store: tiles::Store,
+    /// Overview of every tile seen in `scope` (ADR 0004).
+    mip: tiles::Mip,
     scope: (Option<String>, String),
     /// The tile being scanned.
     job: Option<tiles::Job>,
@@ -97,6 +99,7 @@ impl Default for Mod {
             want_close: false,
             tp: None,
             store: tiles::Store::new(tiles::CAPACITY),
+            mip: tiles::Mip::new(),
             scope: (None, String::new()),
             job: None,
             open_map: false,
@@ -165,6 +168,7 @@ fn explore(host: &dyn ClientHost, s: &mut State, player: (i32, i32)) {
         flush(host, s);
         s.scope = scope;
         s.store = tiles::Store::new(tiles::CAPACITY);
+        s.mip.clear();
         s.job = None;
     }
     // Tiles on disk count as known: load the picked one, and pick again unless it must be rescanned (few reads a tick).
@@ -179,6 +183,7 @@ fn explore(host: &dyn ClientHost, s: &mut State, player: (i32, i32)) {
                 let (px, pz) = tiles::tile_of(player.0, player.1);
                 let near = (key.0 - px).abs().max((key.1 - pz).abs()) <= tiles::NEAR;
                 let rescan = tile.needs_rescan(s.tick, near);
+                s.mip.insert(key, tile.mip());
                 put(host, s, key, tile);
                 if rescan {
                     s.job = Some(tiles::Job::new(key));
@@ -208,6 +213,7 @@ fn explore(host: &dyn ClientHost, s: &mut State, player: (i32, i32)) {
     }
     if done {
         tile.scanned_at = Some(s.tick);
+        s.mip.insert(key, tile.mip());
         s.job = None;
     }
 }
@@ -237,7 +243,10 @@ fn screen_input(m: &Mutex<State>, host: &dyn ClientHost, input: impl FnOnce(&mut
             e.refresh();
             act
         }
-        View::Map(m) => m.act(outcome),
+        View::Map(m) => {
+            let here = host.camera().map_or((0, 0), |c| (c.position[0].floor() as i32, c.position[2].floor() as i32));
+            m.act(outcome, here)
+        }
     };
     if act.save {
         save_waypoints(host, s);
@@ -277,23 +286,28 @@ fn load_waypoints(host: &dyn ClientHost, s: &mut State) {
     s.world = key;
 }
 
-/// Reads the visible tiles that are not in memory from disk, a few a frame (spec A18); the image is made again after each batch.
+/// Reads the visible tiles that are new to the map from disk, a few a frame (spec A18, ADR 0004): at 1 block a pixel
+/// the full tile goes into memory, at larger scales only its overview is kept. The image is made again after each batch.
 fn load_view(host: &dyn ClientHost, s: &mut State) {
     let Some(View::Map(m)) = &mut s.view else { return };
+    let full = m.scale == 1;
     let missing: Vec<tiles::Key> = fullmap::visible_tiles(m.centre, m.scale, m.image.0, m.image.1)
         .into_iter()
-        .filter(|k| !m.tried.contains(k) && s.store.peek(*k).is_none())
+        .filter(|k| !m.tried.contains(&(*k, full)) && if full { s.store.peek(*k).is_none() } else { !s.mip.contains_key(k) })
         .take(fullmap::LOADS_PER_FRAME)
         .collect();
     if missing.is_empty() {
         return;
     }
-    m.tried.extend(&missing);
+    m.tried.extend(missing.iter().map(|k| (*k, full)));
     m.invalidate();
     for key in missing {
         let loaded = tile_path(&s.scope, key).and_then(|p| host.data_files().read(&p).ok()).and_then(|b| tiles::Tile::parse(&b));
         if let Some(tile) = loaded {
-            put(host, s, key, tile);
+            s.mip.insert(key, tile.mip());
+            if full {
+                put(host, s, key, tile);
+            }
         }
     }
 }
@@ -438,7 +452,7 @@ impl Hooks for Mod {
         if let Some(View::Map(m)) = s.view.as_mut().filter(|_| open) {
             // The one shared image slot belongs to the map while it is open.
             if m.stale(s.tick) {
-                let rgba = fullmap::render(&s.store, m.centre, m.scale, m.image.0, m.image.1);
+                let rgba = fullmap::render(&s.store, &s.mip, m.centre, m.scale, m.image.0, m.image.1);
                 if host.mod_image(m.image.0 as u32, m.image.1 as u32, &rgba) {
                     m.made(s.tick);
                 }
@@ -543,8 +557,31 @@ impl Hooks for Mod {
     }
 
     fn screen_mouse_dragged_pre(&self, host: &dyn ClientHost, event: &mut ScreenMouseDraggedPreEvent<'_>) -> Flow {
-        let (at, button) = (event.screen.mouse, event.button);
-        screen_input(&self.0, host, |w| w.mouse_dragged(host, at, button))
+        let (at, button, delta) = (event.screen.mouse, event.button, event.delta);
+        let flow = screen_input(&self.0, host, |w| w.mouse_dragged(host, at, button));
+        if matches!(flow, Flow::Cancel) || host.mod_screen() != Some(ID) {
+            return flow;
+        }
+        match &mut lock(&self.0).view {
+            Some(View::Map(m)) => {
+                m.pan(delta);
+                Flow::Cancel
+            }
+            _ => flow,
+        }
+    }
+
+    fn screen_mouse_scrolled_pre(&self, host: &dyn ClientHost, event: &mut ScreenMouseScrolledPreEvent<'_>) -> Flow {
+        if host.mod_screen() != Some(ID) {
+            return Flow::Continue;
+        }
+        match &mut lock(&self.0).view {
+            Some(View::Map(m)) => {
+                m.zoom(event.scroll[1]);
+                Flow::Cancel
+            }
+            _ => Flow::Continue,
+        }
     }
 
     fn screen_key_pressed_pre(&self, host: &dyn ClientHost, event: &mut ScreenKeyPressedPreEvent<'_>) -> Flow {

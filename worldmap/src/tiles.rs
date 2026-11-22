@@ -27,6 +27,16 @@ pub const CAPACITY: usize = 320;
 /// Tile coordinates (tile column, tile row).
 pub type Key = (i32, i32);
 
+/// Cells along one side of a tile's overview: every 2nd column (ADR 0004).
+pub const MIP_SIDE: usize = SIDE / 2;
+/// Overview of the tiles seen, by key: `MIP_SIDE`^2 cells of (colour id, shade).
+pub type Mip = HashMap<Key, Vec<u8>>;
+
+/// Index of the overview cell that holds world column `(x, z)`.
+pub fn mip_index(x: i32, z: i32) -> usize {
+    (z.rem_euclid(SIDE as i32) as usize / 2) * MIP_SIDE + x.rem_euclid(SIDE as i32) as usize / 2
+}
+
 /// Tile that holds world column `(x, z)`.
 pub fn tile_of(x: i32, z: i32) -> Key {
     (x.div_euclid(SIDE as i32), z.div_euclid(SIDE as i32))
@@ -112,6 +122,18 @@ impl Tile {
     /// Stored surface level north of `(x, z)` inside the same tile; None on the tile's first row or when unscanned.
     pub fn north_height(&self, x: i32, z: i32) -> Option<i32> {
         (z.rem_euclid(SIDE as i32) > 0).then(|| self.get(x, z - 1)).filter(|c| c.shade != 0).map(|c| i32::from(c.height))
+    }
+
+    /// The overview: the colour id and shade of every 2nd column of every 2nd row.
+    pub fn mip(&self) -> Vec<u8> {
+        let mut out = Vec::with_capacity(MIP_SIDE * MIP_SIDE * 2);
+        for cz in 0..MIP_SIDE {
+            for cx in 0..MIP_SIDE {
+                let at = (cz * 2 * SIDE + cx * 2) * BYTES_PER_COLUMN;
+                out.extend_from_slice(&self.data[at..at + 2]);
+            }
+        }
+        out
     }
 
     /// True when every column has been scanned.
@@ -263,6 +285,19 @@ mod tests {
         assert!(a.split('/').all(|n| !n.is_empty() && !n.contains([':', '\\', '?'])), "{a}");
         assert_ne!(folder("w", "minecraft:overworld"), folder("w", "minecraft:the_end"));
         assert_eq!(folder("w", "d"), folder("w", "d"));
+    }
+
+    #[test]
+    fn mip_samples_every_second_column() {
+        let mut t = Tile::default();
+        t.set(4, 6, Column { color: 9, shade: 2, height: 1 });
+        t.set(5, 6, Column { color: 7, shade: 3, height: 1 });
+        let m = t.mip();
+        assert_eq!(m.len(), MIP_SIDE * MIP_SIDE * 2);
+        let i = mip_index(5, 7);
+        assert_eq!(i, mip_index(4, 6), "the 2x2 block of (4,6)");
+        assert_eq!(&m[i * 2..i * 2 + 2], &[9, 2]);
+        assert_eq!(mip_index(-1, -1), MIP_SIDE * MIP_SIDE - 1);
     }
 
     #[test]

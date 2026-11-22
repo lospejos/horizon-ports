@@ -13,7 +13,7 @@ const UNKNOWN: [u8; 4] = [16, 16, 20, 255];
 /// The image is made again at least this often (ticks) while the explorer fills tiles in.
 const REFRESH_TICKS: u64 = 20;
 /// Tiles read from disk per frame while the view fills.
-pub const LOADS_PER_FRAME: usize = 24;
+pub const LOADS_PER_FRAME: usize = 48;
 
 /// Image pixels per GUI pixel for a screen of `gui` pixels: 1 up to the host limit, less above it.
 pub fn image_factor(gui: [f32; 2]) -> f32 {
@@ -21,28 +21,36 @@ pub fn image_factor(gui: [f32; 2]) -> f32 {
 }
 
 /// RGBA of a `w` x `h` image: pixel `(w/2, h/2)` is world column `centre`, each pixel `scale` blocks.
+/// Scale 1 reads the full tiles, larger scales the overview (ADR 0004).
 /// Columns not stored or without a colour are `UNKNOWN`.
-pub fn render(store: &Store, centre: (i32, i32), scale: i32, w: usize, h: usize) -> Vec<u8> {
+pub fn render(store: &Store, mip: &tiles::Mip, centre: (i32, i32), scale: i32, w: usize, h: usize) -> Vec<u8> {
     let mut out = Vec::with_capacity(w * h * 4);
     for py in 0..h {
         let z = centre.1 + (py as i32 - (h / 2) as i32) * scale;
-        let mut cached: Option<(tiles::Key, Option<&tiles::Tile>)> = None;
+        let mut cached: Option<(tiles::Key, Option<&tiles::Tile>, Option<&Vec<u8>>)> = None;
         for px in 0..w {
             let x = centre.0 + (px as i32 - (w / 2) as i32) * scale;
             let key = tiles::tile_of(x, z);
-            let tile = match cached {
-                Some((k, t)) if k == key => t,
+            let (tile, cells) = match cached {
+                Some((k, t, c)) if k == key => (t, c),
                 _ => {
-                    let t = store.peek(key);
-                    cached = Some((key, t));
-                    t
+                    let (t, c) = (store.peek(key), mip.get(&key));
+                    cached = Some((key, t, c));
+                    (t, c)
                 }
             };
-            let rgba = tile
-                .map(|t| t.get(x, z))
-                .and_then(|c| tiles::brightness(c.shade).map(|b| map_rgba(c.color, b)))
-                .filter(|p| p[3] != 0)
-                .unwrap_or(UNKNOWN);
+            let (color, shade) = if scale == 1 {
+                tile.map_or((0, 0), |t| {
+                    let c = t.get(x, z);
+                    (c.color, c.shade)
+                })
+            } else {
+                cells.map_or((0, 0), |m| {
+                    let i = tiles::mip_index(x, z) * 2;
+                    (m[i], m[i + 1])
+                })
+            };
+            let rgba = tiles::brightness(shade).map(|b| map_rgba(color, b)).filter(|p| p[3] != 0).unwrap_or(UNKNOWN);
             out.extend_from_slice(&rgba);
         }
     }
@@ -60,6 +68,9 @@ pub fn visible_tiles(centre: (i32, i32), scale: i32, w: usize, h: usize) -> Vec<
 pub struct MapView {
     pub widgets: Widgets,
     close: WidgetId,
+    centre_btn: WidgetId,
+    /// Pan left over after whole blocks were taken, in blocks.
+    frac: [f32; 2],
     /// World column in the middle of the screen.
     pub centre: (i32, i32),
     /// Blocks per image pixel.
@@ -71,8 +82,8 @@ pub struct MapView {
     pub uploaded: bool,
     /// (centre, scale, image size, tick) of the last image.
     last: Option<((i32, i32), i32, (usize, usize), u64)>,
-    /// Tiles already asked from disk (found or not).
-    pub tried: HashSet<tiles::Key>,
+    /// Tiles already asked from disk (found or not), for the full tile (true) or the overview (false).
+    pub tried: HashSet<(tiles::Key, bool)>,
 }
 
 impl MapView {
@@ -81,11 +92,41 @@ impl MapView {
         let close = widgets.add_button(Button::new([(gui[0] / 2.0 - 40.0).floor(), gui[1] - 28.0, 80.0, 20.0], Text::translate("worldmap.wp.close", Vec::new())));
         let f = image_factor(gui);
         let image = (((gui[0] * f) as usize).max(1), ((gui[1] * f) as usize).max(1));
-        Self { widgets, close, centre, scale: 1, gui, image, uploaded: false, last: None, tried: HashSet::new() }
+        let centre_btn = widgets.add_button(Button::new([(gui[0] / 2.0 - 126.0).floor(), gui[1] - 28.0, 80.0, 20.0], Text::translate("worldmap.map.centre", Vec::new())));
+        Self { widgets, close, centre_btn, frac: [0.0; 2], centre, scale: 1, gui, image, uploaded: false, last: None, tried: HashSet::new() }
     }
 
-    pub fn act(&mut self, outcome: Outcome) -> Act {
+    /// `here` is the player's column, where the centre button goes back to.
+    pub fn act(&mut self, outcome: Outcome, here: (i32, i32)) -> Act {
+        if outcome == Outcome::Pressed(self.centre_btn) {
+            self.centre = here;
+            self.frac = [0.0; 2];
+        }
         Act { close: outcome == Outcome::Pressed(self.close), ..Act::default() }
+    }
+
+    /// Moves the view with the mouse: content follows a drag of `delta` GUI pixels.
+    pub fn pan(&mut self, delta: [f32; 2]) {
+        let per_pixel = self.scale as f32 / image_factor(self.gui);
+        for (axis, d) in delta.into_iter().enumerate() {
+            let blocks = self.frac[axis] - d * per_pixel;
+            let whole = blocks.trunc();
+            self.frac[axis] = blocks - whole;
+            if axis == 0 {
+                self.centre.0 += whole as i32;
+            } else {
+                self.centre.1 += whole as i32;
+            }
+        }
+    }
+
+    /// Wheel up zooms in, down zooms out; blocks a pixel stay in 1, 2, 4, 8.
+    pub fn zoom(&mut self, wheel: f32) {
+        if wheel > 0.0 {
+            self.scale = (self.scale / 2).max(1);
+        } else if wheel < 0.0 {
+            self.scale = (self.scale * 2).min(8);
+        }
     }
 
     /// True when the image no longer matches the view, or is old while tiles may be filling in.
@@ -124,11 +165,15 @@ mod tests {
         s
     }
 
+    fn mip_of(s: &Store, key: tiles::Key) -> tiles::Mip {
+        std::iter::once((key, s.peek(key).unwrap().mip())).collect()
+    }
+
     #[test]
     fn unknown_is_dark_and_a_known_column_has_its_colour() {
         // colour 1 (grass) at full brightness, one block left of the centre column
         let s = store_with(-1, 0, Column { color: 1, shade: 4, height: 70 });
-        let img = render(&s, (0, 0), 1, 4, 4);
+        let img = render(&s, &tiles::Mip::new(), (0, 0), 1, 4, 4);
         let at = |x: usize, y: usize| img[(y * 4 + x) * 4..][..4].to_vec();
         assert_eq!(at(1, 2), vec![0x7F, 0xB2, 0x38, 255], "centre pixel (2,2) is column (0,0), so (1,2) is (-1,0)");
         assert_eq!(at(2, 2), UNKNOWN.to_vec());
@@ -138,9 +183,9 @@ mod tests {
     #[test]
     fn scale_skips_columns_and_colourless_columns_stay_dark() {
         let s = store_with(2, 0, Column { color: 1, shade: 4, height: 70 });
-        assert_eq!(&render(&s, (0, 0), 2, 4, 4)[(2 * 4 + 3) * 4..][..4], &[0x7F, 0xB2, 0x38, 255], "pixel (3,2) is column (2,0) at 2 blocks a pixel");
+        assert_eq!(&render(&Store::new(1), &mip_of(&s, (0, 0)), (0, 0), 2, 4, 4)[(2 * 4 + 3) * 4..][..4], &[0x7F, 0xB2, 0x38, 255], "pixel (3,2) is column (2,0) at 2 blocks a pixel");
         let none = store_with(0, 0, Column { color: 0, shade: 4, height: 70 });
-        assert_eq!(&render(&none, (0, 0), 1, 4, 4)[(2 * 4 + 2) * 4..][..4], &UNKNOWN);
+        assert_eq!(&render(&none, &tiles::Mip::new(), (0, 0), 1, 4, 4)[(2 * 4 + 2) * 4..][..4], &UNKNOWN);
     }
 
     #[test]
@@ -155,6 +200,28 @@ mod tests {
         assert_eq!(image_factor([853.0, 480.0]), 1.0);
         let f = image_factor([2560.0, 1440.0]);
         assert!(2560.0 * f <= IMAGE_MAX);
+    }
+
+    #[test]
+    fn pan_follows_the_drag_and_zoom_stays_in_steps() {
+        let mut v = MapView::new([800.0, 400.0], (100, 100));
+        v.pan([10.0, -4.0]);
+        assert_eq!(v.centre, (90, 104), "dragging right moves the view west");
+        v.scale = 2;
+        v.pan([0.25, 0.0]);
+        assert_eq!(v.centre, (90, 104), "less than a block waits");
+        v.pan([0.25, 0.0]);
+        assert_eq!(v.centre, (89, 104), "and adds up");
+        for _ in 0..5 {
+            v.zoom(-1.0);
+        }
+        assert_eq!(v.scale, 8);
+        for _ in 0..5 {
+            v.zoom(1.0);
+        }
+        assert_eq!(v.scale, 1);
+        v.zoom(0.0);
+        assert_eq!(v.scale, 1);
     }
 
     #[test]
