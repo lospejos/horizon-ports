@@ -72,6 +72,12 @@ pub struct MapView {
     pub widgets: Widgets,
     close: WidgetId,
     centre_btn: WidgetId,
+    tp_btn: WidgetId,
+    /// Where a plain click chose (X, Y to land on, Z); the Teleport button works while it is set.
+    pub target: Option<[i32; 3]>,
+    /// Left press position while a click may still turn out to be one (no drag since).
+    pub press: Option<[f32; 2]>,
+    pub moved: bool,
     /// Pan left over after whole blocks were taken, in blocks.
     frac: [f32; 2],
     /// World column in the middle of the screen.
@@ -96,7 +102,10 @@ impl MapView {
         let f = image_factor(gui);
         let image = (((gui[0] * f) as usize).max(1), ((gui[1] * f) as usize).max(1));
         let centre_btn = widgets.add_button(Button::new([(gui[0] / 2.0 - 126.0).floor(), gui[1] - 28.0, 80.0, 20.0], Text::translate("worldmap.map.centre", Vec::new())));
-        Self { widgets, close, centre_btn, frac: [0.0; 2], centre, scale: 1, gui, image, uploaded: false, last: None, tried: HashSet::new() }
+        let mut tp = Button::new([(gui[0] / 2.0 + 46.0).floor(), gui[1] - 28.0, 80.0, 20.0], Text::translate("worldmap.wp.tp", Vec::new()));
+        tp.active = false;
+        let tp_btn = widgets.add_button(tp);
+        Self { widgets, close, centre_btn, tp_btn, target: None, press: None, moved: false, frac: [0.0; 2], centre, scale: 1, gui, image, uploaded: false, last: None, tried: HashSet::new() }
     }
 
     /// `here` is the player's column, where the centre button goes back to.
@@ -105,7 +114,15 @@ impl MapView {
             self.centre = here;
             self.frac = [0.0; 2];
         }
-        Act { close: outcome == Outcome::Pressed(self.close), ..Act::default() }
+        Act { close: outcome == Outcome::Pressed(self.close), teleport: self.target.filter(|_| outcome == Outcome::Pressed(self.tp_btn)), ..Act::default() }
+    }
+
+    /// Chooses (or clears) the click target and arms the Teleport button.
+    pub fn set_target(&mut self, t: Option<[i32; 3]>) {
+        self.target = t;
+        if let Some(b) = self.widgets.button_mut(self.tp_btn) {
+            b.active = t.is_some();
+        }
     }
 
     /// Moves the view with the mouse: content follows a drag of `delta` GUI pixels.
@@ -256,6 +273,19 @@ mod tests {
         v.centre = (3, 0);
         assert!(v.stale(6));
         assert_eq!(v.to_gui(3.0, 0.0), [400.0, 200.0]);
+    }
+
+    #[test]
+    fn teleport_works_only_with_a_target() {
+        let mut v = MapView::new([800.0, 400.0], (0, 0));
+        let tp = Outcome::Pressed(v.tp_btn);
+        assert!(v.act(tp, (0, 0)).teleport.is_none());
+        v.set_target(Some([5, 70, -6]));
+        assert!(v.widgets.button_mut(v.tp_btn).unwrap().active);
+        assert_eq!(v.act(tp, (0, 0)).teleport, Some([5, 70, -6]));
+        assert!(v.act(Outcome::Pressed(v.close), (0, 0)).teleport.is_none());
+        v.set_target(None);
+        assert!(!v.widgets.button_mut(v.tp_btn).unwrap().active);
     }
 
     #[test]

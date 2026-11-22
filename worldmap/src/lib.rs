@@ -224,6 +224,11 @@ fn explore(host: &dyn ClientHost, s: &mut State, player: (i32, i32)) {
     }
 }
 
+/// Surface height stored for world column `(x, z)`; None when the tile or the column is unknown.
+fn surface(store: &tiles::Store, x: i32, z: i32) -> Option<i32> {
+    store.peek(tiles::tile_of(x, z)).map(|t| t.get(x, z)).filter(|c| c.color != 0).map(|c| i32::from(c.height))
+}
+
 /// Writes the world's waypoint file; a failure is logged and the list stays in memory.
 fn save_waypoints(host: &dyn ClientHost, s: &State) {
     let Some(key) = s.world.as_deref() else { return };
@@ -321,13 +326,14 @@ fn load_view(host: &dyn ClientHost, s: &mut State) {
     }
 }
 
-fn draw_map(host: &dyn ClientHost, event: &mut ScreenRenderPostEvent<'_>, m: &mut fullmap::MapView, wps: &Waypoints) {
+fn draw_map(host: &dyn ClientHost, event: &mut ScreenRenderPostEvent<'_>, m: &mut fullmap::MapView, wps: &Waypoints, store: &tiles::Store) {
     let size = event.draw.size();
     if m.gui != size {
         // The window was resized: lay out again, keep the view.
         let mut fresh = fullmap::MapView::new(size, m.centre);
         fresh.scale = m.scale;
         fresh.tried = std::mem::take(&mut m.tried);
+        fresh.set_target(m.target);
         *m = fresh;
     }
     event.draw.fill([0.0, 0.0, size[0], size[1]], 0xFF101014);
@@ -348,6 +354,31 @@ fn draw_map(host: &dyn ClientHost, event: &mut ScreenRenderPostEvent<'_>, m: &mu
         event.draw.fill([mx - 3.0, my - 3.0, 6.0, 6.0], 0xFF000000);
         event.draw.fill([mx - 2.0, my - 2.0, 4.0, 4.0], 0xFFFFFFFF);
         event.draw.fill([tx - 1.5, ty - 1.5, 3.0, 3.0], 0xFFFF2020);
+    }
+    if let Some([tx, _, tz]) = m.target {
+        let [x, y] = m.to_gui(f64::from(tx) + 0.5, f64::from(tz) + 0.5);
+        event.draw.fill([x - 5.0, y - 1.0, 10.0, 2.0], 0xFFFFFFFF);
+        event.draw.fill([x - 1.0, y - 5.0, 2.0, 10.0], 0xFFFFFFFF);
+    }
+    // Under the cursor: X Z, the stored surface Y, and the biome where the host can read it (loaded chunks only).
+    let mouse = event.screen.mouse;
+    if mouse[1] < size[1] - 30.0 {
+        let (x, z) = m.to_world(mouse);
+        let y = surface(store, x, z);
+        let mut line = format!("X {x}  Z {z}");
+        if let Some(y) = y {
+            line.push_str(&format!("  Y {y}"));
+        }
+        if let Some(y) = y {
+            let base: &dyn Host = host;
+            if let Some(b) = host.level(host.dimension()).and_then(|l| l.client_biome(base, [x, y, z])) {
+                line.push_str("  ");
+                line.push_str(&host.translate(&format!("biome.{}", b.replacen(':', ".", 1))).unwrap_or_else(|| pretty_id(&b)));
+            }
+        }
+        let w = event.draw.text_width(&line);
+        event.draw.fill([2.0, 2.0, w + 6.0, 12.0], 0x80000000);
+        event.draw.text(&line, [5.0, 4.0], 0xFFFFFFFF, true);
     }
     // A refused label is not drawn; the screen stays usable.
     let _ = m.widgets.draw(&mut *event.draw, host, event.screen.mouse);
@@ -563,7 +594,7 @@ impl Hooks for Mod {
         let view = s.view.get_or_insert_with(|| View::List(list::List::new(width, here, dimension, &s.waypoints)));
         match view {
             View::Edit(screen) => draw_edit(host, event, screen, width),
-            View::Map(m) => draw_map(host, event, m, &s.waypoints),
+            View::Map(m) => draw_map(host, event, m, &s.waypoints, &s.store),
             View::List(l) => draw_list(host, event, l, &s.waypoints),
         }
     }
@@ -576,7 +607,7 @@ impl Hooks for Mod {
         }
         let mut guard = lock(&self.0);
         let s = &mut *guard;
-        let Some(View::Map(m)) = &s.view else { return flow };
+        let Some(View::Map(m)) = &mut s.view else { return flow };
         // The bottom strip holds the buttons.
         if at[1] >= m.gui[1] - 30.0 {
             return flow;
@@ -586,11 +617,11 @@ impl Hooks for Mod {
                 s.open = Some(Some(i));
                 return Flow::Cancel;
             }
+            (m.press, m.moved) = (Some(at), false);
         } else if button == 1 {
             // A right click starts a new waypoint here, at the stored surface (Y = height + 1), else at the player's height.
             let (x, z) = m.to_world(at);
-            let known = s.store.peek(tiles::tile_of(x, z)).map(|t| t.get(x, z)).filter(|c| c.color != 0);
-            let y = known.map_or_else(|| host.camera().map_or(64, |c| c.position[1].floor() as i32), |c| i32::from(c.height) + 1);
+            let y = surface(&s.store, x, z).map_or_else(|| host.camera().map_or(64, |c| c.position[1].floor() as i32), |h| h + 1);
             s.open_here = Some([x, y, z]);
             s.open = Some(None);
             return Flow::Cancel;
@@ -600,7 +631,20 @@ impl Hooks for Mod {
 
     fn screen_mouse_button_released_pre(&self, host: &dyn ClientHost, event: &mut ScreenMouseButtonReleasedPreEvent<'_>) -> Flow {
         let button = event.button;
-        screen_input(&self.0, host, |w| w.mouse_released(button))
+        let flow = screen_input(&self.0, host, |w| w.mouse_released(button));
+        if button != 0 || host.mod_screen() != Some(ID) {
+            return flow;
+        }
+        let mut guard = lock(&self.0);
+        let s = &mut *guard;
+        let Some(View::Map(m)) = &mut s.view else { return flow };
+        // A press and release with no drag between is a click: choose that point for Teleport (Y: stored surface + 1, else the player's).
+        if let Some(at) = m.press.take().filter(|_| !m.moved) {
+            let (x, z) = m.to_world(at);
+            let y = surface(&s.store, x, z).map_or_else(|| host.camera().map_or(64, |c| c.position[1].floor() as i32), |h| h + 1);
+            m.set_target(Some([x, y, z]));
+        }
+        flow
     }
 
     fn screen_mouse_dragged_pre(&self, host: &dyn ClientHost, event: &mut ScreenMouseDraggedPreEvent<'_>) -> Flow {
@@ -611,6 +655,7 @@ impl Hooks for Mod {
         }
         match &mut lock(&self.0).view {
             Some(View::Map(m)) => {
+                m.moved = true;
                 m.pan(delta);
                 Flow::Cancel
             }
