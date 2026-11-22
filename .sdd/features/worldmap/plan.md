@@ -9,3 +9,12 @@
 - [x] T7: Custom position: settings offset X and Y from the chosen corner, so the map can sit below the item popup (done when: user moves the map by the offsets and it stays on screen; covers A9)
 - [x] T8: Info lines under the map, each a toggle: coordinates, biome, time of day, light level, dimension (done when: the user sees each enabled line; what the API cannot give is dropped and noted in spec; covers A10)
 - [x] T9: README, icon, version 0.1.0 (done when: README has install/update; .hmod holds icon.png; tag only on the user's word; covers A8)
+
+## Step 2: waypoints (planned, not started; run /sdd-new or /sdd-next to refine)
+
+- [ ] T10: Waypoint data and storage: name, x y z, dimension, colour, icon id, visible flag; kept per world and survives a restart (done when: unit tests for add/edit/delete/serialise pass in CI; covers A11)
+- [ ] T11: Create, edit and delete a waypoint: key bind to add one at the player position, edit screen (name, coordinates, colour, icon), delete with confirm (done when: user makes, changes and removes a waypoint in game; covers A11)
+- [ ] T12: Waypoint markers on the minimap, drawn with the chosen icon and colour, clamped to the map edge when out of range, hidden in other dimensions (done when: user sees markers on the minimap; covers A12)
+- [ ] T13: Custom icons and colours: built-in icon set plus colour picker (palette and RGB), shown in the edit screen and on the map (done when: each icon and colour change shows live; covers A13)
+- [ ] T14: Waypoint list screen: all waypoints, toggle visibility, edit, delete, sort by distance or name (done when: user manages waypoints from the list; covers A11, A13)
+- [ ] T15: Teleport to a waypoint like Xaero's Minimap: button in the list and edit screen, sends a tp command with the waypoint coordinates, same dimension only (done when: user lands on the waypoint in game; the no-permission case shows a clear message; covers A14)

@@ -32,3 +32,13 @@ Constraints: wasm only, no mixins (ADR 0002). SDK pin 2b77287de099c9316278ba7ac4
 - T9 check (2026-11-22): CI green on abaf385f; worldmap.hmod holds icon.png (crop of the map itself) and version 0.1.0. Not tagged: a tag needs the user's word (`worldmap-wasm-v0.1.0`).
 - Final audit (2026-11-22): A1-A10 met and checked in CI or in game (A7: LICENSE MIT, NOTICE credits Eternity World Map ideas; ADR 0001 and 0002 followed). Not verified: ru lang in game, settings kept after a restart, icon shown in the launcher.
 - Follow-ups (not in this plan): jerky scroll (draw the image offset by camera minus pass centre each frame, needs clipping); weather/FPS info lines; drag-to-move editor; fullscreen map, waypoints, radar (non-goals of step 1).
+
+## Step 2: waypoints (planned, tasks T10-T15 in plan.md)
+
+Goal: waypoints like Xaero's Minimap for Minecraft Java Fabric.
+
+Acceptance criteria:
+- A11: The user can create a waypoint (name, x y z, dimension), edit it and delete it; waypoints persist per world across restarts.
+- A12: Waypoints show on the minimap as markers; out-of-range ones stick to the map edge; other dimensions are hidden.
+- A13: Each waypoint has a custom icon (built-in set) and colour; both changeable after creation.
+- A14: The user can teleport to a waypoint from the list or the edit screen. Needs the host API to run a command or move the player and permission to do so (cheats/op); without it the mod shows a message. To check: what the wasm API offers for commands, key binds, text input and file storage.

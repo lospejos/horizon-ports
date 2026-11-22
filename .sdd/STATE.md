@@ -1,7 +1,7 @@
 # SDD STATE (keep <= 20 lines)
 Feature: none (worldmap step 1 finished, plan in .sdd/features/worldmap/)
 Task: none
-Next: run /sdd-new <feature description>. Candidates: worldmap jerky-scroll fix (see Follow-ups in worldmap/spec.md), tag worldmap-wasm-v0.1.0 on the user's word, README row in root README.
+Next: run /sdd-new <feature description>. Candidates: worldmap step 2 waypoints (T10-T15 in plan, A11-A14 in spec), worldmap jerky-scroll fix (see Follow-ups in worldmap/spec.md), tag worldmap-wasm-v0.1.0 on the user's word, README row in root README.
 Blockers: none
 Open questions: none
 Last ADR: 0002
