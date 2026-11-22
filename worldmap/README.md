@@ -12,14 +12,18 @@ Options > Mods > Worldmap > Config: show the map, corner, offsets X and Y from t
 
 Waypoints: press N (rebindable in Options > Controls) for the list. Each waypoint has a name, coordinates, colour (palette or RRGGBB) and icon; it shows on the minimap (stuck to the edge when out of range, hidden in other dimensions), and is saved per world. The list can hide, sort (age, name, distance), edit, delete and teleport (`/tp`, same dimension, needs permission).
 
-Not done yet: a fullscreen map, radar, cave mode, a persistent cache. The map image moves in small jumps while you walk, as it is rebuilt a few times a second.
+Fullscreen map: press M (rebindable in Options > Controls). It draws every area you have explored in this world and dimension, not only what the minimap shows; unknown area is dark. Drag to pan, scroll to zoom (1, 2, 4 or 8 blocks a pixel), Centre returns to you. Waypoints show on it: click one to edit it, right click to start a new one at that spot. The top left shows X, Z, the surface Y and, where the chunk is loaded, the biome under the cursor. A click marks a point; Teleport then sends `/tp @s` there (same dimension, needs permission, lands one block above the stored surface). M, Esc or Close shuts the map.
+
+The explored terrain is a cache: while you play, the mod scans the ground around you into 64 x 64 block tiles and saves them (every few seconds and when you leave the world) under the mod's data folder, per world and dimension, so the map survives a restart. A tile file is 16 KB, so about 4 MB per 1000 x 1000 blocks explored and about 400 MB per 10000 x 10000. Delete the `tiles` folder in the mod's data folder to reset it; a broken file is ignored and scanned again.
+
+Not done yet: radar, cave mode, sharing maps. The minimap image moves in small jumps while you walk, as it is rebuilt a few times a second.
 
 ## Installing and updating
 
 Download the release into the game's mods folder (the `horizon-mods` folder of the instance or of the launcher's data directory; `--clobber` replaces the old file), then restart the game:
 
 ```powershell
-gh release download worldmap-wasm-v0.2.0 -R lospejos/horizon-ports -p "*.hmod" -D "C:\Users\User\AppData\Roaming\horizon\horizon-mods" --clobber
+gh release download worldmap-wasm-v0.3.0 -R lospejos/horizon-ports -p "*.hmod" -D "C:\Users\User\AppData\Roaming\horizon\horizon-mods" --clobber
 ```
 
 For a newer version, change only the tag. `gh release list -R lospejos/horizon-ports` lists the tags. Or download `worldmap.hmod` from the release page by hand.
