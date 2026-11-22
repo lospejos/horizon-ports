@@ -1,7 +1,7 @@
 # SDD STATE (keep <= 20 lines)
 Feature: worldmap (.sdd/features/worldmap/)
-Task: T7 (CI + in-game check pending)
-Next: T7 offsets, T8 info lines, T9 README. Also fix jerky scroll: draw offset by (camera - pass centre) per frame, needs clipping.
+Task: none
+Next: T8 info lines (coordinates, biome, time, light, dimension; each a toggle), T9 README. Also fix jerky scroll: draw offset by (camera - pass centre) per frame, needs clipping.
 Blockers: none
 Open questions: none
 Last ADR: 0002

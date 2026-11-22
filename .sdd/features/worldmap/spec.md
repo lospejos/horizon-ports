@@ -26,3 +26,4 @@ Constraints: wasm only, no mixins (ADR 0002). SDK pin 2b77287de099c9316278ba7ac4
 - T6: marker is a white square with a red tip in the look direction, placed at (camera - pass centre) so it moves between passes; coordinates (x y z, floored) sit under the map for top corners and above it for bottom corners. T8 turns the coordinates into one of the toggled info lines.
 - T6 check (2026-11-22, agent in game): marker with look tip and coordinates visible under the map.
 - T7: offset_x and offset_y (0-640 and 0-360 GUI px, default 4) count inward from the chosen corner; the map is clamped to stay on screen.
+- T7 check (2026-11-22, agent in game): offsets 64 and 60 moved the map and its text; reset to 4 afterwards.
