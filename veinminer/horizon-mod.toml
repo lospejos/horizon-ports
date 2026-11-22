@@ -6,7 +6,7 @@
 #   normal flood fill, the client addon, permissions, the enchantment, the update checker.
 id = "veinminer"
 name = "Veinminer"
-version = "0.1.0"
+version = "0.1.1"
 description = "Mine a single ore to mine the whole vein (Veinminer by MiraculixxT)"
 authors = []
 api = "0.2"
