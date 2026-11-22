@@ -1,0 +1,14 @@
+# veinminer: Veinminer 2.x (MiraculixxT, AGPL-3.0-only) for Horizon, as a WebAssembly mod.
+# Mining one ore of a vein mines the whole vein.
+# - src/lib.rs (mod_api::Hooks): `break_block` finds the vein, `server_tick` drops and clears it; the
+#   options are Horizon settings (Options > Mods).
+# - Not ported: /veinminer commands and group editing, mining speed, hunger, shapes other than the
+#   normal flood fill, the client addon, permissions, the enchantment, the update checker.
+id = "veinminer"
+name = "Veinminer"
+version = "0.1.0"
+description = "Mine a single ore to mine the whole vein (Veinminer by MiraculixxT)"
+authors = []
+api = "0.2"
+side = "both"
+capabilities = ["registries"]

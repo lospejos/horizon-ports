@@ -1,0 +1,9 @@
+{
+  "veinminer.setting.must_sneak": "Must sneak",
+  "veinminer.setting.need_correct_tool": "Needs the correct tool",
+  "veinminer.setting.merge_item_drops": "Merge drops at the mined block",
+  "veinminer.setting.decrease_durability": "Wear the tool",
+  "veinminer.setting.max_chain": "Chain limit (blocks)",
+  "veinminer.setting.search_radius": "Search radius",
+  "veinminer.setting.cooldown": "Cooldown (ticks)"
+}

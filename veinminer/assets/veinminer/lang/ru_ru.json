@@ -1,0 +1,9 @@
+{
+  "veinminer.setting.must_sneak": "Только на приседании",
+  "veinminer.setting.need_correct_tool": "Нужен подходящий инструмент",
+  "veinminer.setting.merge_item_drops": "Собирать добычу у добытого блока",
+  "veinminer.setting.decrease_durability": "Изнашивать инструмент",
+  "veinminer.setting.max_chain": "Предел цепочки (блоков)",
+  "veinminer.setting.search_radius": "Радиус поиска",
+  "veinminer.setting.cooldown": "Перезарядка (тики)"
+}

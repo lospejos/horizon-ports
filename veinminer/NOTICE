@@ -1,0 +1,10 @@
+Veinminer for Horizon 26.3 (version 0.1.0)
+
+A port of Veinminer 2.x by MiraculixxT.
+Original source: https://github.com/MiraculixxT/Veinminer (commit 254850d)
+Original licence: AGPL-3.0-only
+
+Ported to Horizon: the behaviour is re-implemented in Rust as a Horizon WebAssembly mod (the mod API only,
+no mixins; no Kotlin code is included). This port is distributed under the same licence as the original
+(AGPL-3.0-only); the licence text is in LICENSE. Built against Horizon's exact-build SDK
+2b77287de099c9316278ba7ac4d83590fdb7ef30.
