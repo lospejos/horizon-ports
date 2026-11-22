@@ -1,4 +1,5 @@
 //! Worldmap for Horizon: a minimap drawn over the GUI.
+mod fullmap;
 mod icons;
 mod list;
 mod sampler;
@@ -53,6 +54,8 @@ struct State {
     scope: (Option<String>, String),
     /// The tile being scanned.
     job: Option<tiles::Job>,
+    /// The key asked for the fullscreen map; the screen draw opens it (it needs the screen size).
+    open_map: bool,
     /// Client ticks since the mod started; the clock of the rescan rule.
     tick: u64,
 }
@@ -61,6 +64,7 @@ struct State {
 enum View {
     List(list::List),
     Edit(screen::Screen),
+    Map(fullmap::MapView),
 }
 
 impl View {
@@ -68,6 +72,7 @@ impl View {
         match self {
             View::List(l) => &mut l.widgets,
             View::Edit(e) => &mut e.widgets,
+            View::Map(m) => &mut m.widgets,
         }
     }
 }
@@ -94,6 +99,7 @@ impl Default for Mod {
             store: tiles::Store::new(tiles::CAPACITY),
             scope: (None, String::new()),
             job: None,
+            open_map: false,
             tick: 0,
         }))
     }
@@ -231,6 +237,7 @@ fn screen_input(m: &Mutex<State>, host: &dyn ClientHost, input: impl FnOnce(&mut
             e.refresh();
             act
         }
+        View::Map(m) => m.act(outcome),
     };
     if act.save {
         save_waypoints(host, s);
@@ -268,6 +275,52 @@ fn load_waypoints(host: &dyn ClientHost, s: &mut State) {
         .and_then(|bytes| Waypoints::parse(&String::from_utf8_lossy(&bytes)))
         .unwrap_or_default();
     s.world = key;
+}
+
+/// Reads the visible tiles that are not in memory from disk, a few a frame (spec A18); the image is made again after each batch.
+fn load_view(host: &dyn ClientHost, s: &mut State) {
+    let Some(View::Map(m)) = &mut s.view else { return };
+    let missing: Vec<tiles::Key> = fullmap::visible_tiles(m.centre, m.scale, m.image.0, m.image.1)
+        .into_iter()
+        .filter(|k| !m.tried.contains(k) && s.store.peek(*k).is_none())
+        .take(fullmap::LOADS_PER_FRAME)
+        .collect();
+    if missing.is_empty() {
+        return;
+    }
+    m.tried.extend(&missing);
+    m.invalidate();
+    for key in missing {
+        let loaded = tile_path(&s.scope, key).and_then(|p| host.data_files().read(&p).ok()).and_then(|b| tiles::Tile::parse(&b));
+        if let Some(tile) = loaded {
+            put(host, s, key, tile);
+        }
+    }
+}
+
+fn draw_map(host: &dyn ClientHost, event: &mut ScreenRenderPostEvent<'_>, m: &mut fullmap::MapView) {
+    let size = event.draw.size();
+    if m.gui != size {
+        // The window was resized: lay out again, keep the view.
+        let mut fresh = fullmap::MapView::new(size, m.centre);
+        fresh.scale = m.scale;
+        fresh.tried = std::mem::take(&mut m.tried);
+        *m = fresh;
+    }
+    event.draw.fill([0.0, 0.0, size[0], size[1]], 0xFF101014);
+    if m.uploaded {
+        event.draw.sprite(SPRITE, [0.0, 0.0, m.image.0 as f32, m.image.1 as f32], [0.0, 0.0, size[0], size[1]], None);
+    }
+    if let Some(cam) = host.camera() {
+        let [mx, my] = m.to_gui(cam.position[0], cam.position[2]);
+        let yaw = cam.yaw.to_radians();
+        let (tx, ty) = (mx - yaw.sin() * 7.0, my + yaw.cos() * 7.0);
+        event.draw.fill([mx - 3.0, my - 3.0, 6.0, 6.0], 0xFF000000);
+        event.draw.fill([mx - 2.0, my - 2.0, 4.0, 4.0], 0xFFFFFFFF);
+        event.draw.fill([tx - 1.5, ty - 1.5, 3.0, 3.0], 0xFFFF2020);
+    }
+    // A refused label is not drawn; the screen stays usable.
+    let _ = m.widgets.draw(&mut *event.draw, host, event.screen.mouse);
 }
 
 fn draw_edit(host: &dyn ClientHost, event: &mut ScreenRenderPostEvent<'_>, screen: &mut screen::Screen, width: f32) {
@@ -361,6 +414,11 @@ impl Hooks for Mod {
             s.view = None;
             host.mod_screen_open(ID);
         }
+        if host.consume_click(ID, "map") {
+            s.view = None;
+            s.open_map = true;
+            host.mod_screen_open(ID);
+        }
     }
 
     fn client_tick_post(&self, host: &mut dyn ClientHost, _: &mut ClientTickPostEvent) {
@@ -375,6 +433,16 @@ impl Hooks for Mod {
         };
         load_waypoints(host, &mut s);
         explore(host, &mut s, (pos[0].floor() as i32, pos[2].floor() as i32));
+        if let Some(View::Map(m)) = &mut s.view {
+            // The one shared image slot belongs to the map while it is open.
+            if m.stale(s.tick) {
+                let rgba = fullmap::render(&s.store, m.centre, m.scale, m.image.0, m.image.1);
+                if host.mod_image(m.image.0 as u32, m.image.1 as u32, &rgba) {
+                    m.made(s.tick);
+                }
+            }
+            return;
+        }
         let range = s.scan.batch(BUDGET);
         if range.start == 0 {
             s.centre = (pos[0].floor() as i32, pos[2].floor() as i32);
@@ -428,6 +496,7 @@ impl Hooks for Mod {
             SettingSpec::choice("shape", "worldmap.setting.shape", ["worldmap.shape.square", "worldmap.shape.round"], 0),
         ];
         registrar.register_key_mapping(KeyRegistration::new("waypoints", "key.keyboard.n").label("worldmap.key.waypoints"));
+        registrar.register_key_mapping(KeyRegistration::new("map", "key.keyboard.m").label("worldmap.key.map"));
         for s in settings {
             if let Err(e) = registrar.register_setting(s) {
                 eprintln!("[worldmap] setting refused: {e:?}");
@@ -439,17 +508,24 @@ impl Hooks for Mod {
         if host.mod_screen() != Some(ID) {
             return;
         }
-        let [width, _] = event.draw.size();
+        let [width, height] = event.draw.size();
         let mut guard = lock(&self.0);
         let s = &mut *guard;
         let here = host.camera().map_or([0; 3], |c| c.position.map(|v| v.floor() as i32));
         let dimension = host.dimension().to_string();
+        if std::mem::take(&mut s.open_map) {
+            s.view = Some(View::Map(fullmap::MapView::new([width, height], (here[0], here[2]))));
+            // The minimap's image is replaced by the map's; hide it until its next pass.
+            s.ready = false;
+        }
+        load_view(host, s);
         if let Some(i) = s.open.take() {
             s.view = Some(View::Edit(screen::Screen::new(width, here, dimension.clone(), i, &s.waypoints)));
         }
         let view = s.view.get_or_insert_with(|| View::List(list::List::new(width, here, dimension, &s.waypoints)));
         match view {
             View::Edit(screen) => draw_edit(host, event, screen, width),
+            View::Map(m) => draw_map(host, event, m),
             View::List(l) => draw_list(host, event, l, &s.waypoints),
         }
     }
@@ -471,6 +547,14 @@ impl Hooks for Mod {
 
     fn screen_key_pressed_pre(&self, host: &dyn ClientHost, event: &mut ScreenKeyPressedPreEvent<'_>) -> Flow {
         let (key, modifiers) = (event.key, event.modifiers);
+        // shortcut: the map closes on the key's default M, not on a rebound key; Esc and the button always close it.
+        if key == "key.keyboard.m" && host.mod_screen() == Some(ID) {
+            let mut s = lock(&self.0);
+            if matches!(s.view, Some(View::Map(_))) {
+                s.want_close = true;
+                return Flow::Cancel;
+            }
+        }
         screen_input(&self.0, host, |w| w.key_pressed(host, key, modifiers))
     }
 

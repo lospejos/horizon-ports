@@ -21,6 +21,7 @@
   "worldmap.shape.square": "Square",
   "worldmap.shape.round": "Round",
   "worldmap.key.waypoints": "Waypoints",
+  "worldmap.key.map": "World map",
   "worldmap.wp.new": "New",
   "worldmap.wp.save": "Save",
   "worldmap.wp.delete": "Delete",

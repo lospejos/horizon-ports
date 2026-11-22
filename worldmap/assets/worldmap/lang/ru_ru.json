@@ -21,6 +21,7 @@
   "worldmap.shape.square": "Квадрат",
   "worldmap.shape.round": "Круг",
   "worldmap.key.waypoints": "Метки",
+  "worldmap.key.map": "Карта мира",
   "worldmap.wp.new": "Новая",
   "worldmap.wp.save": "Сохранить",
   "worldmap.wp.delete": "Удалить",

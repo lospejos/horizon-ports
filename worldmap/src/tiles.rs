@@ -21,8 +21,8 @@ pub const BUDGET: usize = 2048;
 pub const RADIUS: i32 = 7;
 /// Tiles within this distance of the player's tile count as near, so they are rescanned when old.
 pub const NEAR: i32 = 2;
-/// Tiles kept in memory (16 KB each).
-pub const CAPACITY: usize = 256;
+/// Tiles kept in memory (16 KB each): the explorer's area plus a full-size map view (17 x 17 tiles at 1 block a pixel).
+pub const CAPACITY: usize = 320;
 
 /// Tile coordinates (tile column, tile row).
 pub type Key = (i32, i32);
