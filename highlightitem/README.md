@@ -9,3 +9,13 @@ A WebAssembly mod (`mod.wasm`, no mixins), built with `cargo horizon-mod build -
 Options > Mods > HighLightItem: on/off, comparator (material; material and amount; material and NBT; material, NBT and amount; name; name and amount; namespace), where it highlights (everywhere, not in creative, player inventory, player inventory without creative, containers only), how the hovered slot is drawn (the game's own, coloured, coloured when not empty), colour and opacity. Controls: keys to toggle and to cycle the comparator, unbound by default.
 
 Not ported: the colour-picker screen, the `/highlightitem` commands, ModMenu, notifications, the key that colours the hovered slot. Needs the player's inventory screen not covered by the recipe book (nothing is drawn then).
+
+## Installing and updating
+
+Download the release into the game's mods folder (the `horizon-mods` folder of the instance or of the launcher's data directory; `--clobber` replaces the old file), then restart the game:
+
+```powershell
+gh release download highlightitem-wasm-v0.1.1 -R lospejos/horizon-ports -p "*.hmod" -D "C:\Users\User\AppData\Roaming\horizon\horizon-mods" --clobber
+```
+
+For a newer version, change only the tag. `gh release list -R lospejos/horizon-ports` lists the tags. Or download `highlightitem.hmod` from the release page by hand.
