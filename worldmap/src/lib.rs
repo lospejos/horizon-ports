@@ -3,7 +3,7 @@ mod sampler;
 mod screen;
 mod waypoints;
 use mod_api::*;
-use sampler::{clock, map_rgba, pretty_id, marker_cell, slope_brightness, water_brightness, Scan, WATER};
+use sampler::{clamp_to_map, clock, map_rgba, pretty_id, marker_cell, slope_brightness, water_brightness, Scan, WATER};
 use mod_api::client::widgets::Outcome;
 use waypoints::Waypoints;
 use std::collections::HashMap;
@@ -279,14 +279,22 @@ impl Hooks for Mod {
         let y = (if corner < 2 { oy } else { h - side - oy }).clamp(0.0, (h - side).max(0.0));
         event.batch.sprite(SPRITE, [0.0, 0.0, SIDE as f32, SIDE as f32], [x, y, side, side], None);
         let Some(cam) = host.camera() else { return };
-        let (centre, scale) = {
+        let (centre, scale, round) = {
             let s = lock(&self.0);
-            (s.centre, s.scale)
+            (s.centre, s.scale, s.round)
         };
         // The image is centred on where the last pass began, so the marker moves off-centre between passes.
         let half = SIDE / 2;
         let px = |pos: f64, c: i32| marker_cell(pos, c, scale, half).clamp(0.0, SIDE as f32) * side / SIDE as f32;
         let (mx, my) = (x + px(cam.position[0], centre.0), y + px(cam.position[2], centre.1));
+        // Waypoints of this dimension; the ones out of range stick to the map edge.
+        let dim = host.dimension().to_string();
+        for w in lock(&self.0).waypoints.list().iter().filter(|w| w.visible && w.dimension == dim) {
+            let at = |pos: i32, c: i32| marker_cell(f64::from(pos), c, scale, half) * side / SIDE as f32;
+            let [wx, wy] = clamp_to_map([at(w.pos[0], centre.0), at(w.pos[2], centre.1)], side, 4.0, round);
+            event.batch.fill([x + wx - 3.0, y + wy - 3.0, 6.0, 6.0], 0xFF000000);
+            event.batch.fill([x + wx - 2.0, y + wy - 2.0, 4.0, 4.0], 0xFF000000 | w.color);
+        }
         // Yaw 0 looks along +z; the red tip points where the player looks.
         let yaw = cam.yaw.to_radians();
         let (tx, ty) = (mx - yaw.sin() * 6.0, my + yaw.cos() * 6.0);

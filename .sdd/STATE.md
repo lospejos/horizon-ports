@@ -1,7 +1,7 @@
 # SDD STATE (keep <= 20 lines)
 Feature: worldmap step 2, waypoints (plan in .sdd/features/worldmap/)
-Task: none (T11 done, CI green on 45061574693)
-Next: T12 markers on the minimap. Every key-adding task: check Options > Controls for conflicts (spec). M reserved for the world map. gh needs -R lospejos/horizon-ports.
+Task: none (T12 coded and committed; CI run and in-game check of markers pending)
+Next: confirm T12 CI green, install branch build and check markers in game (create waypoint with N, walk away, other dimension), then T13. Every key-adding task: check Options > Controls for conflicts (spec). M reserved for the world map. gh needs -R lospejos/horizon-ports.
 Blockers: none
 Open questions: none
 Last ADR: 0002

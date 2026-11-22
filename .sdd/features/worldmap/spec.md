@@ -47,4 +47,4 @@ Acceptance criteria:
 - Key plan (user, 2026-11-22): N = create waypoint (T11), M = open the world map (fullscreen map, not yet in the plan; keep M free).
 - Test rule (user, 2026-11-22): every task that adds a key checks in the game, Options > Controls (page keybinds), that the default is not bound to another command or mod. T11 check: Worldmap > Waypoints = N; no other binding on N except the debug combo F3+N; M free.
 - T11 check (2026-11-22, agent in game): N opened the screen; made Home and Mine, edited Mine's X to 500 (Save greyed while the field was empty), browsed with <, deleted Home with two presses; file `horizon-mod-data/worldmap/waypoints-worldmap-test-<hash>.txt` held only Mine afterwards. Not checked: restart keeps the list, ru texts, a server world.
-
+- T12: visible waypoints of the current dimension draw on the minimap as a 6 px square (black border, waypoint colour), placed like the player marker (relative to the pass centre, so they move between passes). Out of range ones stick to the map edge (4 px inset; round maps pull them in along the line to the centre). The player marker is drawn on top. Icons come in T13.

@@ -14,7 +14,7 @@
 
 - [x] T10: Waypoint data and storage: name, x y z, dimension, colour, icon id, visible flag; kept per world and survives a restart (done when: unit tests for add/edit/delete/serialise pass in CI; covers A11)
 - [x] T11: Create, edit and delete a waypoint: key bind to add one at the player position, edit screen (name, coordinates, colour, icon), delete with confirm (done when: user makes, changes and removes a waypoint in game; covers A11)
-- [ ] T12: Waypoint markers on the minimap, drawn with the chosen icon and colour, clamped to the map edge when out of range, hidden in other dimensions (done when: user sees markers on the minimap; covers A12)
+- [x] T12: Waypoint markers on the minimap, drawn with the chosen icon and colour, clamped to the map edge when out of range, hidden in other dimensions (done when: user sees markers on the minimap; covers A12)
 - [ ] T13: Custom icons and colours: built-in icon set plus colour picker (palette and RGB), shown in the edit screen and on the map (done when: each icon and colour change shows live; covers A13)
 - [ ] T14: Waypoint list screen: all waypoints, toggle visibility, edit, delete, sort by distance or name (done when: user manages waypoints from the list; covers A11, A13)
 - [ ] T15: Teleport to a waypoint like Xaero's Minimap: button in the list and edit screen, sends a tp command with the waypoint coordinates, same dimension only (done when: user lands on the waypoint in game; the no-permission case shows a clear message; covers A14)

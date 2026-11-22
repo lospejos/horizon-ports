@@ -50,6 +50,20 @@ pub fn marker_cell(pos: f64, centre: i32, scale: i32, half: u32) -> f32 {
     half as f32 + ((pos - centre as f64) / scale as f64) as f32
 }
 
+/// Keeps a point inside a map of `side` px (origin at its corner), `inset` px from the edge: a square map clamps
+/// each axis, a round one pulls the point in along the line to the centre.
+pub fn clamp_to_map(p: [f32; 2], side: f32, inset: f32, round: bool) -> [f32; 2] {
+    let r = side / 2.0 - inset;
+    let (dx, dy) = (p[0] - side / 2.0, p[1] - side / 2.0);
+    let (dx, dy) = if round {
+        let d = dx.hypot(dy);
+        if d > r { (dx * r / d, dy * r / d) } else { (dx, dy) }
+    } else {
+        (dx.clamp(-r, r), dy.clamp(-r, r))
+    };
+    [side / 2.0 + dx, side / 2.0 + dy]
+}
+
 /// Clock text of a time of day in ticks (0 is 06:00, as in game; the count may run past 24000).
 pub fn clock(day_time: i64) -> String {
     let t = day_time.rem_euclid(24000);
@@ -155,6 +169,16 @@ mod tests {
         assert_eq!(marker_cell(100.0, 100, 1, 64), 64.0);
         assert_eq!(marker_cell(110.0, 100, 1, 64), 74.0);
         assert_eq!(marker_cell(108.0, 100, 4, 64), 66.0);
+    }
+
+    #[test]
+    fn markers_stick_to_the_edge() {
+        assert_eq!(clamp_to_map([50.0, 60.0], 100.0, 3.0, false), [50.0, 60.0]);
+        assert_eq!(clamp_to_map([500.0, -9.0], 100.0, 3.0, false), [97.0, 3.0]);
+        let [x, y] = clamp_to_map([500.0, 50.0], 100.0, 3.0, true);
+        assert!((x - 97.0).abs() < 1e-4 && (y - 50.0).abs() < 1e-4);
+        let [x, y] = clamp_to_map([200.0, 200.0], 100.0, 3.0, true);
+        assert!((x - 50.0).hypot(y - 50.0) <= 47.0 + 1e-4);
     }
 
     #[test]
