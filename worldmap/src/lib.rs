@@ -1,7 +1,7 @@
 //! Worldmap for Horizon: a minimap drawn over the GUI.
 mod sampler;
 use mod_api::*;
-use sampler::{map_rgba, Scan};
+use sampler::{map_rgba, slope_brightness, water_brightness, Scan, WATER};
 use std::collections::HashMap;
 use std::sync::Mutex;
 
@@ -9,14 +9,14 @@ use std::sync::Mutex;
 const SIDE: u32 = 128;
 /// Columns read per tick (spec A6).
 const BUDGET: u32 = 4096;
-/// Vanilla map brightness of a flat column.
-const FLAT: u32 = 220;
 /// The HUD atlas slot `native_mod_image` fills.
 const SPRITE: &str = "horizon/modimage";
 
 struct State {
     scan: Scan,
     rgba: Vec<u8>,
+    /// Surface level per grid index (water top where wet), for slope shading against the north column.
+    heights: Vec<Option<i32>>,
     /// Block id to map colour id, filled on first sight (a host call each).
     colors: HashMap<String, u8>,
     /// Centre of the pass being sampled, latched when it starts.
@@ -32,6 +32,7 @@ impl Default for Mod {
         Self(Mutex::new(State {
             scan: Scan::new(SIDE),
             rgba: vec![0; (SIDE * SIDE * 4) as usize],
+            heights: vec![None; (SIDE * SIDE) as usize],
             colors: HashMap::new(),
             centre: (0, 0),
             ready: false,
@@ -65,9 +66,23 @@ impl Hooks for Mod {
                             id
                         }
                     };
-                    map_rgba(id, FLAT)
+                    match c.water {
+                        Some(w) => {
+                            s.heights[i as usize] = Some(w);
+                            map_rgba(WATER, water_brightness(w - c.height))
+                        }
+                        None => {
+                            s.heights[i as usize] = Some(c.height);
+                            // Row 0 and an unread north neighbour stay flat.
+                            let north = i.checked_sub(SIDE).and_then(|n| s.heights[n as usize]);
+                            map_rgba(id, slope_brightness(c.height, north))
+                        }
+                    }
                 }
-                None => [0; 4],
+                None => {
+                    s.heights[i as usize] = None;
+                    [0; 4]
+                }
             };
             let at = i as usize * 4;
             s.rgba[at..at + 4].copy_from_slice(&px);

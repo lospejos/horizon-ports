@@ -22,6 +22,28 @@ pub fn map_rgba(id: u8, brightness: u32) -> [u8; 4] {
     }
 }
 
+/// Map colour id of water (vanilla `MapColor.WATER`).
+pub const WATER: u8 = 12;
+
+/// Brightness of a water column by depth (surface minus floor): shallow is light, deep is dark.
+pub fn water_brightness(depth: i32) -> u32 {
+    match depth {
+        ..=2 => 255,
+        3..=4 => 220,
+        5..=9 => 180,
+        _ => 135,
+    }
+}
+
+/// Brightness of a dry column against the column to its north: higher than north is light, lower is dark.
+pub fn slope_brightness(height: i32, north: Option<i32>) -> u32 {
+    match north.map(|n| height.cmp(&n)) {
+        Some(std::cmp::Ordering::Greater) => 255,
+        Some(std::cmp::Ordering::Less) => 135,
+        _ => 220,
+    }
+}
+
 /// Walks a `size` x `size` grid row by row, `budget` columns per call, wrapping at the end.
 pub struct Scan {
     pub size: u32,
@@ -61,6 +83,22 @@ mod tests {
         assert_eq!(map_rgba(8, 220)[0], 220);
         assert_eq!(map_rgba(0, 220), [0; 4]);
         assert_eq!(map_rgba(200, 220), [0; 4]);
+    }
+
+    #[test]
+    fn water_gets_darker_with_depth() {
+        assert_eq!(water_brightness(1), 255);
+        assert_eq!(water_brightness(4), 220);
+        assert_eq!(water_brightness(9), 180);
+        assert_eq!(water_brightness(30), 135);
+    }
+
+    #[test]
+    fn slopes_light_and_dark_against_north() {
+        assert_eq!(slope_brightness(70, Some(68)), 255);
+        assert_eq!(slope_brightness(70, Some(72)), 135);
+        assert_eq!(slope_brightness(70, Some(70)), 220);
+        assert_eq!(slope_brightness(70, None), 220);
     }
 
     #[test]
