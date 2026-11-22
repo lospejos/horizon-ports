@@ -1,6 +1,11 @@
 {
   "worldmap.setting.enabled": "Показывать миникарту",
   "worldmap.setting.corner": "Угол",
+  "worldmap.setting.info_coords": "Показывать координаты",
+  "worldmap.setting.info_biome": "Показывать биом",
+  "worldmap.setting.info_time": "Показывать время суток",
+  "worldmap.setting.info_light": "Показывать уровень света",
+  "worldmap.setting.info_dimension": "Показывать измерение",
   "worldmap.setting.offset_x": "Смещение X (пикселей от угла)",
   "worldmap.setting.offset_y": "Смещение Y (пикселей от угла)",
   "worldmap.setting.size": "Размер (пикселей)",

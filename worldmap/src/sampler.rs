@@ -50,6 +50,24 @@ pub fn marker_cell(pos: f64, centre: i32, scale: i32, half: u32) -> f32 {
     half as f32 + ((pos - centre as f64) / scale as f64) as f32
 }
 
+/// Clock text of a time of day in ticks (0 is 06:00, as in game; the count may run past 24000).
+pub fn clock(day_time: i64) -> String {
+    let t = day_time.rem_euclid(24000);
+    format!("{:02}:{:02}", (t / 1000 + 6) % 24, t % 1000 * 60 / 1000)
+}
+
+/// Readable name from a resource id: `minecraft:dark_forest` is `Dark Forest`.
+pub fn pretty_id(id: &str) -> String {
+    let name = id.rsplit(':').next().unwrap_or(id);
+    name.split('_')
+        .map(|w| {
+            let mut c = w.chars();
+            c.next().map(|f| f.to_uppercase().chain(c).collect::<String>()).unwrap_or_default()
+        })
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+
 /// Walks a `size` x `size` grid row by row, `budget` columns per call, wrapping at the end.
 pub struct Scan {
     pub size: u32,
@@ -137,6 +155,20 @@ mod tests {
         assert_eq!(marker_cell(100.0, 100, 1, 64), 64.0);
         assert_eq!(marker_cell(110.0, 100, 1, 64), 74.0);
         assert_eq!(marker_cell(108.0, 100, 4, 64), 66.0);
+    }
+
+    #[test]
+    fn clock_starts_at_six_and_wraps() {
+        assert_eq!(clock(0), "06:00");
+        assert_eq!(clock(6000), "12:00");
+        assert_eq!(clock(18000), "00:00");
+        assert_eq!(clock(24000 + 500), "06:30");
+    }
+
+    #[test]
+    fn ids_become_names() {
+        assert_eq!(pretty_id("minecraft:dark_forest"), "Dark Forest");
+        assert_eq!(pretty_id("overworld"), "Overworld");
     }
 
     #[test]

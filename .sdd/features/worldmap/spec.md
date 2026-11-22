@@ -27,3 +27,4 @@ Constraints: wasm only, no mixins (ADR 0002). SDK pin 2b77287de099c9316278ba7ac4
 - T6 check (2026-11-22, agent in game): marker with look tip and coordinates visible under the map.
 - T7: offset_x and offset_y (0-640 and 0-360 GUI px, default 4) count inward from the chosen corner; the map is clamped to stay on screen.
 - T7 check (2026-11-22, agent in game): offsets 64 and 60 moved the map and its text; reset to 4 afterwards.
+- T8: toggles info_coords (default on), info_biome, info_time (clock, 0 ticks = 06:00), info_light (block / sky at the camera block), info_dimension, off by default but coords; lines stack under the map for top corners, above it for bottom ones. Biome and dimension names use the game's translation, else the id made readable. Not done: weather, FPS, speed.

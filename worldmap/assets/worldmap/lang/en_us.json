@@ -1,6 +1,11 @@
 {
   "worldmap.setting.enabled": "Show minimap",
   "worldmap.setting.corner": "Corner",
+  "worldmap.setting.info_coords": "Show coordinates",
+  "worldmap.setting.info_biome": "Show biome",
+  "worldmap.setting.info_time": "Show time of day",
+  "worldmap.setting.info_light": "Show light level",
+  "worldmap.setting.info_dimension": "Show dimension",
   "worldmap.setting.offset_x": "Offset X (pixels from the corner)",
   "worldmap.setting.offset_y": "Offset Y (pixels from the corner)",
   "worldmap.setting.size": "Size (pixels)",

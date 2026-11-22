@@ -1,7 +1,7 @@
 //! Worldmap for Horizon: a minimap drawn over the GUI.
 mod sampler;
 use mod_api::*;
-use sampler::{map_rgba, marker_cell, slope_brightness, water_brightness, Scan, WATER};
+use sampler::{clock, map_rgba, pretty_id, marker_cell, slope_brightness, water_brightness, Scan, WATER};
 use std::collections::HashMap;
 use std::sync::Mutex;
 
@@ -114,6 +114,11 @@ impl Hooks for Mod {
                 ["worldmap.corner.top_right", "worldmap.corner.top_left", "worldmap.corner.bottom_right", "worldmap.corner.bottom_left"],
                 0,
             ),
+            SettingSpec::toggle("info_coords", "worldmap.setting.info_coords", true),
+            SettingSpec::toggle("info_biome", "worldmap.setting.info_biome", false),
+            SettingSpec::toggle("info_time", "worldmap.setting.info_time", false),
+            SettingSpec::toggle("info_light", "worldmap.setting.info_light", false),
+            SettingSpec::toggle("info_dimension", "worldmap.setting.info_dimension", false),
             SettingSpec::range("offset_x", "worldmap.setting.offset_x", 0.0, 640.0, 1.0, f64::from(MARGIN)),
             SettingSpec::range("offset_y", "worldmap.setting.offset_y", 0.0, 360.0, 1.0, f64::from(MARGIN)),
             SettingSpec::range("size", "worldmap.setting.size", 64.0, 256.0, 16.0, 128.0),
@@ -155,9 +160,38 @@ impl Hooks for Mod {
         event.batch.fill([mx - 3.0, my - 3.0, 6.0, 6.0], 0xFF000000);
         event.batch.fill([mx - 2.0, my - 2.0, 4.0, 4.0], 0xFFFFFFFF);
         event.batch.fill([tx - 1.5, ty - 1.5, 3.0, 3.0], 0xFFFF2020);
-        let text = format!("{} {} {}", cam.position[0].floor(), cam.position[1].floor(), cam.position[2].floor());
-        let tw = event.batch.text_width(&text);
-        let ty = if corner < 2 { y + side + 2.0 } else { y - 10.0 };
-        event.batch.text(&text, [x + (side - tw) / 2.0, ty], 0xFFFFFFFF, true);
+        let pos = cam.position.map(|v| v.floor() as i32);
+        let on = |key: &str, default: bool| host.setting_bool(key).unwrap_or(default);
+        let level = host.level(host.dimension());
+        let name = |prefix: &str, id: String| host.translate(&format!("{prefix}.{}", id.replacen(':', ".", 1))).unwrap_or_else(|| pretty_id(&id));
+        let mut lines: Vec<String> = Vec::new();
+        if on("info_coords", true) {
+            lines.push(format!("{} {} {}", pos[0], pos[1], pos[2]));
+        }
+        if on("info_biome", false) {
+            if let Some(b) = level.and_then(|l| host.level_client_biome(l, pos)) {
+                lines.push(name("biome", b));
+            }
+        }
+        if on("info_time", false) {
+            if let Some(t) = level.and_then(|l| host.level_day_time(l)) {
+                lines.push(clock(t));
+            }
+        }
+        if on("info_light", false) {
+            let light = |layer| level.and_then(|l| host.level_brightness(l, layer, pos));
+            if let (Some(b), Some(s)) = (light(LightLayer::Block), light(LightLayer::Sky)) {
+                lines.push(format!("Light {b} / {s}"));
+            }
+        }
+        if on("info_dimension", false) {
+            lines.push(name("dimension", host.dimension().to_string()));
+        }
+        // Lines stack away from the map: down for a top corner, up for a bottom one.
+        let top = if corner < 2 { y + side + 2.0 } else { y - 2.0 - 10.0 * lines.len() as f32 };
+        for (i, line) in lines.iter().enumerate() {
+            let tw = event.batch.text_width(line);
+            event.batch.text(line, [x + (side - tw) / 2.0, top + 10.0 * i as f32], 0xFFFFFFFF, true);
+        }
     }
 }
