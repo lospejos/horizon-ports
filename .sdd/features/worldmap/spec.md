@@ -19,3 +19,4 @@ Constraints: wasm only, no mixins (ADR 0002). SDK pin 2b77287de099c9316278ba7ac4
 - Map is 128 px square at 1 block per pixel, top right, rebuilt as one pass of 4096 columns per tick and uploaded when a pass ends (MOD_IMAGE_SIZE is 1024); water and shading come in T4, settings in T5.
 - In game T3 check (2026-11-22): terrain shows and follows the player, but the image moves in jumps (refresh ~5 per second, no offset between refreshes); lakes show as ocean-floor grey until T4.
 - T4 check (2026-11-22): user sees sea (depth shades) and slopes in game.
+- Settings (T5): enabled, corner (4), size 64-256 px step 16, scale 1\/2\/4 blocks per cell, shape square\/round; grid stays 128x128 cells. Scale and shape apply from the next pass (about 8 ticks), others at once. Round shape clears corner pixels in the buffer.

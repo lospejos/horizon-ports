@@ -1,0 +1,16 @@
+{
+  "worldmap.setting.enabled": "Show minimap",
+  "worldmap.setting.corner": "Corner",
+  "worldmap.setting.size": "Size (pixels)",
+  "worldmap.setting.scale": "Blocks per cell",
+  "worldmap.setting.shape": "Shape",
+  "worldmap.corner.top_right": "Top right",
+  "worldmap.corner.top_left": "Top left",
+  "worldmap.corner.bottom_right": "Bottom right",
+  "worldmap.corner.bottom_left": "Bottom left",
+  "worldmap.scale.1": "1",
+  "worldmap.scale.2": "2",
+  "worldmap.scale.4": "4",
+  "worldmap.shape.square": "Square",
+  "worldmap.shape.round": "Round"
+}

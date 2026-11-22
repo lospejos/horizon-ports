@@ -66,10 +66,18 @@ impl Scan {
         start..self.next
     }
 
-    /// World column of grid index `i` for a map centred on `(cx, cz)`.
-    pub fn column(&self, i: u32, cx: i32, cz: i32) -> (i32, i32) {
+    /// World column of grid index `i` for a map centred on `(cx, cz)`, `scale` blocks per cell.
+    pub fn column(&self, i: u32, cx: i32, cz: i32, scale: i32) -> (i32, i32) {
         let half = (self.size / 2) as i32;
-        (cx - half + (i % self.size) as i32, cz - half + (i / self.size) as i32)
+        (cx + (i % self.size) as i32 * scale - half * scale, cz + (i / self.size) as i32 * scale - half * scale)
+    }
+
+    /// True when grid index `i` lies inside the circle that fills the grid (the round map shape).
+    pub fn in_circle(&self, i: u32) -> bool {
+        let s = self.size as i64;
+        let dx = (i % self.size) as i64 * 2 + 1 - s;
+        let dy = (i / self.size) as i64 * 2 + 1 - s;
+        dx * dx + dy * dy <= s * s
     }
 }
 
@@ -112,7 +120,18 @@ mod tests {
     #[test]
     fn columns_centre_on_player() {
         let s = Scan::new(4);
-        assert_eq!(s.column(0, 100, 200), (98, 198));
-        assert_eq!(s.column(15, 100, 200), (101, 201));
+        assert_eq!(s.column(0, 100, 200, 1), (98, 198));
+        assert_eq!(s.column(15, 100, 200, 1), (101, 201));
+        assert_eq!(s.column(0, 100, 200, 2), (96, 196));
+        assert_eq!(s.column(15, 100, 200, 2), (102, 202));
+    }
+
+    #[test]
+    fn circle_clips_corners_only() {
+        let s = Scan::new(8);
+        assert!(!s.in_circle(0));
+        assert!(!s.in_circle(63));
+        assert!(s.in_circle(3 * 8 + 3));
+        assert!(s.in_circle(4));
     }
 }

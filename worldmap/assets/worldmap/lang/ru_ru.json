@@ -1,0 +1,16 @@
+{
+  "worldmap.setting.enabled": "Показывать миникарту",
+  "worldmap.setting.corner": "Угол",
+  "worldmap.setting.size": "Размер (пикселей)",
+  "worldmap.setting.scale": "Блоков на клетку",
+  "worldmap.setting.shape": "Форма",
+  "worldmap.corner.top_right": "Справа сверху",
+  "worldmap.corner.top_left": "Слева сверху",
+  "worldmap.corner.bottom_right": "Справа снизу",
+  "worldmap.corner.bottom_left": "Слева снизу",
+  "worldmap.scale.1": "1",
+  "worldmap.scale.2": "2",
+  "worldmap.scale.4": "4",
+  "worldmap.shape.square": "Квадрат",
+  "worldmap.shape.round": "Круг"
+}
