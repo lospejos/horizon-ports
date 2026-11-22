@@ -434,7 +434,8 @@ impl Hooks for Mod {
         load_waypoints(host, &mut s);
         explore(host, &mut s, (pos[0].floor() as i32, pos[2].floor() as i32));
         let s = &mut *s;
-        if let Some(View::Map(m)) = &mut s.view {
+        let open = host.mod_screen() == Some(ID);
+        if let Some(View::Map(m)) = s.view.as_mut().filter(|_| open) {
             // The one shared image slot belongs to the map while it is open.
             if m.stale(s.tick) {
                 let rgba = fullmap::render(&s.store, m.centre, m.scale, m.image.0, m.image.1);
