@@ -1,7 +1,7 @@
 # SDD STATE (keep <= 20 lines)
 Feature: worldmap step 3, fullscreen map (plan in .sdd/features/fullmap/)
 Task: none
-Next: T2 tile store (tiles.rs). Every key-adding task: check Options > Controls for conflicts. gh needs -R lospejos/horizon-ports.
+Next: T3 explorer scan into the store. Every key-adding task: check Options > Controls for conflicts. gh needs -R lospejos/horizon-ports.
 Blockers: none
 Open questions: none
 Last ADR: 0003

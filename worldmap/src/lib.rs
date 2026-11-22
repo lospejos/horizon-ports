@@ -3,6 +3,7 @@ mod icons;
 mod list;
 mod sampler;
 mod screen;
+mod tiles;
 mod waypoints;
 use mod_api::*;
 use sampler::{clamp_to_map, clock, map_rgba, pretty_id, marker_cell, slope_brightness, water_brightness, Scan, WATER};

@@ -1,7 +1,7 @@
 # fullmap: plan (branch worldmap-wasm, folder worldmap/)
 
 - [x] T1: Probe host limits: the `data_files` per-file size cap, whether a mod screen can draw the `mod_image` sprite full size, and whether a biome can be read at a far column (done when: the three answers are written into spec.md; covers A16, A18, A21)
-- [ ] T2: Tile store as pure logic in `tiles.rs`: 64x64 tiles, 4 bytes a column, world to tile maths, serialise/parse, memory LRU, stale rule (done when: unit tests for maths, round trip, broken input and LRU pass in CI; covers A17, A18)
+- [x] T2: Tile store as pure logic in `tiles.rs`: 64x64 tiles, 4 bytes a column, world to tile maths, serialise/parse, memory LRU, stale rule (done when: unit tests for maths, round trip, broken input and LRU pass in CI; covers A17, A18)
 - [ ] T3: Explorer scan into the store: budget 2048 columns a tick, unknown tiles nearest first, rescan near and old (done when: unit tests for the order and budget pass; in game a walk fills tiles beyond the minimap area; covers A16, A17)
 - [ ] T4: Persistence: load a tile on demand, write dirty tiles every few seconds and on close, per world and dimension folder (done when: after a restart the tiles of the last session exist; a corrupt file is ignored; covers A18)
 - [ ] T5: Fullscreen screen on `M`: key, screen, image of the visible tiles in `mod_image`, player marker, dark unknown area, close on M/Esc/button (done when: user opens the map in game and sees explored terrain; Controls check for M; covers A15, A16)
