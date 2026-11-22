@@ -2,6 +2,7 @@
 use crate::sampler::map_rgba;
 use crate::screen::Act;
 use crate::tiles::{self, Store};
+use crate::waypoints::Waypoint;
 use mod_api::client::widgets::{Button, Outcome, WidgetId, Widgets};
 use mod_api::Text;
 use std::collections::HashSet;
@@ -12,6 +13,8 @@ const IMAGE_MAX: f32 = 1024.0;
 const UNKNOWN: [u8; 4] = [16, 16, 20, 255];
 /// The image is made again at least this often (ticks) while the explorer fills tiles in.
 const REFRESH_TICKS: u64 = 20;
+/// A click this close (GUI pixels) to a waypoint's icon picks it.
+const PICK_RADIUS: f32 = 6.0;
 /// Tiles read from disk per frame while the view fills.
 pub const LOADS_PER_FRAME: usize = 48;
 
@@ -150,6 +153,25 @@ impl MapView {
         let k = f / self.scale as f32;
         [self.gui[0] / 2.0 + (x - f64::from(self.centre.0)) as f32 * k, self.gui[1] / 2.0 + (z - f64::from(self.centre.1)) as f32 * k]
     }
+
+    /// World column under GUI position `at`; the inverse of `to_gui`.
+    pub fn to_world(&self, at: [f32; 2]) -> (i32, i32) {
+        let k = image_factor(self.gui) / self.scale as f32;
+        (self.centre.0 + ((at[0] - self.gui[0] / 2.0) / k).floor() as i32, self.centre.1 + ((at[1] - self.gui[1] / 2.0) / k).floor() as i32)
+    }
+
+    /// Index of the visible waypoint of `dimension` nearest to GUI position `at`, within `PICK_RADIUS`.
+    pub fn waypoint_at(&self, wps: &[Waypoint], dimension: &str, at: [f32; 2]) -> Option<usize> {
+        let d2 = |w: &Waypoint| {
+            let p = self.to_gui(f64::from(w.pos[0]) + 0.5, f64::from(w.pos[2]) + 0.5);
+            (p[0] - at[0]).powi(2) + (p[1] - at[1]).powi(2)
+        };
+        wps.iter()
+            .enumerate()
+            .filter(|(_, w)| w.visible && w.dimension == dimension && d2(w) <= PICK_RADIUS * PICK_RADIUS)
+            .min_by(|a, b| d2(a.1).total_cmp(&d2(b.1)))
+            .map(|(i, _)| i)
+    }
 }
 
 #[cfg(test)]
@@ -234,5 +256,19 @@ mod tests {
         v.centre = (3, 0);
         assert!(v.stale(6));
         assert_eq!(v.to_gui(3.0, 0.0), [400.0, 200.0]);
+    }
+
+    #[test]
+    fn click_maps_to_the_column_and_picks_the_near_waypoint() {
+        let mut v = MapView::new([800.0, 400.0], (100, 100));
+        assert_eq!(v.to_world([400.0, 200.0]), (100, 100));
+        assert_eq!(v.to_world([410.0, 195.0]), (110, 95));
+        v.scale = 2;
+        assert_eq!(v.to_world([410.0, 200.0]), (120, 100));
+        let w = |x, dim: &str, visible| Waypoint { name: String::new(), pos: [x, 64, 100], dimension: dim.to_owned(), color: 0, icon: String::new(), visible };
+        let list = [w(300, "a", true), w(104, "a", true), w(104, "b", true), w(104, "a", false)];
+        assert_eq!(v.waypoint_at(&list, "a", [402.0, 200.0]), Some(1));
+        assert_eq!(v.waypoint_at(&list, "a", [430.0, 200.0]), None, "too far");
+        assert_eq!(v.waypoint_at(&list, "b", [402.0, 200.0]), Some(2), "other dimension picks only its own");
     }
 }

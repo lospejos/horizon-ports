@@ -45,6 +45,10 @@ struct State {
     view: Option<View>,
     /// The list asked to open the edit screen (needs the screen width, known when drawing).
     open: Option<Option<usize>>,
+    /// Where a new waypoint opened from the map goes (a right click); None is the player.
+    open_here: Option<[i32; 3]>,
+    /// The map while the edit screen opened from it is up; Back returns to it.
+    back_map: Option<fullmap::MapView>,
     /// A button asked to close the screen; the next client tick does it (input hooks only read).
     want_close: bool,
     /// A teleport asked by a screen button; the next client tick sends it (input hooks only read).
@@ -96,6 +100,8 @@ impl Default for Mod {
             world: None,
             view: None,
             open: None,
+            open_here: None,
+            back_map: None,
             want_close: false,
             tp: None,
             store: tiles::Store::new(tiles::CAPACITY),
@@ -252,7 +258,10 @@ fn screen_input(m: &Mutex<State>, host: &dyn ClientHost, input: impl FnOnce(&mut
         save_waypoints(host, s);
     }
     if act.back {
-        s.view = None;
+        s.view = s.back_map.take().map(|mut m| {
+            m.invalidate();
+            View::Map(m)
+        });
     }
     if act.open.is_some() {
         s.open = act.open;
@@ -312,7 +321,7 @@ fn load_view(host: &dyn ClientHost, s: &mut State) {
     }
 }
 
-fn draw_map(host: &dyn ClientHost, event: &mut ScreenRenderPostEvent<'_>, m: &mut fullmap::MapView) {
+fn draw_map(host: &dyn ClientHost, event: &mut ScreenRenderPostEvent<'_>, m: &mut fullmap::MapView, wps: &Waypoints) {
     let size = event.draw.size();
     if m.gui != size {
         // The window was resized: lay out again, keep the view.
@@ -324,6 +333,13 @@ fn draw_map(host: &dyn ClientHost, event: &mut ScreenRenderPostEvent<'_>, m: &mu
     event.draw.fill([0.0, 0.0, size[0], size[1]], 0xFF101014);
     if m.uploaded {
         event.draw.sprite(SPRITE, [0.0, 0.0, m.image.0 as f32, m.image.1 as f32], [0.0, 0.0, size[0], size[1]], None);
+    }
+    let dim = host.dimension().to_string();
+    for w in wps.list().iter().filter(|w| w.visible && w.dimension == dim) {
+        let [wx, wy] = m.to_gui(f64::from(w.pos[0]) + 0.5, f64::from(w.pos[2]) + 0.5);
+        if wx >= 0.0 && wy >= 0.0 && wx < size[0] && wy < size[1] {
+            icons::draw(&mut |r, argb| event.draw.fill(r, argb), &w.icon, [wx, wy], w.color);
+        }
     }
     if let Some(cam) = host.camera() {
         let [mx, my] = m.to_gui(cam.position[0], cam.position[2]);
@@ -426,10 +442,12 @@ impl Hooks for Mod {
         // The key counts only while no screen is open.
         if host.consume_click(ID, "waypoints") {
             s.view = None;
+            s.back_map = None;
             host.mod_screen_open(ID);
         }
         if host.consume_click(ID, "map") {
             s.view = None;
+            s.back_map = None;
             s.open_map = true;
             host.mod_screen_open(ID);
         }
@@ -536,19 +554,48 @@ impl Hooks for Mod {
         }
         load_view(host, s);
         if let Some(i) = s.open.take() {
-            s.view = Some(View::Edit(screen::Screen::new(width, here, dimension.clone(), i, &s.waypoints)));
+            if let Some(View::Map(m)) = s.view.take() {
+                s.back_map = Some(m);
+            }
+            let at = s.open_here.take().unwrap_or(here);
+            s.view = Some(View::Edit(screen::Screen::new(width, at, dimension.clone(), i, &s.waypoints)));
         }
         let view = s.view.get_or_insert_with(|| View::List(list::List::new(width, here, dimension, &s.waypoints)));
         match view {
             View::Edit(screen) => draw_edit(host, event, screen, width),
-            View::Map(m) => draw_map(host, event, m),
+            View::Map(m) => draw_map(host, event, m, &s.waypoints),
             View::List(l) => draw_list(host, event, l, &s.waypoints),
         }
     }
 
     fn screen_mouse_button_pressed_pre(&self, host: &dyn ClientHost, event: &mut ScreenMouseButtonPressedPreEvent<'_>) -> Flow {
         let (at, button, modifiers) = (event.screen.mouse, event.button, event.modifiers);
-        screen_input(&self.0, host, |w| w.mouse_pressed(host, at, button, modifiers))
+        let flow = screen_input(&self.0, host, |w| w.mouse_pressed(host, at, button, modifiers));
+        if matches!(flow, Flow::Cancel) || host.mod_screen() != Some(ID) {
+            return flow;
+        }
+        let mut guard = lock(&self.0);
+        let s = &mut *guard;
+        let Some(View::Map(m)) = &s.view else { return flow };
+        // The bottom strip holds the buttons.
+        if at[1] >= m.gui[1] - 30.0 {
+            return flow;
+        }
+        if button == 0 {
+            if let Some(i) = m.waypoint_at(s.waypoints.list(), &host.dimension().to_string(), at) {
+                s.open = Some(Some(i));
+                return Flow::Cancel;
+            }
+        } else if button == 1 {
+            // A right click starts a new waypoint here, at the stored surface (Y = height + 1), else at the player's height.
+            let (x, z) = m.to_world(at);
+            let known = s.store.peek(tiles::tile_of(x, z)).map(|t| t.get(x, z)).filter(|c| c.color != 0);
+            let y = known.map_or_else(|| host.camera().map_or(64, |c| c.position[1].floor() as i32), |c| i32::from(c.height) + 1);
+            s.open_here = Some([x, y, z]);
+            s.open = Some(None);
+            return Flow::Cancel;
+        }
+        flow
     }
 
     fn screen_mouse_button_released_pre(&self, host: &dyn ClientHost, event: &mut ScreenMouseButtonReleasedPreEvent<'_>) -> Flow {
