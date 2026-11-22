@@ -1,0 +1,107 @@
+{
+  "template": "minecraft:stone",
+  "state_properties": {
+    "facing": {
+      "type": "enum",
+      "values": [
+        "north",
+        "south",
+        "west",
+        "east"
+      ]
+    },
+    "open": {
+      "type": "boolean"
+    },
+    "powered": {
+      "type": "boolean"
+    }
+  },
+  "properties": {
+    "hardness": 3.0,
+    "explosion_resistance": 2.0,
+    "requires_tool": true,
+    "map_color": 33,
+    "sounds": "minecraft:stone",
+    "occludes": false
+  },
+  "shapes": {
+    "properties": [
+      "facing"
+    ],
+    "values": {
+      "west": [
+        [
+          0.0,
+          0.0,
+          0.125,
+          1.0,
+          0.375,
+          0.875
+        ]
+      ],
+      "east": [
+        [
+          0.0,
+          0.0,
+          0.125,
+          1.0,
+          0.375,
+          0.875
+        ]
+      ]
+    },
+    "default": [
+      [
+        0.125,
+        0.0,
+        0.0,
+        0.875,
+        0.375,
+        1.0
+      ]
+    ]
+  },
+  "collision_shapes": {
+    "properties": [
+      "facing"
+    ],
+    "values": {
+      "west": [
+        [
+          0.0,
+          0.0,
+          0.125,
+          1.0,
+          0.375,
+          0.875
+        ]
+      ],
+      "east": [
+        [
+          0.0,
+          0.0,
+          0.125,
+          1.0,
+          0.375,
+          0.875
+        ]
+      ]
+    },
+    "default": [
+      [
+        0.125,
+        0.0,
+        0.0,
+        0.875,
+        0.375,
+        1.0
+      ]
+    ]
+  },
+  "default_state": {
+    "facing": "north",
+    "open": "false",
+    "powered": "false"
+  }
+}

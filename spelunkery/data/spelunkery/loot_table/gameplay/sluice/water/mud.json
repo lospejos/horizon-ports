@@ -1,0 +1,57 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "condition": {
+            "predicate": {
+              "biome": "minecraft:mangrove_swamp"
+            },
+            "type": "minecraft:location_check"
+          },
+          "name": "minecraft:mangrove_roots",
+          "type": "minecraft:item",
+          "weight": 20
+        },
+        {
+          "condition": {
+            "predicate": {
+              "biome": "minecraft:mangrove_swamp"
+            },
+            "type": "minecraft:location_check"
+          },
+          "name": "minecraft:mangrove_propagule",
+          "type": "minecraft:item",
+          "weight": 20
+        },
+        {
+          "name": "minecraft:bone",
+          "type": "minecraft:item",
+          "weight": 10
+        },
+        {
+          "name": "minecraft:skeleton_skull",
+          "type": "minecraft:item",
+          "weight": 5
+        },
+        {
+          "name": "minecraft:leather_boots",
+          "type": "minecraft:item",
+          "weight": 10
+        },
+        {
+          "name": "minecraft:glass_bottle",
+          "type": "minecraft:item",
+          "weight": 10
+        },
+        {
+          "name": "minecraft:clay_ball",
+          "type": "minecraft:item",
+          "weight": 1
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "category": "building",
+  "key": {
+    "P": "mythicupgrades:ruby_crystal_pillar"
+  },
+  "pattern": [
+    "PP",
+    "PP"
+  ],
+  "result": {
+    "count": 4,
+    "id": "mythicupgrades:cut_ruby_crystal_pillar"
+  },
+  "show_notification": true,
+  "type": "minecraft:crafting_shaped"
+}

@@ -1,0 +1,13 @@
+{
+  "key": {
+    "#": "spelunkery:polished_rock_salt"
+  },
+  "pattern": [
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "id": "spelunkery:polished_rock_salt_slab"
+  },
+  "type": "minecraft:crafting_shaped"
+}

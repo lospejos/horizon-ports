@@ -1,0 +1,9 @@
+{
+  "addition": "mythicupgrades:peridot_ingot",
+  "base": "mythicupgrades:aquamarine_helmet",
+  "result": {
+    "id": "mythicupgrades:peridot_helmet"
+  },
+  "template": "mythicupgrades:mythic_upgrade_smithing_template",
+  "type": "minecraft:smithing_transform"
+}

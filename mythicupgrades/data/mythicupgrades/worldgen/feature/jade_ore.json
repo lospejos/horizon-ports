@@ -1,0 +1,25 @@
+{
+  "discard_chance_on_air_exposure": 0.0,
+  "size": 7,
+  "targets": [
+    {
+      "state": {
+        "id": "mythicupgrades:jade_ore"
+      },
+      "target": {
+        "block": "minecraft:end_stone",
+        "predicate_type": "minecraft:block_match"
+      }
+    },
+    {
+      "state": {
+        "id": "mythicupgrades:jade_ore"
+      },
+      "target": {
+        "block": "mythicupgrades:jade_schist",
+        "predicate_type": "minecraft:block_match"
+      }
+    }
+  ],
+  "type": "minecraft:ore"
+}

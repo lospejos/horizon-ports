@@ -1,0 +1,15 @@
+{
+  "key": {
+    "/": "minecraft:stick",
+    "X": "minecraft:obsidian"
+  },
+  "pattern": [
+    " X ",
+    "/X ",
+    " /X"
+  ],
+  "result": {
+    "id": "spelunkery:obsidian_hammer_and_chisel"
+  },
+  "type": "minecraft:crafting_shaped"
+}

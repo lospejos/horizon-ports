@@ -1,0 +1,81 @@
+{
+  "template": "minecraft:end_rod",
+  "state_properties": {
+    "waterlogged": {
+      "type": "boolean"
+    }
+  },
+  "properties": {
+    "hardness": 0.0,
+    "explosion_resistance": 0.0,
+    "requires_tool": false,
+    "map_color": 0,
+    "sounds": "minecraft:candle",
+    "light": 14,
+    "occludes": false
+  },
+  "shapes": {
+    "properties": [
+      "facing"
+    ],
+    "values": {
+      "east": [
+        [
+          0.0,
+          0.375,
+          0.375,
+          1.0,
+          0.625,
+          0.625
+        ]
+      ],
+      "west": [
+        [
+          0.0,
+          0.375,
+          0.375,
+          1.0,
+          0.625,
+          0.625
+        ]
+      ],
+      "up": [
+        [
+          0.375,
+          0.0,
+          0.375,
+          0.625,
+          1.0,
+          0.625
+        ]
+      ],
+      "down": [
+        [
+          0.375,
+          0.0,
+          0.375,
+          0.625,
+          1.0,
+          0.625
+        ]
+      ]
+    },
+    "default": [
+      [
+        0.375,
+        0.375,
+        0.0,
+        0.625,
+        0.625,
+        1.0
+      ]
+    ]
+  },
+  "collision_shapes": {
+    "default": []
+  },
+  "default_state": {
+    "facing": "up",
+    "waterlogged": "false"
+  }
+}

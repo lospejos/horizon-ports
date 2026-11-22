@@ -1,0 +1,15 @@
+{
+  "template": "minecraft:amethyst_cluster",
+  "properties": {
+    "hardness": 1.5,
+    "explosion_resistance": 1.5,
+    "requires_tool": false,
+    "map_color": 28,
+    "sounds": "minecraft:amethyst_cluster",
+    "light": 6
+  },
+  "default_state": {
+    "facing": "up",
+    "waterlogged": "false"
+  }
+}

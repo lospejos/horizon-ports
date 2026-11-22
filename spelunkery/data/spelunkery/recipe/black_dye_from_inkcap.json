@@ -1,0 +1,9 @@
+{
+  "ingredients": [
+    "spelunkery:inkcap_mushroom"
+  ],
+  "result": {
+    "id": "minecraft:black_dye"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

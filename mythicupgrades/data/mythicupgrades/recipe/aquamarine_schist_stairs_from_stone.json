@@ -1,0 +1,17 @@
+{
+  "category": "building",
+  "key": {
+    "B": "mythicupgrades:aquamarine_schist"
+  },
+  "pattern": [
+    "B  ",
+    "BB ",
+    "BBB"
+  ],
+  "result": {
+    "count": 4,
+    "id": "mythicupgrades:aquamarine_schist_stairs"
+  },
+  "show_notification": true,
+  "type": "minecraft:crafting_shaped"
+}

@@ -1,0 +1,42 @@
+{
+  "depth": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 5,
+    "min_inclusive": 3
+  },
+  "extra_bottom_block_chance": 0,
+  "extra_edge_column_chance": 0.5,
+  "ground_state": {
+    "entries": [
+      {
+        "data": {
+          "id": "minecraft:crying_obsidian"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "minecraft:obsidian"
+        },
+        "weight": 100
+      }
+    ],
+    "type": "minecraft:weighted"
+  },
+  "replaceable": "#spelunkery:base_stone_end",
+  "surface": "ceiling",
+  "type": "minecraft:vegetation_patch",
+  "vegetation_chance": 0,
+  "vegetation_feature": {
+    "feature": {
+      "type": "minecraft:no_op"
+    },
+    "placement": []
+  },
+  "vertical_range": 5,
+  "xz_radius": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 7,
+    "min_inclusive": 4
+  }
+}

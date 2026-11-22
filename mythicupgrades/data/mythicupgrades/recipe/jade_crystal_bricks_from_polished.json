@@ -1,0 +1,16 @@
+{
+  "category": "building",
+  "key": {
+    "P": "mythicupgrades:polished_jade_crystal_block"
+  },
+  "pattern": [
+    "PP",
+    "PP"
+  ],
+  "result": {
+    "count": 4,
+    "id": "mythicupgrades:jade_crystal_bricks"
+  },
+  "show_notification": true,
+  "type": "minecraft:crafting_shaped"
+}

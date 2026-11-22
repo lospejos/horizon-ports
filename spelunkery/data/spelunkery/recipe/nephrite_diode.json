@@ -1,0 +1,17 @@
+{
+  "key": {
+    "#": "spelunkery:nephrite",
+    "C": "spelunkery:carved_nephrite",
+    "R": "spelunkery:cinnabar",
+    "S": "spelunkery:nephrite_siphon"
+  },
+  "pattern": [
+    "###",
+    "CRS",
+    "###"
+  ],
+  "result": {
+    "id": "spelunkery:nephrite_diode"
+  },
+  "type": "minecraft:crafting_shaped"
+}

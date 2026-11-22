@@ -1,0 +1,21 @@
+{
+  "template": "minecraft:structure_void",
+  "properties": {
+    "hardness": 0.0,
+    "explosion_resistance": 0.0,
+    "requires_tool": false,
+    "map_color": 21,
+    "sounds": "minecraft:white_wool",
+    "push_reaction": "PUSH_PULL",
+    "occludes": false
+  },
+  "shapes": {
+    "default": []
+  },
+  "collision_shapes": {
+    "default": []
+  },
+  "components": {
+    "minecraft:max_stack_size": 1
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "category": "building",
+  "key": {
+    "#": "mythicupgrades:raw_necoium"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "mythicupgrades:raw_necoium_block"
+  },
+  "show_notification": true,
+  "type": "minecraft:crafting_shaped"
+}

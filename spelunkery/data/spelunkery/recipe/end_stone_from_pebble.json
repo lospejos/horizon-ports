@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:end_stone_pebble"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "minecraft:end_stone"
+  },
+  "type": "minecraft:crafting_shaped"
+}

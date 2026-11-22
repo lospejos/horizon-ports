@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:basalt_pebble"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "minecraft:smooth_basalt"
+  },
+  "type": "minecraft:crafting_shaped"
+}

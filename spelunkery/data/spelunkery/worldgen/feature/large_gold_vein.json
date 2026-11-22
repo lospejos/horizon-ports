@@ -1,0 +1,70 @@
+{
+  "features": [
+    {
+      "feature": {
+        "to_place": {
+          "default_state": {
+            "id": "minecraft:raw_gold_block"
+          },
+          "high_chance": 0.9,
+          "high_states": [
+            {
+              "id": "minecraft:nether_gold_ore"
+            }
+          ],
+          "low_states": [
+            {
+              "id": "minecraft:blackstone"
+            }
+          ],
+          "noise": {
+            "base_octave": -3,
+            "base_amplitude": 0.955388882960065
+          },
+          "scale": 1,
+          "seed": 69,
+          "threshold": 0.2,
+          "type": "minecraft:noise_threshold"
+        },
+        "type": "minecraft:simple_block"
+      },
+      "placement": [
+        {
+          "count": 16,
+          "type": "minecraft:count"
+        },
+        {
+          "type": "minecraft:offset",
+          "x": {
+            "max": 3,
+            "min": -3,
+            "plateau": 0,
+            "type": "minecraft:trapezoid"
+          },
+          "y": {
+            "max": 3,
+            "min": -3,
+            "plateau": 0,
+            "type": "minecraft:trapezoid"
+          },
+          "z": {
+            "max": 3,
+            "min": -3,
+            "plateau": 0,
+            "type": "minecraft:trapezoid"
+          }
+        },
+        {
+          "predicate": {
+            "blocks": [
+              "minecraft:netherrack"
+            ],
+            "type": "minecraft:matching_blocks"
+          },
+          "type": "minecraft:block_predicate_filter"
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:simple_random_selector"
+}

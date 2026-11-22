@@ -1,0 +1,14 @@
+{
+  "template": "minecraft:stone_slab",
+  "properties": {
+    "hardness": 1.5,
+    "explosion_resistance": 1.5,
+    "requires_tool": true,
+    "map_color": 32,
+    "sounds": "minecraft:amethyst_block"
+  },
+  "default_state": {
+    "type": "bottom",
+    "waterlogged": "false"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "template": "minecraft:weeping_vines_plant",
+  "state_properties": {
+    "top": {
+      "type": "boolean"
+    },
+    "waterlogged": {
+      "type": "boolean"
+    }
+  },
+  "properties": {
+    "hardness": 0.0,
+    "explosion_resistance": 0.0,
+    "requires_tool": false,
+    "map_color": 26,
+    "sounds": "minecraft:weeping_vines",
+    "random_ticks": true
+  },
+  "default_state": {
+    "top": "true",
+    "waterlogged": "false"
+  },
+  "item": false,
+  "pick_item": "spelunkery:tangle_roots"
+}

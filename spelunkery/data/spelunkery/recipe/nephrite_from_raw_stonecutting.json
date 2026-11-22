@@ -1,0 +1,8 @@
+{
+  "ingredient": "spelunkery:raw_nephrite",
+  "result": {
+    "count": 1,
+    "id": "spelunkery:nephrite"
+  },
+  "type": "minecraft:stonecutting"
+}

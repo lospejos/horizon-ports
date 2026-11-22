@@ -1,0 +1,38 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "name": "minecraft:diamond",
+          "type": "minecraft:item"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "name": "minecraft:experience_bottle",
+          "type": "minecraft:item"
+        }
+      ],
+      "rolls": {
+        "max": 4,
+        "min": 2,
+        "type": "minecraft:uniform"
+      }
+    },
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "name": "minecraft:bedrock",
+          "type": "minecraft:item"
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

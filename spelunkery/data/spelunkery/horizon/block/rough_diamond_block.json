@@ -1,0 +1,10 @@
+{
+  "template": "minecraft:raw_copper_block",
+  "properties": {
+    "hardness": 5.0,
+    "explosion_resistance": 6.0,
+    "requires_tool": true,
+    "map_color": 31,
+    "sounds": "minecraft:calcite"
+  }
+}

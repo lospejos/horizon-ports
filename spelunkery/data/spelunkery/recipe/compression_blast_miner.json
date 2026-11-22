@@ -1,0 +1,19 @@
+{
+  "group": "glowsticks",
+  "key": {
+    "C": "spelunkery:cinnabar_block",
+    "D": "minecraft:dispenser",
+    "I": "minecraft:iron_block",
+    "N": "minecraft:netherite_ingot",
+    "O": "minecraft:obsidian"
+  },
+  "pattern": [
+    "ODO",
+    "OIO",
+    "NCN"
+  ],
+  "result": {
+    "id": "spelunkery:compression_blast_miner"
+  },
+  "type": "minecraft:crafting_shaped"
+}

@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:cinnabar_shard"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "spelunkery:cinnabar"
+  },
+  "type": "minecraft:crafting_shaped"
+}

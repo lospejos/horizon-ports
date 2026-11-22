@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "spelunkery:salt_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:salt"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

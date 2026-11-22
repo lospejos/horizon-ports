@@ -1,0 +1,27 @@
+{
+  "feature": "mythicupgrades:deepslate_necoium_ore",
+  "placement": [
+    {
+      "count": 5,
+      "type": "minecraft:count"
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "height": {
+        "max_inclusive": {
+          "absolute": -16
+        },
+        "min_inclusive": {
+          "absolute": -64
+        },
+        "type": "minecraft:trapezoid"
+      },
+      "type": "minecraft:height_range"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

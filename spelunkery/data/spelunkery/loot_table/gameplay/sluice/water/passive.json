@@ -1,0 +1,65 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "name": "spelunkery:stone_pebble",
+          "type": "minecraft:item",
+          "weight": 20
+        },
+        {
+          "name": "minecraft:seagrass",
+          "type": "minecraft:item",
+          "weight": 15
+        },
+        {
+          "name": "minecraft:dirt",
+          "type": "minecraft:item",
+          "weight": 5
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "biome": "minecraft:frozen_peaks"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:frozen_ocean"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:frozen_river"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:snowy_taiga"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:snowy_plains"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "minecraft:ice",
+          "type": "minecraft:item",
+          "weight": 20
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

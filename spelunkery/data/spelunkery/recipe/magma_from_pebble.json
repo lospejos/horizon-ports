@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:magma_pebble"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "minecraft:magma_block"
+  },
+  "type": "minecraft:crafting_shaped"
+}

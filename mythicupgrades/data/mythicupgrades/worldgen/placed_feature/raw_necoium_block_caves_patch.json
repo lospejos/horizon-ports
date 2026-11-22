@@ -1,0 +1,29 @@
+{
+  "feature": "mythicupgrades:raw_necoium_block_in_caves",
+  "placement": [
+    {
+      "type": "minecraft:noise_threshold_count",
+      "noise_level": 0.7,
+      "below_noise": 0,
+      "above_noise": 4
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "height": {
+        "max_inclusive": {
+          "absolute": 16
+        },
+        "min_inclusive": {
+          "absolute": -64
+        },
+        "type": "minecraft:trapezoid"
+      },
+      "type": "minecraft:height_range"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

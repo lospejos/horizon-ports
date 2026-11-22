@@ -1,0 +1,34 @@
+{
+  "template": "minecraft:stone",
+  "state_properties": {
+    "facing": {
+      "type": "enum",
+      "values": [
+        "north",
+        "east",
+        "south",
+        "west",
+        "up",
+        "down"
+      ]
+    },
+    "powered": {
+      "type": "boolean"
+    },
+    "primed": {
+      "type": "boolean"
+    }
+  },
+  "properties": {
+    "hardness": 50.0,
+    "explosion_resistance": 1200.0,
+    "requires_tool": true,
+    "map_color": 29,
+    "sounds": "minecraft:netherite_block"
+  },
+  "default_state": {
+    "facing": "south",
+    "powered": "false",
+    "primed": "false"
+  }
+}

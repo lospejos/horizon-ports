@@ -1,0 +1,56 @@
+{
+  "feature": "spelunkery:rock_salt",
+  "placement": [
+    {
+      "count": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 8,
+        "min_inclusive": 1
+      },
+      "type": "minecraft:count"
+    },
+    {
+      "noise_factor": 55,
+      "noise_offset": 0,
+      "noise_to_count_ratio": 2,
+      "type": "minecraft:noise_based_count"
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "height": {
+        "max_inclusive": {
+          "absolute": 100
+        },
+        "min_inclusive": {
+          "absolute": 30
+        },
+        "type": "minecraft:uniform"
+      },
+      "type": "minecraft:height_range"
+    },
+    {
+      "allowed_search_condition": {
+        "blocks": "minecraft:air",
+        "type": "minecraft:matching_blocks"
+      },
+      "direction_of_search": "up",
+      "max_steps": 12,
+      "target_condition": {
+        "direction": "down",
+        "type": "minecraft:has_sturdy_face"
+      },
+      "type": "minecraft:environment_scan"
+    },
+    {
+      "type": "minecraft:offset",
+      "x": 0,
+      "y": -1,
+      "z": 0
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

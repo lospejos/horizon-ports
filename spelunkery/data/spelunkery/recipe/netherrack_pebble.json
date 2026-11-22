@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "minecraft:netherrack"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:netherrack_pebble"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

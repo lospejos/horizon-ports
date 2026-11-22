@@ -1,0 +1,10 @@
+{
+  "template": "minecraft:nether_gold_ore",
+  "properties": {
+    "hardness": 3.0,
+    "explosion_resistance": 3.0,
+    "requires_tool": true,
+    "map_color": 35,
+    "sounds": "minecraft:nether_gold_ore"
+  }
+}

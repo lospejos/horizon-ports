@@ -1,0 +1,11 @@
+{
+  "ingredients": [
+    "spelunkery:saltpeter",
+    "spelunkery:phosphor_fungus"
+  ],
+  "result": {
+    "count": 3,
+    "id": "minecraft:bone_meal"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

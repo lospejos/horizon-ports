@@ -1,0 +1,16 @@
+{
+  "key": {
+    "#": "spelunkery:rock_salt",
+    "G": "minecraft:glowstone_dust",
+    "W": "#minecraft:wooden_slabs"
+  },
+  "pattern": [
+    "#",
+    "G",
+    "W"
+  ],
+  "result": {
+    "id": "spelunkery:salt_lamp"
+  },
+  "type": "minecraft:crafting_shaped"
+}

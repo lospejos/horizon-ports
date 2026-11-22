@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:polished_nephrite_bricks"
+  },
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "id": "spelunkery:polished_nephrite_brick_wall"
+  },
+  "type": "minecraft:crafting_shaped"
+}

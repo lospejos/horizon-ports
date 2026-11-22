@@ -1,0 +1,16 @@
+{
+  "category": "building",
+  "key": {
+    "#": "mythicupgrades:citrine_ingot"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "mythicupgrades:citrine_block"
+  },
+  "show_notification": true,
+  "type": "minecraft:crafting_shaped"
+}

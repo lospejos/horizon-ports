@@ -1,0 +1,9 @@
+{
+  "addition": "mythicupgrades:sapphire_ingot",
+  "base": "mythicupgrades:aquamarine_pickaxe",
+  "result": {
+    "id": "mythicupgrades:sapphire_pickaxe"
+  },
+  "template": "mythicupgrades:mythic_upgrade_smithing_template",
+  "type": "minecraft:smithing_transform"
+}

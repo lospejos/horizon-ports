@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "spelunkery:cinnabar_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:cinnabar"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

@@ -1,0 +1,11 @@
+{
+  "category": "misc",
+  "ingredients": [
+    "mythicupgrades:ruby_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "mythicupgrades:ruby_ingot"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

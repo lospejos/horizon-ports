@@ -1,0 +1,15 @@
+{
+  "key": {
+    "#": "minecraft:copper_ingot",
+    "X": "minecraft:redstone"
+  },
+  "pattern": [
+    " # ",
+    "#X#",
+    " # "
+  ],
+  "result": {
+    "id": "spelunkery:depth_gauge"
+  },
+  "type": "minecraft:crafting_shaped"
+}

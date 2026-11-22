@@ -1,0 +1,24 @@
+{
+  "template": "minecraft:ladder",
+  "state_properties": {
+    "end": {
+      "type": "boolean"
+    },
+    "top": {
+      "type": "boolean"
+    }
+  },
+  "properties": {
+    "hardness": 1.0,
+    "explosion_resistance": 1.0,
+    "requires_tool": false,
+    "map_color": 0,
+    "sounds": "minecraft:oak_planks"
+  },
+  "default_state": {
+    "end": "false",
+    "facing": "north",
+    "top": "false",
+    "waterlogged": "false"
+  }
+}

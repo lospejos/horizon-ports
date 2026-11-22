@@ -1,0 +1,38 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "condition": {
+        "terms": [
+          {
+            "chances": [
+              0.1,
+              0.14285715,
+              0.25,
+              1
+            ],
+            "enchantment": "minecraft:fortune",
+            "type": "minecraft:table_bonus"
+          },
+          {
+            "predicate": {
+              "biome": "minecraft:beach"
+            },
+            "type": "minecraft:location_check"
+          },
+          {
+            "type": "minecraft:survives_explosion"
+          }
+        ],
+        "type": "minecraft:all_of"
+      },
+      "entries": [
+        {
+          "name": "spelunkery:nephrite_chunk",
+          "type": "minecraft:item"
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

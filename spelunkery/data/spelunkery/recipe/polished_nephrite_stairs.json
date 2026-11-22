@@ -1,0 +1,15 @@
+{
+  "key": {
+    "#": "spelunkery:polished_nephrite"
+  },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "result": {
+    "count": 4,
+    "id": "spelunkery:polished_nephrite_stairs"
+  },
+  "type": "minecraft:crafting_shaped"
+}

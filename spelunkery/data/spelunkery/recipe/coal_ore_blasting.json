@@ -1,0 +1,9 @@
+{
+  "cookingtime": 100,
+  "experience": 0.1,
+  "ingredient": "#spelunkery:coal_ores",
+  "result": {
+    "id": "minecraft:coal"
+  },
+  "type": "minecraft:blasting"
+}

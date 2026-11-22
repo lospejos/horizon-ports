@@ -1,0 +1,13 @@
+{
+  "key": {
+    "#": "spelunkery:nephrite_chunk"
+  },
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "result": {
+    "id": "spelunkery:nephrite"
+  },
+  "type": "minecraft:crafting_shaped"
+}

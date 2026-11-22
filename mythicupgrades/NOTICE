@@ -1,0 +1,14 @@
+Mythic Upgrades for Horizon 26.3 (version 0.2.0)
+
+A port of Mythic Upgrades 5.1.1 (Fabric, Minecraft 1.20.1) by TriQue (fabric.mod.json "authors", gradle.properties
+mod_author).
+Original source: https://github.com/TriQue06/mythic-upgrades-multiloader (branch 1.20.1, version=5.1.1)
+Original licence: MIT ("license": "MIT" in fabric.mod.json, license=MIT in gradle.properties). The 1.20.1 branch
+ships no licence file; LICENSE is the MIT text from the author's earlier repository,
+https://github.com/TriQue06/mythic-upgrades-1.20.x (its copyright line names no holder; the author is TriQue).
+
+Ported to Horizon by lavoide: the rules (budding crystal growth, ore experience, the armour set effects, the tool
+effects, the end city loot) are re-implemented in Rust on Horizon's mod API, and the content (blocks, items,
+textures, models, sounds, loot, recipes, tags, trims, worldgen) is carried over from the original jar and converted
+to 26.3's formats. This port is distributed under the same licence as the original (MIT); the licence text is in
+LICENSE. Built against Horizon's exact-build SDK dd67b76ff23e28c6d8e21859df600d31572f81a0.

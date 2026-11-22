@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:weighted",
+    "entries": [
+      {
+        "data": {
+          "id": "mythicupgrades:medium_ametrine_crystal_bud",
+          "properties": {
+            "facing": "east",
+            "waterlogged": "false"
+          }
+        },
+        "weight": 3
+      },
+      {
+        "data": {
+          "id": "mythicupgrades:large_ametrine_crystal_bud",
+          "properties": {
+            "facing": "east",
+            "waterlogged": "false"
+          }
+        },
+        "weight": 2
+      },
+      {
+        "data": {
+          "id": "mythicupgrades:ametrine_crystal_cluster",
+          "properties": {
+            "facing": "east",
+            "waterlogged": "false"
+          }
+        },
+        "weight": 1
+      }
+    ]
+  }
+}

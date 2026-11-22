@@ -1,0 +1,47 @@
+{
+  "features": [
+    {
+      "feature": {
+        "to_place": {
+          "id": "spelunkery:inkcap_mushroom"
+        },
+        "type": "minecraft:simple_block"
+      },
+      "placement": [
+        {
+          "count": 5,
+          "type": "minecraft:count"
+        },
+        {
+          "type": "minecraft:offset",
+          "x": {
+            "max": 7,
+            "min": -7,
+            "plateau": 0,
+            "type": "minecraft:trapezoid"
+          },
+          "y": {
+            "max": 3,
+            "min": -3,
+            "plateau": 0,
+            "type": "minecraft:trapezoid"
+          },
+          "z": {
+            "max": 7,
+            "min": -7,
+            "plateau": 0,
+            "type": "minecraft:trapezoid"
+          }
+        },
+        {
+          "predicate": {
+            "blocks": "minecraft:air",
+            "type": "minecraft:matching_blocks"
+          },
+          "type": "minecraft:block_predicate_filter"
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:simple_random_selector"
+}

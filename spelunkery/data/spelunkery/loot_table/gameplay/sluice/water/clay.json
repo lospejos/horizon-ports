@@ -1,0 +1,236 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "structure": "minecraft:trail_ruins"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "structure": "minecraft:ocean_ruin_warm"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "structure": "minecraft:ocean_ruin_cold"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "minecraft:bowl",
+          "type": "minecraft:item",
+          "weight": 10
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "structure": "minecraft:trail_ruins"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "structure": "minecraft:ocean_ruin_warm"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "structure": "minecraft:ocean_ruin_cold"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "minecraft:brick",
+          "type": "minecraft:item",
+          "weight": 10
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "structure": "minecraft:trail_ruins"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "structure": "minecraft:ocean_ruin_warm"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "structure": "minecraft:ocean_ruin_cold"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "minecraft:spyglass",
+          "type": "minecraft:item",
+          "weight": 5
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "structure": "minecraft:trail_ruins"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "structure": "minecraft:ocean_ruin_warm"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "structure": "minecraft:ocean_ruin_cold"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "minecraft:writable_book",
+          "type": "minecraft:item",
+          "weight": 5
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "structure": "minecraft:trail_ruins"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "structure": "minecraft:ocean_ruin_warm"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "structure": "minecraft:ocean_ruin_cold"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "minecraft:shears",
+          "type": "minecraft:item",
+          "weight": 5
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "structure": "minecraft:trail_ruins"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "structure": "minecraft:ocean_ruin_warm"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "structure": "minecraft:ocean_ruin_cold"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "minecraft:bundle",
+          "type": "minecraft:item",
+          "weight": 5
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "structure": "minecraft:village_desert"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "spelunkery:rough_diamond_shard",
+          "type": "minecraft:item",
+          "weight": 1
+        },
+        {
+          "name": "spelunkery:tangle_roots",
+          "type": "minecraft:item",
+          "weight": 10
+        },
+        {
+          "name": "minecraft:seagrass",
+          "type": "minecraft:item",
+          "weight": 10
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "biome": "minecraft:river"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:frozen_river"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "spelunkery:nephrite_chunk",
+          "type": "minecraft:item",
+          "weight": 5
+        },
+        {
+          "name": "spelunkery:raw_copper_nugget",
+          "type": "minecraft:item",
+          "weight": 4
+        },
+        {
+          "name": "spelunkery:saltpeter",
+          "type": "minecraft:item",
+          "weight": 10
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "template": "minecraft:stone",
+  "state_properties": {
+    "charge": {
+      "type": "enum",
+      "values": [
+        "empty",
+        "one_to_twenty",
+        "twentyone_to_fourty",
+        "fourtyone_to_sixty",
+        "sixtyone_to_eighty",
+        "eightyone_to_ninetynine",
+        "full"
+      ]
+    }
+  },
+  "state_light": {
+    "properties": [
+      "charge"
+    ],
+    "values": {
+      "one_to_twenty": 1,
+      "twentyone_to_fourty": 2,
+      "fourtyone_to_sixty": 3,
+      "sixtyone_to_eighty": 4,
+      "eightyone_to_ninetynine": 5,
+      "full": 6
+    },
+    "default": 0
+  },
+  "properties": {
+    "hardness": 3.0,
+    "explosion_resistance": 2.0,
+    "requires_tool": true,
+    "map_color": 33,
+    "sounds": "minecraft:stone"
+  },
+  "default_state": {
+    "charge": "empty"
+  }
+}

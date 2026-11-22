@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:simple_random_selector",
+  "features": [
+    "mythicupgrades:ametrine_crystal_buds_down",
+    "mythicupgrades:ametrine_crystal_buds_up",
+    "mythicupgrades:ametrine_crystal_buds_north",
+    "mythicupgrades:ametrine_crystal_buds_south",
+    "mythicupgrades:ametrine_crystal_buds_east",
+    "mythicupgrades:ametrine_crystal_buds_west"
+  ]
+}

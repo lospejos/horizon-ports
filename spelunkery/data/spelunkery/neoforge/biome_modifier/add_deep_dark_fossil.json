@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#spelunkery:has_sculk_noise",
+  "features": "spelunkery:deep_dark_fossil",
+  "step": "vegetal_decoration"
+}

@@ -1,0 +1,45 @@
+{
+  "template": "minecraft:tall_grass",
+  "properties": {
+    "hardness": 0.0,
+    "explosion_resistance": 0.0,
+    "requires_tool": false,
+    "map_color": 7,
+    "sounds": "minecraft:moss_block"
+  },
+  "default_state": {
+    "half": "lower"
+  },
+  "components": {
+    "minecraft:compostable": {
+      "layers": {
+        "type": "minecraft:number_dispatcher",
+        "cases": [
+          {
+            "condition": {
+              "type": "minecraft:match_block",
+              "blocks": "minecraft:composter",
+              "state": {
+                "level": "0"
+              }
+            },
+            "value": 1
+          }
+        ],
+        "default": {
+          "type": "minecraft:weighted_list",
+          "distribution": [
+            {
+              "data": 1,
+              "weight": 50
+            },
+            {
+              "data": 0,
+              "weight": 50
+            }
+          ]
+        }
+      }
+    }
+  }
+}

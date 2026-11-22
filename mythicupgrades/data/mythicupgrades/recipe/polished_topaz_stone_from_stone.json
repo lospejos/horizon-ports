@@ -1,0 +1,16 @@
+{
+  "category": "building",
+  "key": {
+    "B": "mythicupgrades:topaz_schist"
+  },
+  "pattern": [
+    "BB",
+    "BB"
+  ],
+  "result": {
+    "count": 4,
+    "id": "mythicupgrades:polished_topaz_schist"
+  },
+  "show_notification": true,
+  "type": "minecraft:crafting_shaped"
+}

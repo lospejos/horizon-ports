@@ -1,0 +1,8 @@
+{
+  "ingredient": "mythicupgrades:polished_citrine_schist",
+  "result": {
+    "count": 1,
+    "id": "mythicupgrades:polished_citrine_schist_wall"
+  },
+  "type": "minecraft:stonecutting"
+}
