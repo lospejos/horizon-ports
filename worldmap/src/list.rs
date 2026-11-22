@@ -172,3 +172,73 @@ fn layout(v: &mut View, wps: &Waypoints) -> (Widgets, Ids, usize) {
     let close = w.add_button(Button::new([x + 176.0, BOTTOM_Y, 84.0, 20.0], label("worldmap.wp.close")));
     (w, Ids { rows, prev, next, new, sort, close }, pages)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::waypoints::Waypoint;
+
+    fn many(n: usize) -> Waypoints {
+        let mut wps = Waypoints::default();
+        for i in 0..n {
+            wps.add(Waypoint { name: format!("Waypoint {i}"), pos: [i as i32 * 10, 64, 0], dimension: "minecraft:overworld".into(), color: 0xFF8800, icon: String::new(), visible: true });
+        }
+        wps
+    }
+
+    fn list(wps: &Waypoints) -> List {
+        List::new(427.0, [0, 64, 0], "minecraft:overworld".into(), wps)
+    }
+
+    /// There is no scrollbar: the list pages at `PAGE` rows, so 20-50 waypoints give 3-7 pages.
+    #[test]
+    fn twenty_to_fifty_waypoints_page_and_every_row_fits_the_panel() {
+        for (n, pages) in [(20, 3), (50, 7)] {
+            let wps = many(n);
+            let mut l = list(&wps);
+            assert_eq!(l.page(), (1, pages));
+            let mut seen = Vec::new();
+            for p in 0..pages {
+                assert_eq!(l.page(), (p + 1, pages));
+                let rows = l.rows();
+                assert_eq!(rows.len(), if p + 1 < pages { PAGE } else { n - PAGE * (pages - 1) });
+                for r in rows {
+                    assert!(r.rect[1] >= TOP && r.rect[1] + r.rect[3] <= PAGER_Y, "row inside the panel, above the pager");
+                    seen.push(r.index);
+                }
+                let next = l.ids.next;
+                l.act(Outcome::Pressed(next), &mut many(n));
+            }
+            seen.sort_unstable();
+            assert_eq!(seen, (0..n).collect::<Vec<_>>(), "every waypoint is on exactly one page");
+            assert_eq!(l.page(), (1, pages), "next from the last page wraps to the first");
+        }
+    }
+
+    #[test]
+    fn panel_fits_a_small_gui_and_prev_wraps_to_the_last_page() {
+        assert!(BOTTOM_Y + 20.0 <= 360.0, "bottom buttons stay on a 640x360 GUI");
+        let mut wps = many(50);
+        let mut l = list(&wps);
+        let prev = l.ids.prev;
+        l.act(Outcome::Pressed(prev), &mut wps);
+        assert_eq!(l.page(), (7, 7));
+        assert_eq!(l.rows().len(), 2);
+    }
+
+    #[test]
+    fn deleting_the_last_row_of_the_last_page_steps_back_a_page() {
+        let mut wps = many(9);
+        let mut l = list(&wps);
+        let next = l.ids.next;
+        l.act(Outcome::Pressed(next), &mut wps);
+        assert_eq!(l.page(), (2, 2));
+        for _ in 0..2 {
+            let del = l.rows()[0].del;
+            l.act(Outcome::Pressed(del), &mut wps);
+        }
+        assert_eq!(wps.list().len(), 8);
+        assert_eq!(l.page(), (1, 1));
+        assert_eq!(l.rows().len(), 8);
+    }
+}
