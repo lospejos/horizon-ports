@@ -433,6 +433,7 @@ impl Hooks for Mod {
         };
         load_waypoints(host, &mut s);
         explore(host, &mut s, (pos[0].floor() as i32, pos[2].floor() as i32));
+        let s = &mut *s;
         if let Some(View::Map(m)) = &mut s.view {
             // The one shared image slot belongs to the map while it is open.
             if m.stale(s.tick) {
