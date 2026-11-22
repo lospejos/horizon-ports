@@ -46,7 +46,7 @@ fn lock(m: &Mutex<State>) -> std::sync::MutexGuard<'_, State> {
 #[mod_api::horizon_mod]
 impl Hooks for Mod {
     fn client_tick_post(&self, host: &mut dyn ClientHost, _: &mut ClientTickPostEvent) {
-        let Some(pos) = host.local_player().and_then(|p| host.entity_position(p.entity())) else { return };
+        let Some(pos) = host.camera().map(|c| c.position) else { return };
         let mut s = lock(&self.0);
         let range = s.scan.batch(BUDGET);
         if range.start == 0 {
@@ -60,7 +60,7 @@ impl Hooks for Mod {
                     let id = match s.colors.get(&c.block) {
                         Some(&id) => id,
                         None => {
-                            let id = host.block_state_id(&c.block).and_then(|b| host.block_state_map_color(b)).unwrap_or(0);
+                            let id = host.block_state_id(&c.block).and_then(|b| host.block_states().map_color(b)).unwrap_or(0);
                             s.colors.insert(c.block, id);
                             id
                         }
