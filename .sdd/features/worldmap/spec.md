@@ -13,6 +13,8 @@ Acceptance criteria:
 - A6: Sampling is budgeted per tick (at most 4096 columns); user sees no stutter.
 - A7: LICENSE is MIT; NOTICE credits Eternity World Map ideas; no GPL code (ADR 0001).
 - A8: README has install and update lines; package icon present.
+- A9: The map position is custom: corner plus offsets X and Y (so it can move below the item popup at the top right); applies without a restart. A drag-to-move editor is a later feature.
+- A10: Optional info lines under the map, like Xaero's Minimap: coordinates, biome, time of day, light level, dimension; each is a toggle. Only what the host API can read.
 
 Constraints: wasm only, no mixins (ADR 0002). SDK pin 2b77287de099c9316278ba7ac4d83590fdb7ef30. No local cargo: verify in CI. No commit, push or tag without the user's word.
 - Block names come from client_far_surface (TerrainColumn: block, height, water), since no client block read exists; far terrain (LOD Distance) must be on, else columns stay empty. Map colour: block_state_id(name) then block_state_map_color.
