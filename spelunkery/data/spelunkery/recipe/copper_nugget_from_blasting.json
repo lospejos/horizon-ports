@@ -1,0 +1,10 @@
+{
+  "cookingtime": 12,
+  "experience": 0.1,
+  "group": "copper_nugget",
+  "ingredient": "spelunkery:raw_copper_nugget",
+  "result": {
+    "id": "spelunkery:copper_nugget"
+  },
+  "type": "minecraft:blasting"
+}

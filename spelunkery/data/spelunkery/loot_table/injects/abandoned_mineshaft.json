@@ -1,0 +1,240 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "children": [
+            {
+              "condition": {
+                "chance": 0.2,
+                "type": "minecraft:random_chance"
+              },
+              "modifier": [
+                {
+                  "condition": {
+                    "chance": 0.75,
+                    "type": "minecraft:random_chance"
+                  },
+                  "tag": "{used:1b}",
+                  "type": "minecraft:set_nbt"
+                },
+                {
+                  "add": false,
+                  "damage": {
+                    "max": 0.8,
+                    "min": 0.2,
+                    "type": "minecraft:uniform"
+                  },
+                  "type": "minecraft:set_damage"
+                }
+              ],
+              "name": "spelunkery:parachute",
+              "type": "minecraft:item"
+            },
+            {
+              "condition": {
+                "chance": 0.233,
+                "type": "minecraft:random_chance"
+              },
+              "modifier": [
+                {
+                  "count": {
+                    "max": 6,
+                    "min": 1,
+                    "type": "minecraft:uniform"
+                  },
+                  "type": "minecraft:set_count"
+                }
+              ],
+              "name": "spelunkery:dust_bun",
+              "type": "minecraft:item"
+            },
+            {
+              "condition": {
+                "chance": 0.25,
+                "type": "minecraft:random_chance"
+              },
+              "modifier": [
+                {
+                  "count": {
+                    "max": 14,
+                    "min": 3,
+                    "type": "minecraft:uniform"
+                  },
+                  "type": "minecraft:set_count"
+                }
+              ],
+              "name": "spelunkery:mineomite",
+              "type": "minecraft:item"
+            },
+            {
+              "condition": {
+                "chance": 0.25,
+                "type": "minecraft:random_chance"
+              },
+              "modifier": [
+                {
+                  "count": {
+                    "max": 16,
+                    "min": 4,
+                    "type": "minecraft:uniform"
+                  },
+                  "type": "minecraft:set_count"
+                }
+              ],
+              "name": "spelunkery:wooden_rail",
+              "type": "minecraft:item"
+            },
+            {
+              "condition": {
+                "chance": 0.25,
+                "type": "minecraft:random_chance"
+              },
+              "modifier": [
+                {
+                  "count": {
+                    "max": 16,
+                    "min": 3,
+                    "type": "minecraft:uniform"
+                  },
+                  "type": "minecraft:set_count"
+                }
+              ],
+              "name": "spelunkery:rope_ladder",
+              "type": "minecraft:item"
+            },
+            {
+              "condition": {
+                "chance": 0.25,
+                "type": "minecraft:random_chance"
+              },
+              "modifier": [
+                {
+                  "count": {
+                    "max": 10,
+                    "min": 3,
+                    "type": "minecraft:uniform"
+                  },
+                  "type": "minecraft:set_count"
+                }
+              ],
+              "name": "spelunkery:glowstick",
+              "type": "minecraft:item"
+            },
+            {
+              "condition": {
+                "chance": 0.25,
+                "type": "minecraft:random_chance"
+              },
+              "modifier": [
+                {
+                  "count": {
+                    "max": 10,
+                    "min": 3,
+                    "type": "minecraft:uniform"
+                  },
+                  "type": "minecraft:set_count"
+                }
+              ],
+              "name": "spelunkery:red_glowstick",
+              "type": "minecraft:item"
+            },
+            {
+              "condition": {
+                "chance": 0.25,
+                "type": "minecraft:random_chance"
+              },
+              "modifier": [
+                {
+                  "count": {
+                    "max": 10,
+                    "min": 3,
+                    "type": "minecraft:uniform"
+                  },
+                  "type": "minecraft:set_count"
+                }
+              ],
+              "name": "spelunkery:purple_glowstick",
+              "type": "minecraft:item"
+            },
+            {
+              "condition": {
+                "chance": 0.25,
+                "type": "minecraft:random_chance"
+              },
+              "modifier": [
+                {
+                  "count": {
+                    "max": 10,
+                    "min": 3,
+                    "type": "minecraft:uniform"
+                  },
+                  "type": "minecraft:set_count"
+                }
+              ],
+              "name": "spelunkery:yellow_glowstick",
+              "type": "minecraft:item"
+            },
+            {
+              "condition": {
+                "chance": 0.5,
+                "type": "minecraft:random_chance"
+              },
+              "modifier": [
+                {
+                  "count": {
+                    "max": 1,
+                    "min": 0,
+                    "type": "minecraft:uniform"
+                  },
+                  "type": "minecraft:set_count"
+                }
+              ],
+              "name": "spelunkery:depth_gauge",
+              "type": "minecraft:item"
+            },
+            {
+              "condition": {
+                "chance": 0.25,
+                "type": "minecraft:random_chance"
+              },
+              "modifier": [
+                {
+                  "count": {
+                    "max": 16,
+                    "min": 4,
+                    "type": "minecraft:uniform"
+                  },
+                  "type": "minecraft:set_count"
+                }
+              ],
+              "name": "spelunkery:nephrite_chunk",
+              "type": "minecraft:item"
+            },
+            {
+              "condition": {
+                "chance": 0.25,
+                "type": "minecraft:random_chance"
+              },
+              "modifier": [
+                {
+                  "count": {
+                    "max": 16,
+                    "min": 4,
+                    "type": "minecraft:uniform"
+                  },
+                  "type": "minecraft:set_count"
+                }
+              ],
+              "name": "spelunkery:rock_salt",
+              "type": "minecraft:item"
+            }
+          ],
+          "type": "minecraft:alternatives"
+        }
+      ],
+      "rolls": 2
+    }
+  ]
+}

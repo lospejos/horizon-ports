@@ -1,0 +1,48 @@
+{
+  "blocks": {
+    "alternate_inner_layer_provider": {
+      "id": "minecraft:tuff"
+    },
+    "cannot_replace": "#minecraft:features_cannot_replace",
+    "filling_provider": {
+      "id": "minecraft:sculk"
+    },
+    "inner_layer_provider": {
+      "id": "spelunkery:nephrite"
+    },
+    "inner_placements": [
+      {
+        "id": "minecraft:tuff"
+      }
+    ],
+    "invalid_blocks": "#minecraft:geode_invalid_blocks",
+    "middle_layer_provider": {
+      "id": "minecraft:tuff"
+    },
+    "outer_layer_provider": {
+      "id": "minecraft:tuff"
+    }
+  },
+  "crack": {
+    "base_crack_size": 0,
+    "crack_point_offset": 0,
+    "generate_crack_chance": 0
+  },
+  "distribution_points": 2,
+  "invalid_blocks_threshold": 1,
+  "layers": {
+    "filling": 1,
+    "inner_layer": 1.5,
+    "middle_layer": 2,
+    "outer_layer": 3
+  },
+  "max_gen_offset": 8,
+  "min_gen_offset": -8,
+  "noise_multiplier": 0.04,
+  "outer_wall_distance": 2,
+  "placements_require_layer0_alternate": true,
+  "point_offset": 2,
+  "type": "minecraft:geode",
+  "use_alternate_layer0_chance": 0,
+  "use_potential_placements_chance": 0
+}

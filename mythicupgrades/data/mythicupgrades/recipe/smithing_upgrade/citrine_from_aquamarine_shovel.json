@@ -1,0 +1,9 @@
+{
+  "addition": "mythicupgrades:citrine_ingot",
+  "base": "mythicupgrades:aquamarine_shovel",
+  "result": {
+    "id": "mythicupgrades:citrine_shovel"
+  },
+  "template": "mythicupgrades:mythic_upgrade_smithing_template",
+  "type": "minecraft:smithing_transform"
+}

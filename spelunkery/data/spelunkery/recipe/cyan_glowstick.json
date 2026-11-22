@@ -1,0 +1,17 @@
+{
+  "group": "glowsticks",
+  "key": {
+    "#": "#spelunkery:glowsticks",
+    "X": "minecraft:cyan_dye"
+  },
+  "pattern": [
+    "###",
+    "#X#",
+    "###"
+  ],
+  "result": {
+    "count": 8,
+    "id": "spelunkery:cyan_glowstick"
+  },
+  "type": "minecraft:crafting_shaped"
+}

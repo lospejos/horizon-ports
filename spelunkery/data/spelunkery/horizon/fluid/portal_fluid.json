@@ -1,0 +1,6 @@
+{
+  "sprite": "spelunkery:block/portal_fluid",
+  "world": {
+    "source_conversion": false
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:blackstone_pebble"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "minecraft:blackstone"
+  },
+  "type": "minecraft:crafting_shaped"
+}

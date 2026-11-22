@@ -1,0 +1,21 @@
+{
+  "key": {
+    "#": "minecraft:slime_ball",
+    "/": "minecraft:stick",
+    "X": [
+      "minecraft:glow_ink_sac",
+      "spelunkery:phosphor_fungus",
+      "spelunkery:mushgloom"
+    ]
+  },
+  "pattern": [
+    "#",
+    "X",
+    "/"
+  ],
+  "result": {
+    "count": 4,
+    "id": "spelunkery:glowstick"
+  },
+  "type": "minecraft:crafting_shaped"
+}

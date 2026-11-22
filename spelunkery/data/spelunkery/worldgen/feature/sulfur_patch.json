@@ -1,0 +1,59 @@
+{
+  "depth": 1,
+  "extra_bottom_block_chance": 0.2,
+  "extra_edge_column_chance": 0.4,
+  "ground_state": {
+    "entries": [
+      {
+        "data": {
+          "id": "spelunkery:sulfur_block"
+        },
+        "weight": 10
+      },
+      {
+        "data": {
+          "id": "minecraft:soul_sand"
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "minecraft:soul_soil"
+        },
+        "weight": 1
+      }
+    ],
+    "type": "minecraft:weighted"
+  },
+  "replaceable": "#minecraft:soul_speed_blocks",
+  "surface": "floor",
+  "type": "minecraft:vegetation_patch",
+  "vegetation_chance": 0.1,
+  "vegetation_feature": {
+    "feature": {
+      "to_place": {
+        "property": "layers",
+        "source": {
+          "id": "spelunkery:sulfur",
+          "properties": {
+            "layers": "1"
+          }
+        },
+        "type": "minecraft:randomized_int",
+        "values": {
+          "type": "minecraft:uniform",
+          "max_inclusive": 6,
+          "min_inclusive": 1
+        }
+      },
+      "type": "minecraft:simple_block"
+    },
+    "placement": []
+  },
+  "vertical_range": 1,
+  "xz_radius": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 5,
+    "min_inclusive": 3
+  }
+}

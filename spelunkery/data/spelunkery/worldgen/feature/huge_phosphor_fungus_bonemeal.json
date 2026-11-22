@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:huge_red_mushroom",
+  "can_place_on": {
+    "type": "minecraft:true"
+  },
+  "cap_provider": {
+    "id": "spelunkery:phosphor_fungus_block",
+    "properties": {
+      "down": "false",
+      "east": "true",
+      "north": "true",
+      "south": "true",
+      "up": "true",
+      "west": "true"
+    }
+  },
+  "stem_provider": {
+    "id": "spelunkery:cave_mushroom_stem",
+    "properties": {
+      "down": "false",
+      "east": "true",
+      "north": "true",
+      "south": "true",
+      "up": "false",
+      "west": "true"
+    }
+  }
+}

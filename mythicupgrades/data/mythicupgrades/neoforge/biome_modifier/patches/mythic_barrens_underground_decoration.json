@@ -1,0 +1,11 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#mythicupgrades:has_mythic_barrens",
+  "features": [
+    "mythicupgrades:ametrine_crystal_blobs_patch",
+    "mythicupgrades:ametrine_crystal_buds_patch",
+    "mythicupgrades:jade_crystal_blobs_patch",
+    "mythicupgrades:jade_crystal_buds_patch"
+  ],
+  "step": "underground_decoration"
+}

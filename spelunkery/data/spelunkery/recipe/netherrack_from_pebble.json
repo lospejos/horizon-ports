@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:netherrack_pebble"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "minecraft:netherrack"
+  },
+  "type": "minecraft:crafting_shaped"
+}

@@ -1,0 +1,50 @@
+{
+  "template": "minecraft:brown_mushroom_block",
+  "properties": {
+    "hardness": 0.2,
+    "explosion_resistance": 0.2,
+    "requires_tool": false,
+    "map_color": 51,
+    "sounds": "minecraft:oak_planks"
+  },
+  "default_state": {
+    "down": "true",
+    "east": "true",
+    "north": "true",
+    "south": "true",
+    "up": "true",
+    "west": "true"
+  },
+  "components": {
+    "minecraft:compostable": {
+      "layers": {
+        "type": "minecraft:number_dispatcher",
+        "cases": [
+          {
+            "condition": {
+              "type": "minecraft:match_block",
+              "blocks": "minecraft:composter",
+              "state": {
+                "level": "0"
+              }
+            },
+            "value": 1
+          }
+        ],
+        "default": {
+          "type": "minecraft:weighted_list",
+          "distribution": [
+            {
+              "data": 1,
+              "weight": 85
+            },
+            {
+              "data": 0,
+              "weight": 15
+            }
+          ]
+        }
+      }
+    }
+  }
+}

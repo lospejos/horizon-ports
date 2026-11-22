@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:diamond_shard"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "minecraft:diamond"
+  },
+  "type": "minecraft:crafting_shaped"
+}

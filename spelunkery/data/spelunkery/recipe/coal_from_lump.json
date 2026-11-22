@@ -1,0 +1,16 @@
+{
+  "ingredients": [
+    "spelunkery:coal_lump",
+    "spelunkery:coal_lump",
+    "spelunkery:coal_lump",
+    "spelunkery:coal_lump",
+    "spelunkery:coal_lump",
+    "spelunkery:coal_lump",
+    "spelunkery:coal_lump",
+    "spelunkery:coal_lump"
+  ],
+  "result": {
+    "id": "minecraft:coal"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

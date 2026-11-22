@@ -1,0 +1,17 @@
+{
+  "category": "misc",
+  "ingredients": [
+    "mythicupgrades:citrine",
+    "mythicupgrades:citrine",
+    "mythicupgrades:citrine",
+    "mythicupgrades:citrine",
+    "mythicupgrades:necoium_ingot",
+    "mythicupgrades:necoium_ingot",
+    "mythicupgrades:necoium_ingot",
+    "mythicupgrades:necoium_ingot"
+  ],
+  "result": {
+    "id": "mythicupgrades:citrine_ingot"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "minecraft:quartz"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "spelunkery:rough_quartz_block"
+  },
+  "type": "minecraft:crafting_shaped"
+}

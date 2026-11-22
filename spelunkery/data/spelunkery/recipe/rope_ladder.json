@@ -1,0 +1,16 @@
+{
+  "key": {
+    "-": "minecraft:stick",
+    "S": "spelunkery:tangle_roots"
+  },
+  "pattern": [
+    "S S",
+    "---",
+    "S S"
+  ],
+  "result": {
+    "count": 8,
+    "id": "spelunkery:rope_ladder"
+  },
+  "type": "minecraft:crafting_shaped"
+}

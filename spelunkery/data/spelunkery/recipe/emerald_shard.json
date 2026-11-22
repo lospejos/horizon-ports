@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "minecraft:emerald"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:emerald_shard"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

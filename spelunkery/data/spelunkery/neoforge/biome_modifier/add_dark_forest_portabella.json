@@ -1,0 +1,8 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": [
+    "minecraft:dark_forest"
+  ],
+  "features": "spelunkery:dark_forest_portabella",
+  "step": "vegetal_decoration"
+}

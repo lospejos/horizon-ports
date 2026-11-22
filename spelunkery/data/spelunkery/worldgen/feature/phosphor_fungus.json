@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "id": "spelunkery:phosphor_fungus",
+    "properties": {
+      "facing": "north",
+      "floor": "true"
+    }
+  }
+}

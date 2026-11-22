@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "minecraft:diamond"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:diamond_shard"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

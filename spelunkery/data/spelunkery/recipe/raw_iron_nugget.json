@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "minecraft:raw_iron"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:raw_iron_nugget"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

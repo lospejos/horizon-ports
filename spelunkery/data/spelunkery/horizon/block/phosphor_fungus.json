@@ -1,0 +1,123 @@
+{
+  "template": "minecraft:stone",
+  "state_properties": {
+    "facing": {
+      "type": "enum",
+      "values": [
+        "north",
+        "south",
+        "west",
+        "east"
+      ]
+    },
+    "floor": {
+      "type": "boolean"
+    }
+  },
+  "properties": {
+    "hardness": 0.0,
+    "explosion_resistance": 0.0,
+    "requires_tool": false,
+    "map_color": 26,
+    "sounds": "minecraft:crimson_fungus",
+    "light": 3,
+    "occludes": false
+  },
+  "shapes": {
+    "properties": [
+      "facing",
+      "floor"
+    ],
+    "values": {
+      "north,false": [
+        [
+          0.125,
+          0.125,
+          0.3125,
+          0.875,
+          0.875,
+          1.0
+        ]
+      ],
+      "south,false": [
+        [
+          0.125,
+          0.125,
+          0.0,
+          0.875,
+          0.875,
+          0.6875
+        ]
+      ],
+      "west,false": [
+        [
+          0.3125,
+          0.125,
+          0.125,
+          1.0,
+          0.875,
+          0.875
+        ]
+      ],
+      "east,false": [
+        [
+          0.0,
+          0.125,
+          0.125,
+          0.6875,
+          0.875,
+          0.875
+        ]
+      ]
+    },
+    "default": [
+      [
+        0.125,
+        0.0,
+        0.125,
+        0.875,
+        0.6875,
+        0.875
+      ]
+    ]
+  },
+  "collision_shapes": {
+    "default": []
+  },
+  "default_state": {
+    "facing": "north",
+    "floor": "true"
+  },
+  "components": {
+    "minecraft:compostable": {
+      "layers": {
+        "type": "minecraft:number_dispatcher",
+        "cases": [
+          {
+            "condition": {
+              "type": "minecraft:match_block",
+              "blocks": "minecraft:composter",
+              "state": {
+                "level": "0"
+              }
+            },
+            "value": 1
+          }
+        ],
+        "default": {
+          "type": "minecraft:weighted_list",
+          "distribution": [
+            {
+              "data": 1,
+              "weight": 65
+            },
+            {
+              "data": 0,
+              "weight": 35
+            }
+          ]
+        }
+      }
+    }
+  }
+}

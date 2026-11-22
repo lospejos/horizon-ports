@@ -1,0 +1,9 @@
+{
+  "addition": "mythicupgrades:sapphire_ingot",
+  "base": "mythicupgrades:jade_hoe",
+  "result": {
+    "id": "mythicupgrades:sapphire_hoe"
+  },
+  "template": "mythicupgrades:mythic_upgrade_smithing_template",
+  "type": "minecraft:smithing_transform"
+}

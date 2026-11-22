@@ -1,0 +1,29 @@
+{
+  "feature": "mythicupgrades:aquamarine_stone_blobs",
+  "placement": [
+    {
+      "type": "minecraft:noise_threshold_count",
+      "noise_level": 0.7,
+      "below_noise": 0,
+      "above_noise": 30
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "height": {
+        "max_inclusive": {
+          "absolute": 30
+        },
+        "min_inclusive": {
+          "absolute": -64
+        },
+        "type": "minecraft:uniform"
+      },
+      "type": "minecraft:height_range"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

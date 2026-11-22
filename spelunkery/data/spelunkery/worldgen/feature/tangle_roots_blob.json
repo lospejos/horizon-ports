@@ -1,0 +1,17 @@
+{
+  "discard_chance_on_air_exposure": 0,
+  "size": 32,
+  "targets": [
+    {
+      "state": {
+        "id": "spelunkery:tangle_roots_block"
+      },
+      "target": {
+        "block": "minecraft:air",
+        "predicate_type": "minecraft:random_block_match",
+        "probability": 0.8
+      }
+    }
+  ],
+  "type": "minecraft:ore"
+}

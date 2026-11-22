@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:copper_nugget"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "minecraft:copper_ingot"
+  },
+  "type": "minecraft:crafting_shaped"
+}

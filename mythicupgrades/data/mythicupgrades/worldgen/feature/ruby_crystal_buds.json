@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:simple_random_selector",
+  "features": [
+    "mythicupgrades:ruby_crystal_buds_down",
+    "mythicupgrades:ruby_crystal_buds_up",
+    "mythicupgrades:ruby_crystal_buds_north",
+    "mythicupgrades:ruby_crystal_buds_south",
+    "mythicupgrades:ruby_crystal_buds_east",
+    "mythicupgrades:ruby_crystal_buds_west"
+  ]
+}

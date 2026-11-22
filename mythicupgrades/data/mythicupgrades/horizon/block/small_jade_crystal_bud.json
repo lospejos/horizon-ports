@@ -1,0 +1,15 @@
+{
+  "template": "minecraft:small_amethyst_bud",
+  "properties": {
+    "hardness": 1.5,
+    "explosion_resistance": 1.5,
+    "requires_tool": false,
+    "map_color": 7,
+    "sounds": "minecraft:small_amethyst_bud",
+    "light": 2
+  },
+  "default_state": {
+    "facing": "up",
+    "waterlogged": "false"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 1.4,
+  "ingredient": "mythicupgrades:citrine_ore",
+  "result": {
+    "id": "mythicupgrades:citrine"
+  },
+  "type": "minecraft:smelting"
+}

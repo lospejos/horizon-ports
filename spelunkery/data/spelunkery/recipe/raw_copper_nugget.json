@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "minecraft:raw_copper"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:raw_copper_nugget"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

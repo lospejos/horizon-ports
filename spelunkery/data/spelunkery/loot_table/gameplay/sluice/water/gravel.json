@@ -1,0 +1,137 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "name": "minecraft:flint",
+          "type": "minecraft:item",
+          "weight": 20
+        },
+        {
+          "name": "spelunkery:stone_pebble",
+          "type": "minecraft:item",
+          "weight": 20
+        },
+        {
+          "name": "spelunkery:deepslate_pebble",
+          "type": "minecraft:item",
+          "weight": 5
+        },
+        {
+          "name": "spelunkery:raw_copper_nugget",
+          "type": "minecraft:item",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:sand",
+          "type": "minecraft:item",
+          "weight": 10
+        },
+        {
+          "name": "spelunkery:raw_iron_nugget",
+          "type": "minecraft:item",
+          "weight": 2
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "biome": "minecraft:frozen_ocean"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:cold_ocean"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:ocean"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:lukewarm_ocean"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:warm_ocean"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:deep_frozen_ocean"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:deep_cold_ocean"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:deep_ocean"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:deep_lukewarm_ocean"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "minecraft:prismarine_shard",
+          "type": "minecraft:item",
+          "weight": 10
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "biome": "minecraft:river"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:frozen_river"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "spelunkery:nephrite_chunk",
+          "type": "minecraft:item",
+          "weight": 10
+        },
+        {
+          "condition": {
+            "predicate": {
+              "biome": "minecraft:jagged_peaks"
+            },
+            "type": "minecraft:location_check"
+          },
+          "name": "spelunkery:rough_emerald_shard",
+          "type": "minecraft:item",
+          "weight": 1
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "name": "spelunkery:magma_pebble",
+          "type": "minecraft:item",
+          "weight": 150
+        },
+        {
+          "name": "spelunkery:raw_gold_nugget",
+          "type": "minecraft:item",
+          "weight": 10
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "biome": "minecraft:nether_wastes"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:basalt_deltas"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "minecraft:netherite_scrap",
+          "type": "minecraft:item",
+          "weight": 1
+        },
+        {
+          "name": "spelunkery:netherrack_pebble",
+          "type": "minecraft:item",
+          "weight": 200
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "biome": "minecraft:nether_wastes"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:basalt_deltas"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "minecraft:magma_cube_spawn_egg",
+          "type": "minecraft:item",
+          "weight": 10
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "biome": "minecraft:nether_wastes"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:basalt_deltas"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "spelunkery:blackstone_pebble",
+          "type": "minecraft:item",
+          "weight": 100
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "structure": "minecraft:fortress"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "minecraft:wither_skeleton_skull",
+          "type": "minecraft:item",
+          "weight": 1
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "category": "building",
+  "key": {
+    "S": "mythicupgrades:jade_crystal_shard"
+  },
+  "pattern": [
+    "SS",
+    "SS"
+  ],
+  "result": {
+    "id": "mythicupgrades:jade_crystal_block"
+  },
+  "show_notification": true,
+  "type": "minecraft:crafting_shaped"
+}

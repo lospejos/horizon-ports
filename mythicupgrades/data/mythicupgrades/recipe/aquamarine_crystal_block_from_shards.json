@@ -1,0 +1,15 @@
+{
+  "category": "building",
+  "key": {
+    "S": "mythicupgrades:aquamarine_crystal_shard"
+  },
+  "pattern": [
+    "SS",
+    "SS"
+  ],
+  "result": {
+    "id": "mythicupgrades:aquamarine_crystal_block"
+  },
+  "show_notification": true,
+  "type": "minecraft:crafting_shaped"
+}

@@ -1,0 +1,16 @@
+{
+  "default": {
+    "feature": "spelunkery:tangle_roots_block",
+    "placement": []
+  },
+  "features": [
+    {
+      "chance": 0.3,
+      "feature": {
+        "feature": "spelunkery:tangle_roots",
+        "placement": []
+      }
+    }
+  ],
+  "type": "minecraft:random_selector"
+}

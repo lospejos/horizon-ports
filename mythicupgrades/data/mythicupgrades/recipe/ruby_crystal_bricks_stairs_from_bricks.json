@@ -1,0 +1,17 @@
+{
+  "category": "building",
+  "key": {
+    "B": "mythicupgrades:ruby_crystal_bricks"
+  },
+  "pattern": [
+    "B  ",
+    "BB ",
+    "BBB"
+  ],
+  "result": {
+    "count": 4,
+    "id": "mythicupgrades:ruby_crystal_bricks_stairs"
+  },
+  "show_notification": true,
+  "type": "minecraft:crafting_shaped"
+}

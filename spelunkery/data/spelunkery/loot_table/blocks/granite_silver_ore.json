@@ -1,0 +1,39 @@
+{
+  "condition": {
+    "modid": "oreganized",
+    "type": "forge:mod_loaded"
+  },
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "children": [
+            {
+              "condition": "minecraft:tool/can_silk_touch",
+              "name": "spelunkery:granite_silver_ore",
+              "type": "minecraft:item"
+            },
+            {
+              "modifier": [
+                {
+                  "enchantment": "minecraft:fortune",
+                  "formula": "minecraft:ore_drops",
+                  "type": "minecraft:apply_bonus"
+                },
+                {
+                  "type": "minecraft:explosion_decay"
+                }
+              ],
+              "name": "minecraft:stone",
+              "type": "minecraft:item"
+            }
+          ],
+          "type": "minecraft:alternatives"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "type": "minecraft:block"
+}

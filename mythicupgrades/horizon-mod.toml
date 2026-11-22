@@ -1,0 +1,17 @@
+# mythicupgrades: Mythic Upgrades 5.1.1 (TriQue; MIT). One package: data/ and assets/ are the content mod
+# mods/mythicupgrades (tools/mythicupgrades_port.py, settings from the registry oracle in tools/ns_oracle; merged by
+# tools/build_next.py); src/classes.rs is written by the same generator. Everything else is the mod API (src/lib.rs):
+# no game module and no mixin. Licence text in LICENSE (MIT), credits in NOTICE.
+id = "mythicupgrades"
+name = "Mythic Upgrades"
+version = "0.2.0"
+description = "Mythic Upgrades: eight gems and necoium, their ores, crystal geodes and caves, and gear whose armour sets and tools each have their own effect (by TriQue)"
+authors = ["TriQue"]
+api = "0.2"
+side = "both"
+capabilities = ["registries"]
+
+[native]
+game = "26.3"
+horizon = "dd67b76ff23e28c6d8e21859df600d31572f81a0"
+mixins = "e59da9094f0c2fdda6c627fe9eff22dec6a906f0"

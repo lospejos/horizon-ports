@@ -1,0 +1,45 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "children": [
+            {
+              "condition": "minecraft:tool/can_silk_touch",
+              "name": "spelunkery:phosphor_fungus_block",
+              "type": "minecraft:item"
+            },
+            {
+              "modifier": [
+                {
+                  "add": false,
+                  "count": {
+                    "max": 2,
+                    "min": -6,
+                    "type": "minecraft:uniform"
+                  },
+                  "type": "minecraft:set_count"
+                },
+                {
+                  "limit": {
+                    "min": 0
+                  },
+                  "type": "minecraft:limit_count"
+                },
+                {
+                  "type": "minecraft:explosion_decay"
+                }
+              ],
+              "name": "spelunkery:phosphor_fungus",
+              "type": "minecraft:item"
+            }
+          ],
+          "type": "minecraft:alternatives"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "type": "minecraft:block"
+}

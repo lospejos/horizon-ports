@@ -1,0 +1,27 @@
+{
+  "template": "minecraft:stone",
+  "state_properties": {
+    "facing": {
+      "type": "enum",
+      "values": [
+        "north",
+        "east",
+        "south",
+        "west",
+        "up",
+        "down"
+      ]
+    }
+  },
+  "properties": {
+    "hardness": 1.5,
+    "explosion_resistance": 6.0,
+    "requires_tool": true,
+    "map_color": 2,
+    "sounds": "minecraft:stone",
+    "random_ticks": true
+  },
+  "default_state": {
+    "facing": "south"
+  }
+}

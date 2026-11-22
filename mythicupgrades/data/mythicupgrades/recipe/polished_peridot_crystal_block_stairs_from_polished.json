@@ -1,0 +1,17 @@
+{
+  "category": "building",
+  "key": {
+    "B": "mythicupgrades:polished_peridot_crystal_block"
+  },
+  "pattern": [
+    "B  ",
+    "BB ",
+    "BBB"
+  ],
+  "result": {
+    "count": 4,
+    "id": "mythicupgrades:polished_peridot_crystal_block_stairs"
+  },
+  "show_notification": true,
+  "type": "minecraft:crafting_shaped"
+}

@@ -1,0 +1,14 @@
+{
+  "key": {
+    "F": "minecraft:fishing_rod",
+    "P": "minecraft:iron_pickaxe"
+  },
+  "pattern": [
+    "F ",
+    " P"
+  ],
+  "result": {
+    "id": "spelunkery:iron_pick_on_a_stick"
+  },
+  "type": "minecraft:crafting_shaped"
+}

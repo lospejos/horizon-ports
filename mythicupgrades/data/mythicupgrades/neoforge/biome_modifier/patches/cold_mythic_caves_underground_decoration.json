@@ -1,0 +1,11 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#mythicupgrades:has_cold_mythic_caves",
+  "features": [
+    "mythicupgrades:aquamarine_crystal_blobs_patch",
+    "mythicupgrades:aquamarine_crystal_buds_patch",
+    "mythicupgrades:peridot_crystal_blobs_patch",
+    "mythicupgrades:peridot_crystal_buds_patch"
+  ],
+  "step": "underground_decoration"
+}

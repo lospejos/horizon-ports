@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:deepslate_pebble"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "minecraft:cobbled_deepslate"
+  },
+  "type": "minecraft:crafting_shaped"
+}

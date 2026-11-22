@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "mythicupgrades:cold_mythic_caves",
+      "required": false
+    },
+    {
+      "id": "mythicupgrades:warm_mythic_caves",
+      "required": false
+    }
+  ]
+}

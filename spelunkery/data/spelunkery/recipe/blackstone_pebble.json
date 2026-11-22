@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "minecraft:blackstone"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:blackstone_pebble"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

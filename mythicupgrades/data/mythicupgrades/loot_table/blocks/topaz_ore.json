@@ -1,0 +1,36 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "children": [
+            {
+              "condition": "minecraft:tool/can_silk_touch",
+              "name": "mythicupgrades:topaz_ore",
+              "type": "minecraft:item"
+            },
+            {
+              "modifier": [
+                {
+                  "enchantment": "minecraft:fortune",
+                  "formula": "minecraft:ore_drops",
+                  "type": "minecraft:apply_bonus"
+                },
+                {
+                  "type": "minecraft:explosion_decay"
+                }
+              ],
+              "name": "mythicupgrades:topaz",
+              "type": "minecraft:item"
+            }
+          ],
+          "type": "minecraft:alternatives"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "mythicupgrades:blocks/topaz_ore",
+  "type": "minecraft:block"
+}

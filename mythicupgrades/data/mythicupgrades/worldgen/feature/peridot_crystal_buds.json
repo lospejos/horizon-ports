@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:simple_random_selector",
+  "features": [
+    "mythicupgrades:peridot_crystal_buds_down",
+    "mythicupgrades:peridot_crystal_buds_up",
+    "mythicupgrades:peridot_crystal_buds_north",
+    "mythicupgrades:peridot_crystal_buds_south",
+    "mythicupgrades:peridot_crystal_buds_east",
+    "mythicupgrades:peridot_crystal_buds_west"
+  ]
+}

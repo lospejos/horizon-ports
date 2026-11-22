@@ -1,0 +1,11 @@
+{
+  "category": "misc",
+  "ingredients": [
+    "mythicupgrades:aquamarine_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "mythicupgrades:aquamarine_ingot"
+  },
+  "type": "minecraft:crafting_shapeless"
+}
