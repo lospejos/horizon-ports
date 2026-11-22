@@ -7,5 +7,5 @@
 - [x] T5: Settings enabled, corner, size, scale, shape (done when: each changes the live map; round clips via quads or mask; covers A4)
 - [x] T6: Player marker and coordinates text (done when: visible in game; covers A5)
 - [x] T7: Custom position: settings offset X and Y from the chosen corner, so the map can sit below the item popup (done when: user moves the map by the offsets and it stays on screen; covers A9)
-- [ ] T8: Info lines under the map, each a toggle: coordinates, biome, time of day, light level, dimension (done when: the user sees each enabled line; what the API cannot give is dropped and noted in spec; covers A10)
+- [x] T8: Info lines under the map, each a toggle: coordinates, biome, time of day, light level, dimension (done when: the user sees each enabled line; what the API cannot give is dropped and noted in spec; covers A10)
 - [ ] T9: README, icon, version 0.1.0 (done when: README has install/update; .hmod holds icon.png; tag only on the user's word; covers A8)
