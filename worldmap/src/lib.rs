@@ -577,7 +577,7 @@ impl Hooks for Mod {
         }
         match &mut lock(&self.0).view {
             Some(View::Map(m)) => {
-                m.zoom(event.scroll[1]);
+                m.zoom(event.scroll[1] as f32);
                 Flow::Cancel
             }
             _ => Flow::Continue,
