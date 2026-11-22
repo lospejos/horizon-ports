@@ -35,7 +35,7 @@ jobs:
       - name: Install rustup toolchain (the tool then installs the pinned one itself)
         run: rustup toolchain install stable --profile minimal
       - name: Install cargo-horizon-mod from the SDK commit
-        run: cargo install --locked --git https://github.com/horizon-rust/horizon --rev "$SDK_REV" cargo-horizon-mod
+        run: command -v cargo-horizon-mod || cargo install --locked --git https://github.com/horizon-rust/horizon --rev "$SDK_REV" cargo-horizon-mod
       - name: Build
         working-directory: veinminer
         run: cargo horizon-mod build --wasm
