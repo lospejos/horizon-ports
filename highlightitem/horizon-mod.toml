@@ -11,4 +11,4 @@ description = "Highlights inventory items similar to the one hovered over (HighL
 authors = []
 api = "0.2"
 side = "client"
-capabilities = []
+capabilities = ["registries"]
