@@ -2,7 +2,7 @@
 # - src/lib.rs (mod_api::Hooks): `gui_render_post` draws the map over the GUI.
 id = "worldmap"
 name = "Worldmap"
-version = "0.1.0"
+version = "0.2.0"
 description = "A minimap of the terrain around the player"
 authors = []
 api = "0.2"

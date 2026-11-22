@@ -10,14 +10,16 @@ The map shows the terrain colours (the game's map colours) with water shaded by 
 
 Options > Mods > Worldmap > Config: show the map, corner, offsets X and Y from that corner (to move it below another HUD element), size (64 to 256 pixels), blocks per cell (1, 2 or 4), shape (square or round), and the lines under the map: coordinates, biome, time of day, light level (block / sky) and dimension.
 
-Not done yet: a fullscreen map, waypoints, radar, cave mode, a persistent cache. The map image moves in small jumps while you walk, as it is rebuilt a few times a second.
+Waypoints: press N (rebindable in Options > Controls) for the list. Each waypoint has a name, coordinates, colour (palette or RRGGBB) and icon; it shows on the minimap (stuck to the edge when out of range, hidden in other dimensions), and is saved per world. The list can hide, sort (age, name, distance), edit, delete and teleport (`/tp`, same dimension, needs permission).
+
+Not done yet: a fullscreen map, radar, cave mode, a persistent cache. The map image moves in small jumps while you walk, as it is rebuilt a few times a second.
 
 ## Installing and updating
 
 Download the release into the game's mods folder (the `horizon-mods` folder of the instance or of the launcher's data directory; `--clobber` replaces the old file), then restart the game:
 
 ```powershell
-gh release download worldmap-wasm-v0.1.0 -R lospejos/horizon-ports -p "*.hmod" -D "C:\Users\User\AppData\Roaming\horizon\horizon-mods" --clobber
+gh release download worldmap-wasm-v0.2.0 -R lospejos/horizon-ports -p "*.hmod" -D "C:\Users\User\AppData\Roaming\horizon\horizon-mods" --clobber
 ```
 
 For a newer version, change only the tag. `gh release list -R lospejos/horizon-ports` lists the tags. Or download `worldmap.hmod` from the release page by hand.
