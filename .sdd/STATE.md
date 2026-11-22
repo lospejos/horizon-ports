@@ -1,6 +1,6 @@
 # SDD STATE (keep <= 20 lines)
 Feature: worldmap (.sdd/features/worldmap/)
-Task: none
+Task: T9 (CI check pending: .hmod must hold icon.png)
 Next: T9 README, icon, version 0.1.0 (no tag without the user word). Also fix jerky scroll: draw offset by (camera - pass centre) per frame, needs clipping.
 Blockers: none
 Open questions: none
