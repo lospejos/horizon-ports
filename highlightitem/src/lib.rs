@@ -39,7 +39,7 @@ fn keys(prefix: &str, names: &[&str]) -> Vec<String> {
 fn custom_name(stack: &ItemStack) -> Option<String> {
     let tag = stack.components()?.as_nbt().get(&"minecraft:custom_name".into())?;
     Some(match tag {
-        Tag::String(s) => s.to_string(),
+        Tag::String(s) => s.to_string().unwrap_or_default(),
         other => format!("{other:?}"),
     })
 }
