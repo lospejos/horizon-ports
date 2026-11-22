@@ -27,5 +27,7 @@
   "worldmap.wp.sure": "Sure?",
   "worldmap.wp.close": "Close",
   "worldmap.wp.name": "Name",
-  "worldmap.wp.fresh": "New waypoint"
+  "worldmap.wp.fresh": "New waypoint",
+  "worldmap.wp.colour": "Colour (RRGGBB)",
+  "worldmap.wp.icon": "Icon"
 }

@@ -1,6 +1,6 @@
 # SDD STATE (keep <= 20 lines)
 Feature: worldmap step 2, waypoints (plan in .sdd/features/worldmap/)
-Task: none (T12 done, CI green on 45062206186, checked in game)
+Task: T13 coded (icons.rs, screen.rs, lib.rs), waiting for CI and an in-game check, then tick plan.md
 Next: T13 custom icons and colours. Every key-adding task: check Options > Controls for conflicts (spec). M reserved for the world map. gh needs -R lospejos/horizon-ports.
 Blockers: none
 Open questions: none

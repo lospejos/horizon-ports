@@ -27,5 +27,7 @@
   "worldmap.wp.sure": "Точно?",
   "worldmap.wp.close": "Закрыть",
   "worldmap.wp.name": "Название",
-  "worldmap.wp.fresh": "Новая метка"
+  "worldmap.wp.fresh": "Новая метка",
+  "worldmap.wp.colour": "Цвет (RRGGBB)",
+  "worldmap.wp.icon": "Значок"
 }

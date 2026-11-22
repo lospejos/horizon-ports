@@ -1,4 +1,5 @@
 //! Worldmap for Horizon: a minimap drawn over the GUI.
+mod icons;
 mod sampler;
 mod screen;
 mod waypoints;
@@ -224,7 +225,7 @@ impl Hooks for Mod {
             screen::Screen::new(width, here, host.dimension().to_string())
         });
         let x = (width / 2.0 - 100.0).floor();
-        event.draw.fill([x - 6.0, 20.0, 212.0, 166.0], 0x80000000);
+        event.draw.fill([x - 6.0, 20.0, 212.0, 280.0], 0x80000000);
         let tr = |key: &str, fallback: &str| host.translate(key).unwrap_or_else(|| fallback.to_owned());
         let title = match screen.number() {
             Some(n) => format!("{n} / {}", s.waypoints.list().len()),
@@ -233,11 +234,31 @@ impl Hooks for Mod {
         let tw = event.draw.text_width(&title);
         event.draw.text(&title, [x + (200.0 - tw) / 2.0, 36.0], 0xFFFFFFFF, true);
         for (text, dx, y) in screen::Screen::CAPTIONS {
-            let text = if text.is_empty() { tr("worldmap.wp.name", "Name") } else { text.to_owned() };
+            let text = match text {
+                "" => tr("worldmap.wp.name", "Name"),
+                "worldmap.wp.colour" => tr(text, "Colour"),
+                "worldmap.wp.icon" => tr(text, "Icon"),
+                _ => text.to_owned(),
+            };
             event.draw.text(&text, [x + dx, y], 0xFFA0A0A0, true);
         }
         // A refused label is not drawn; the screen stays usable.
         let _ = screen.widgets.draw(&mut *event.draw, host, event.screen.mouse);
+        // Swatches, the colour preview and the icons go over their (blank) buttons.
+        let sel = |on: bool| if on { 0xFFFFFFFF } else { 0xFF000000 };
+        for (_, [bx, by, bw, bh], c) in &screen.swatches {
+            event.draw.fill([bx + 1.0, by + 1.0, bw - 2.0, bh - 2.0], sel(*c == screen.color));
+            event.draw.fill([bx + 2.0, by + 2.0, bw - 4.0, bh - 4.0], 0xFF000000 | c);
+        }
+        event.draw.fill([x + 70.0, 140.0, 20.0, 20.0], 0xFF000000);
+        event.draw.fill([x + 71.0, 141.0, 18.0, 18.0], 0xFF000000 | screen.color);
+        for (_, [bx, by, bw, bh], id) in &screen.icon_buttons {
+            if *id == screen.icon {
+                event.draw.fill([bx - 1.0, by - 1.0, bw + 2.0, bh + 2.0], 0xFFFFFFFF);
+                event.draw.fill([*bx, *by, *bw, *bh], 0xFF303030);
+            }
+            icons::draw(&mut |r, argb| event.draw.fill(r, argb), id, [bx + bw / 2.0, by + bh / 2.0], screen.color);
+        }
     }
 
     fn screen_mouse_button_pressed_pre(&self, host: &dyn ClientHost, event: &mut ScreenMouseButtonPressedPreEvent<'_>) -> Flow {
@@ -291,9 +312,8 @@ impl Hooks for Mod {
         let dim = host.dimension().to_string();
         for w in lock(&self.0).waypoints.list().iter().filter(|w| w.visible && w.dimension == dim) {
             let at = |pos: i32, c: i32| marker_cell(f64::from(pos), c, scale, half) * side / SIDE as f32;
-            let [wx, wy] = clamp_to_map([at(w.pos[0], centre.0), at(w.pos[2], centre.1)], side, 4.0, round);
-            event.batch.fill([x + wx - 3.0, y + wy - 3.0, 6.0, 6.0], 0xFF000000);
-            event.batch.fill([x + wx - 2.0, y + wy - 2.0, 4.0, 4.0], 0xFF000000 | w.color);
+            let [wx, wy] = clamp_to_map([at(w.pos[0], centre.0), at(w.pos[2], centre.1)], side, 5.0, round);
+            icons::draw(&mut |r, argb| event.batch.fill(r, argb), &w.icon, [x + wx, y + wy], w.color);
         }
         // Yaw 0 looks along +z; the red tip points where the player looks.
         let yaw = cam.yaw.to_radians();

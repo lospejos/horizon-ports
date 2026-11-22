@@ -113,6 +113,22 @@ fn unescape(s: &str) -> String {
     out
 }
 
+/// Palette of the colour picker, two rows of eight.
+pub const PALETTE: [u32; 16] = [
+    0xFF0000, 0xFF8800, 0xFFDD00, 0x55DD00, 0x00AA00, 0x00DDDD, 0x3388FF, 0x0000CC, 0xAA00FF, 0xFF55FF, 0xFFFFFF, 0xBBBBBB, 0x777777, 0x333333,
+    0x885522, 0xFF9999,
+];
+
+/// Reads `RRGGBB` (an optional leading `#`); None when it is not six hex digits.
+pub fn parse_color(s: &str) -> Option<u32> {
+    let s = s.trim().trim_start_matches('#');
+    if s.len() == 6 && s.chars().all(|c| c.is_ascii_hexdigit()) {
+        u32::from_str_radix(s, 16).ok()
+    } else {
+        None
+    }
+}
+
 /// The waypoint shown after a step: `None` is the blank "new" entry. From a waypoint it moves to the next or
 /// previous one, wrapping; from the blank entry, forward goes to the first and back to the last.
 pub fn step(index: Option<usize>, len: usize, forward: bool) -> Option<usize> {
@@ -141,6 +157,15 @@ mod tests {
 
     fn wp(name: &str) -> Waypoint {
         Waypoint { name: name.into(), pos: [10, -64, -300], dimension: "minecraft:overworld".into(), color: 0xFF8800, icon: "star".into(), visible: true }
+    }
+
+    #[test]
+    fn parse_color_reads_six_hex_digits() {
+        assert_eq!(parse_color("ff8800"), Some(0xFF8800));
+        assert_eq!(parse_color(" #00AaFF "), Some(0x00AAFF));
+        assert_eq!(parse_color("ff88"), None);
+        assert_eq!(parse_color("gg0000"), None);
+        assert_eq!(parse_color("+f8800"), None);
     }
 
     #[test]

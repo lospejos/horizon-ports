@@ -1,15 +1,25 @@
 //! The waypoint screen (T11): browse waypoints with the arrows, make a new one, edit, delete.
-use crate::waypoints::{step, Waypoint, Waypoints};
+use crate::icons;
+use crate::waypoints::{parse_color, step, Waypoint, Waypoints, PALETTE};
 use mod_api::client::widgets::{Button, Outcome, TextField, WidgetId, Widgets};
 use mod_api::Text;
 
-/// Colour of a waypoint made on this screen until T13 lets the player pick one.
+/// Colour of a new waypoint.
 const DEFAULT_COLOR: u32 = 0xFF8800;
 
 pub struct Screen {
     pub widgets: Widgets,
     name: WidgetId,
     xyz: [WidgetId; 3],
+    /// RRGGBB field.
+    hex: WidgetId,
+    /// Palette buttons: id, rect, colour.
+    pub swatches: Vec<(WidgetId, [f32; 4], u32)>,
+    /// Icon buttons: id, rect, icon id.
+    pub icon_buttons: Vec<(WidgetId, [f32; 4], &'static str)>,
+    /// Colour and icon shown on the screen; Save writes them.
+    pub color: u32,
+    pub icon: &'static str,
     prev: WidgetId,
     next: WidgetId,
     new: WidgetId,
@@ -46,17 +56,34 @@ impl Screen {
         let next = w.add_button(Button::new([x + 180.0, 30.0, 20.0, 20.0], Text::literal(">")));
         let name = w.add_text_field(TextField::new([x, 70.0, 200.0, 20.0], 32));
         let xyz = [0.0, 68.0, 136.0].map(|dx| w.add_text_field(TextField::new([x + dx, 105.0, 64.0, 20.0], 9)));
-        let new = w.add_button(Button::new([x, 135.0, 98.0, 20.0], label("worldmap.wp.new")));
-        let save = w.add_button(Button::new([x + 102.0, 135.0, 98.0, 20.0], label("worldmap.wp.save")));
-        let delete = w.add_button(Button::new([x, 160.0, 98.0, 20.0], label("worldmap.wp.delete")));
-        let close = w.add_button(Button::new([x + 102.0, 160.0, 98.0, 20.0], label("worldmap.wp.close")));
-        let mut s = Self { widgets: w, name, xyz, prev, next, new, save, delete, close, index: None, confirm: false, here, dimension };
+        let hex = w.add_text_field(TextField::new([x, 140.0, 64.0, 20.0], 6));
+        let swatches = PALETTE
+            .iter()
+            .enumerate()
+            .map(|(i, c)| {
+                let rect = [x + (i % 8) as f32 * 25.0, 165.0 + (i / 8) as f32 * 23.0, 21.0, 20.0];
+                (w.add_button(Button::new(rect, Text::literal(""))), rect, *c)
+            })
+            .collect();
+        let icon_buttons = icons::ids()
+            .enumerate()
+            .map(|(i, id)| {
+                let rect = [x + i as f32 * 28.0, 218.0, 24.0, 24.0];
+                (w.add_button(Button::new(rect, Text::literal(""))), rect, id)
+            })
+            .collect();
+        let new = w.add_button(Button::new([x, 248.0, 98.0, 20.0], label("worldmap.wp.new")));
+        let save = w.add_button(Button::new([x + 102.0, 248.0, 98.0, 20.0], label("worldmap.wp.save")));
+        let delete = w.add_button(Button::new([x, 273.0, 98.0, 20.0], label("worldmap.wp.delete")));
+        let close = w.add_button(Button::new([x + 102.0, 273.0, 98.0, 20.0], label("worldmap.wp.close")));
+        let mut s = Self { widgets: w, name, xyz, hex, swatches, icon_buttons, color: DEFAULT_COLOR, icon: icons::canonical(""), prev, next, new, save, delete, close, index: None, confirm: false, here, dimension };
         s.show(None, &Waypoints::default());
         s
     }
 
     /// Captions over the fields: (text, x offset from the left edge, y).
-    pub const CAPTIONS: [(&'static str, f32, f32); 4] = [("", 0.0, 59.0), ("X", 0.0, 94.0), ("Y", 68.0, 94.0), ("Z", 136.0, 94.0)];
+    pub const CAPTIONS: [(&'static str, f32, f32); 6] =
+        [("", 0.0, 59.0), ("X", 0.0, 94.0), ("Y", 68.0, 94.0), ("Z", 136.0, 94.0), ("worldmap.wp.colour", 0.0, 129.0), ("worldmap.wp.icon", 0.0, 207.0)];
 
     /// The waypoint number for the header, 1-based; None for a new one.
     pub fn number(&self) -> Option<usize> {
@@ -68,8 +95,16 @@ impl Screen {
         self.index = i;
         self.confirm = false;
         let (name, pos) = match i.and_then(|i| wps.list().get(i)) {
-            Some(w) => (w.name.clone(), w.pos),
-            None => (String::new(), self.here),
+            Some(w) => {
+                self.color = w.color;
+                self.icon = icons::canonical(&w.icon);
+                (w.name.clone(), w.pos)
+            }
+            None => {
+                self.color = DEFAULT_COLOR;
+                self.icon = icons::canonical("");
+                (String::new(), self.here)
+            }
         };
         let set = |w: &mut Widgets, id, v: &str| {
             if let Some(f) = w.text_field_mut(id) {
@@ -80,7 +115,23 @@ impl Screen {
         for (id, v) in self.xyz.into_iter().zip(pos) {
             set(&mut self.widgets, id, &v.to_string());
         }
+        self.set_hex();
         self.set_delete_label();
+    }
+
+    fn set_hex(&mut self) {
+        let v = format!("{:06X}", self.color);
+        if let Some(f) = self.widgets.text_field_mut(self.hex) {
+            f.set_value(&v);
+        }
+    }
+
+    /// Writes the shown colour and icon into the waypoint being edited, so the map follows at once.
+    /// A new waypoint has none yet; Save adds it.
+    fn apply_style(&self, wps: &mut Waypoints) -> bool {
+        let Some(mut w) = self.index.and_then(|i| wps.list().get(i)).cloned() else { return false };
+        (w.color, w.icon) = (self.color, self.icon.to_owned());
+        self.index.is_some_and(|i| wps.edit(i, w))
     }
 
     fn set_delete_label(&mut self) {
@@ -105,30 +156,46 @@ impl Screen {
     pub fn act(&mut self, outcome: Outcome, wps: &mut Waypoints) -> Act {
         let mut act = Act::default();
         let Outcome::Pressed(id) = outcome else {
-            // Editing the text cancels a pending delete.
-            if matches!(outcome, Outcome::Changed(_)) && self.confirm {
-                self.confirm = false;
-                self.set_delete_label();
+            if let Outcome::Changed(id) = outcome {
+                // Editing the text cancels a pending delete.
+                if self.confirm {
+                    self.confirm = false;
+                    self.set_delete_label();
+                }
+                if id == self.hex {
+                    let typed = self.widgets.text_field(self.hex).and_then(|f| parse_color(f.value()));
+                    if let Some(c) = typed {
+                        self.color = c;
+                        act.save = self.apply_style(wps);
+                    }
+                }
             }
             return act;
         };
         if id == self.prev || id == self.next {
             let to = step(self.index, wps.list().len(), id == self.next);
             self.show(to, wps);
+        } else if let Some(&(_, _, c)) = self.swatches.iter().find(|b| b.0 == id) {
+            self.color = c;
+            self.set_hex();
+            act.save = self.apply_style(wps);
+        } else if let Some(&(_, _, i)) = self.icon_buttons.iter().find(|b| b.0 == id) {
+            self.icon = i;
+            act.save = self.apply_style(wps);
         } else if id == self.new {
             self.show(None, wps);
         } else if id == self.save {
             let Some(pos) = self.coords() else { return act };
             let typed = self.widgets.text_field(self.name).map(|f| f.value().trim().to_owned()).unwrap_or_default();
             let name = if typed.is_empty() { "Waypoint".to_owned() } else { typed };
-            // An edit keeps what the screen does not show yet (dimension, colour, icon, visibility).
+            // An edit keeps what the screen does not show (dimension, visibility).
             let old = self.index.and_then(|i| wps.list().get(i)).cloned();
             let w = Waypoint {
                 name,
                 pos,
                 dimension: old.as_ref().map_or_else(|| self.dimension.clone(), |o| o.dimension.clone()),
-                color: old.as_ref().map_or(DEFAULT_COLOR, |o| o.color),
-                icon: old.as_ref().map(|o| o.icon.clone()).unwrap_or_default(),
+                color: self.color,
+                icon: self.icon.to_owned(),
                 visible: old.map_or(true, |o| o.visible),
             };
             let i = match self.index {
