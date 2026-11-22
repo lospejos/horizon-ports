@@ -1,0 +1,71 @@
+{
+  "allowed_placement": {
+    "blocks": "minecraft:air",
+    "type": "minecraft:matching_blocks"
+  },
+  "direction": "down",
+  "layers": [
+    {
+      "height": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 2,
+        "min_inclusive": 0
+      },
+      "provider": {
+        "id": "spelunkery:tangle_roots_block"
+      }
+    },
+    {
+      "height": 1,
+      "provider": {
+        "id": "spelunkery:tangle_roots_plant",
+        "properties": {
+          "top": "true",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "height": {
+        "distribution": [
+          {
+            "data": {
+              "type": "minecraft:uniform",
+              "max_inclusive": 3,
+              "min_inclusive": 0
+            },
+            "weight": 5
+          },
+          {
+            "data": {
+              "type": "minecraft:uniform",
+              "max_inclusive": 5,
+              "min_inclusive": 1
+            },
+            "weight": 1
+          }
+        ],
+        "type": "minecraft:weighted_list"
+      },
+      "provider": {
+        "id": "spelunkery:tangle_roots_plant",
+        "properties": {
+          "top": "false",
+          "waterlogged": "false"
+        }
+      }
+    },
+    {
+      "height": 1,
+      "provider": {
+        "id": "spelunkery:tangle_roots",
+        "properties": {
+          "age": "25",
+          "waterlogged": "false"
+        }
+      }
+    }
+  ],
+  "prioritize_tip": true,
+  "type": "minecraft:block_column"
+}

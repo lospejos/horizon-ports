@@ -1,0 +1,70 @@
+{
+  "depth": 1,
+  "extra_bottom_block_chance": 0,
+  "extra_edge_column_chance": 0.5,
+  "ground_state": {
+    "entries": [
+      {
+        "data": {
+          "id": "minecraft:mycelium",
+          "properties": {
+            "snowy": "false"
+          }
+        },
+        "weight": 1
+      },
+      {
+        "data": {
+          "id": "minecraft:coarse_dirt"
+        },
+        "weight": 3
+      },
+      {
+        "data": {
+          "id": "minecraft:dirt"
+        },
+        "weight": 3
+      }
+    ],
+    "type": "minecraft:weighted"
+  },
+  "replaceable": "#minecraft:base_stone_overworld",
+  "surface": "floor",
+  "type": "minecraft:vegetation_patch",
+  "vegetation_chance": 0.1,
+  "vegetation_feature": {
+    "feature": {
+      "to_place": {
+        "entries": [
+          {
+            "data": {
+              "id": "spelunkery:portabella"
+            },
+            "weight": 1
+          },
+          {
+            "data": {
+              "id": "spelunkery:crimini"
+            },
+            "weight": 5
+          },
+          {
+            "data": {
+              "id": "spelunkery:button_mushroom"
+            },
+            "weight": 25
+          }
+        ],
+        "type": "minecraft:weighted"
+      },
+      "type": "minecraft:simple_block"
+    },
+    "placement": []
+  },
+  "vertical_range": 5,
+  "xz_radius": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 4,
+    "min_inclusive": 2
+  }
+}

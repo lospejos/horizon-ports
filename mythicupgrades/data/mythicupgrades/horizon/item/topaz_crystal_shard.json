@@ -1,0 +1,27 @@
+{
+  "template": "minecraft:apple",
+  "components": {
+    "minecraft:food": {
+      "nutrition": 1,
+      "saturation": 0.2,
+      "can_always_eat": true
+    },
+    "minecraft:consumable": {
+      "consume_seconds": 1.6,
+      "on_consume_effects": [
+        {
+          "type": "minecraft:apply_effects",
+          "probability": 1.0,
+          "effects": [
+            {
+              "id": "mythicupgrades:topaz_reaction",
+              "duration": 1800,
+              "amplifier": 2
+            }
+          ]
+        }
+      ]
+    },
+    "minecraft:provides_trim_material": "mythicupgrades:topaz"
+  }
+}

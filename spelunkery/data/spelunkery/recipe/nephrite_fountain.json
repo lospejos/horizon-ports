@@ -1,0 +1,15 @@
+{
+  "key": {
+    "C": "spelunkery:carved_nephrite",
+    "R": "spelunkery:cinnabar",
+    "S": "spelunkery:nephrite_siphon"
+  },
+  "pattern": [
+    "CRS"
+  ],
+  "result": {
+    "count": 2,
+    "id": "spelunkery:nephrite_fountain"
+  },
+  "type": "minecraft:crafting_shaped"
+}

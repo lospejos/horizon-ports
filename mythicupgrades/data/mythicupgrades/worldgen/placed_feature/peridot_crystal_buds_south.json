@@ -1,0 +1,48 @@
+{
+  "feature": "mythicupgrades:peridot_crystal_buds_south",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 16
+    },
+    {
+      "type": "minecraft:offset",
+      "x": {
+        "type": "minecraft:uniform",
+        "min_inclusive": -5,
+        "max_inclusive": 5
+      },
+      "y": {
+        "type": "minecraft:uniform",
+        "min_inclusive": -4,
+        "max_inclusive": 4
+      },
+      "z": {
+        "type": "minecraft:uniform",
+        "min_inclusive": -5,
+        "max_inclusive": 5
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:all_of",
+        "predicates": [
+          {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:air"
+          },
+          {
+            "type": "minecraft:has_sturdy_face",
+            "offset": [
+              0,
+              0,
+              -1
+            ],
+            "direction": "south"
+          }
+        ]
+      }
+    }
+  ]
+}

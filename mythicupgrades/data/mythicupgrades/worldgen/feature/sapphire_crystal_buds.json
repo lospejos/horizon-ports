@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:simple_random_selector",
+  "features": [
+    "mythicupgrades:sapphire_crystal_buds_down",
+    "mythicupgrades:sapphire_crystal_buds_up",
+    "mythicupgrades:sapphire_crystal_buds_north",
+    "mythicupgrades:sapphire_crystal_buds_south",
+    "mythicupgrades:sapphire_crystal_buds_east",
+    "mythicupgrades:sapphire_crystal_buds_west"
+  ]
+}

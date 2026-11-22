@@ -1,0 +1,16 @@
+{
+  "key": {
+    "#": "minecraft:chiseled_stone_bricks",
+    "C": "spelunkery:cinnabar",
+    "X": "spelunkery:raw_magnetite"
+  },
+  "pattern": [
+    "#C#",
+    "CXC",
+    "#C#"
+  ],
+  "result": {
+    "id": "minecraft:lodestone"
+  },
+  "type": "minecraft:crafting_shaped"
+}

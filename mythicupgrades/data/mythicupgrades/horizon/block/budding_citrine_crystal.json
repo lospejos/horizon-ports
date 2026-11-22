@@ -1,0 +1,10 @@
+{
+  "template": "minecraft:budding_amethyst",
+  "properties": {
+    "hardness": 1.5,
+    "explosion_resistance": 1.5,
+    "requires_tool": true,
+    "map_color": 18,
+    "sounds": "minecraft:amethyst_block"
+  }
+}

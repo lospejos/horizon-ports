@@ -1,0 +1,63 @@
+{
+  "template": "minecraft:brown_mushroom",
+  "properties": {
+    "hardness": 0.0,
+    "explosion_resistance": 0.0,
+    "requires_tool": false,
+    "map_color": 7,
+    "sounds": "minecraft:crimson_fungus",
+    "light": 0
+  },
+  "components": {
+    "minecraft:compostable": {
+      "layers": {
+        "type": "minecraft:number_dispatcher",
+        "cases": [
+          {
+            "condition": {
+              "type": "minecraft:match_block",
+              "blocks": "minecraft:composter",
+              "state": {
+                "level": "0"
+              }
+            },
+            "value": 1
+          }
+        ],
+        "default": {
+          "type": "minecraft:weighted_list",
+          "distribution": [
+            {
+              "data": 1,
+              "weight": 50
+            },
+            {
+              "data": 0,
+              "weight": 50
+            }
+          ]
+        }
+      }
+    },
+    "minecraft:food": {
+      "nutrition": 2,
+      "saturation": 1.2
+    },
+    "minecraft:consumable": {
+      "consume_seconds": 0.8,
+      "on_consume_effects": [
+        {
+          "type": "minecraft:apply_effects",
+          "probability": 0.01,
+          "effects": [
+            {
+              "id": "minecraft:haste",
+              "duration": 18000,
+              "amplifier": 2
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

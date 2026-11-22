@@ -1,0 +1,25 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:paletted_permutations",
+      "palette_key": "minecraft:trim_base",
+      "permutations": {
+        "ametrine": "mythicupgrades:trim/ametrine",
+        "aquamarine": "mythicupgrades:trim/aquamarine",
+        "citrine": "mythicupgrades:trim/citrine",
+        "jade": "mythicupgrades:trim/jade",
+        "necoium": "mythicupgrades:trim/necoium",
+        "peridot": "mythicupgrades:trim/peridot",
+        "ruby": "mythicupgrades:trim/ruby",
+        "sapphire": "mythicupgrades:trim/sapphire",
+        "topaz": "mythicupgrades:trim/topaz"
+      },
+      "textures": [
+        "minecraft:trims/items/helmet_trim",
+        "minecraft:trims/items/chestplate_trim",
+        "minecraft:trims/items/leggings_trim",
+        "minecraft:trims/items/boots_trim"
+      ]
+    }
+  ]
+}

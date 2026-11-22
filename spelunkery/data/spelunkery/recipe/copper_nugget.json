@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "minecraft:copper_ingot"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:copper_nugget"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

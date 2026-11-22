@@ -1,0 +1,9 @@
+{
+  "cookingtime": 200,
+  "experience": 1.0,
+  "ingredient": "#spelunkery:gold_ores",
+  "result": {
+    "id": "minecraft:gold_ingot"
+  },
+  "type": "minecraft:smelting"
+}

@@ -1,0 +1,8 @@
+{
+  "ingredient": "spelunkery:polished_nephrite",
+  "result": {
+    "count": 2,
+    "id": "spelunkery:polished_nephrite_slab"
+  },
+  "type": "minecraft:stonecutting"
+}

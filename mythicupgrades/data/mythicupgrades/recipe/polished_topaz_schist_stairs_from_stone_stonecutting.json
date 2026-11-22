@@ -1,0 +1,8 @@
+{
+  "ingredient": "mythicupgrades:topaz_schist",
+  "result": {
+    "count": 1,
+    "id": "mythicupgrades:polished_topaz_schist_stairs"
+  },
+  "type": "minecraft:stonecutting"
+}

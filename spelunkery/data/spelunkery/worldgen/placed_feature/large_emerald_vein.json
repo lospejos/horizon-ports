@@ -1,0 +1,41 @@
+{
+  "feature": "spelunkery:large_emerald_vein",
+  "placement": [
+    {
+      "type": "minecraft:offset",
+      "x": 7,
+      "y": 0,
+      "z": 7
+    },
+    {
+      "noise_factor": 250,
+      "noise_offset": -0.3,
+      "noise_to_count_ratio": 8,
+      "type": "minecraft:noise_based_count"
+    },
+    {
+      "noise_factor": 5,
+      "noise_to_count_ratio": 1,
+      "type": "minecraft:noise_based_count"
+    },
+    {
+      "count": 4,
+      "type": "minecraft:count_on_every_layer"
+    },
+    {
+      "height": {
+        "max_inclusive": {
+          "absolute": 256
+        },
+        "min_inclusive": {
+          "absolute": 128
+        },
+        "type": "minecraft:uniform"
+      },
+      "type": "minecraft:height_range"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

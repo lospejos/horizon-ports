@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:simple_random_selector",
+  "features": [
+    "mythicupgrades:topaz_crystal_buds_down",
+    "mythicupgrades:topaz_crystal_buds_up",
+    "mythicupgrades:topaz_crystal_buds_north",
+    "mythicupgrades:topaz_crystal_buds_south",
+    "mythicupgrades:topaz_crystal_buds_east",
+    "mythicupgrades:topaz_crystal_buds_west"
+  ]
+}

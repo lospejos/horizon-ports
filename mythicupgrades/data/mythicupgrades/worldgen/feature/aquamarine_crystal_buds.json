@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:simple_random_selector",
+  "features": [
+    "mythicupgrades:aquamarine_crystal_buds_down",
+    "mythicupgrades:aquamarine_crystal_buds_up",
+    "mythicupgrades:aquamarine_crystal_buds_north",
+    "mythicupgrades:aquamarine_crystal_buds_south",
+    "mythicupgrades:aquamarine_crystal_buds_east",
+    "mythicupgrades:aquamarine_crystal_buds_west"
+  ]
+}

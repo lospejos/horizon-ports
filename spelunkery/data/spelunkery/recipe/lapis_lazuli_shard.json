@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "minecraft:lapis_lazuli"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:lapis_lazuli_shard"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

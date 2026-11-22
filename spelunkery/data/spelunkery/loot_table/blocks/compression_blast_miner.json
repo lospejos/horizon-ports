@@ -1,0 +1,31 @@
+{
+  "pools": [
+    {
+      "entries": [
+        {
+          "name": "spelunkery:compression_blast_miner",
+          "type": "minecraft:item"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "condition": {
+            "block": "spelunkery:compression_blast_miner",
+            "properties": {
+              "primed": "true"
+            },
+            "type": "minecraft:block_state_property"
+          },
+          "name": "minecraft:tnt",
+          "type": "minecraft:item"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "type": "minecraft:block"
+}

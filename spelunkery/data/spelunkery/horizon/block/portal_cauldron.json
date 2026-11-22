@@ -1,0 +1,15 @@
+{
+  "template": "minecraft:water_cauldron",
+  "properties": {
+    "hardness": 2.0,
+    "explosion_resistance": 2.0,
+    "requires_tool": true,
+    "map_color": 11,
+    "sounds": "minecraft:stone",
+    "light": 5
+  },
+  "default_state": {
+    "level": "1"
+  },
+  "item": false
+}

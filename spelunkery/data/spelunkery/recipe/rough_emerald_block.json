@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:rough_emerald"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "spelunkery:rough_emerald_block"
+  },
+  "type": "minecraft:crafting_shaped"
+}

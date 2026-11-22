@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "minecraft:end_stone"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:end_stone_pebble"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

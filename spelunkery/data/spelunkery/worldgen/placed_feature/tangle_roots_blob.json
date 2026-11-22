@@ -1,0 +1,41 @@
+{
+  "feature": "spelunkery:tangle_roots_blob",
+  "placement": [
+    {
+      "direction_of_search": "down",
+      "max_steps": 1,
+      "target_condition": {
+        "offset": [
+          0,
+          -1,
+          0
+        ],
+        "tag": "minecraft:base_stone_overworld",
+        "type": "minecraft:matching_block_tag"
+      },
+      "type": "minecraft:environment_scan"
+    },
+    {
+      "count": 4,
+      "type": "minecraft:count"
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "height": {
+        "max_inclusive": {
+          "absolute": 15
+        },
+        "min_inclusive": {
+          "above_bottom": 0
+        },
+        "type": "minecraft:uniform"
+      },
+      "type": "minecraft:height_range"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

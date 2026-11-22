@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "spelunkery:sulfur_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:sulfur"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

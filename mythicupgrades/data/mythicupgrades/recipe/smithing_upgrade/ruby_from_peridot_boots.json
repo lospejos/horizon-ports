@@ -1,0 +1,9 @@
+{
+  "addition": "mythicupgrades:ruby_ingot",
+  "base": "mythicupgrades:peridot_boots",
+  "result": {
+    "id": "mythicupgrades:ruby_boots"
+  },
+  "template": "mythicupgrades:mythic_upgrade_smithing_template",
+  "type": "minecraft:smithing_transform"
+}

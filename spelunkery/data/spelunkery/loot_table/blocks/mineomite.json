@@ -1,0 +1,116 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "modifier": [
+            {
+              "add": false,
+              "condition": {
+                "block": "spelunkery:mineomite",
+                "properties": {
+                  "sticks": "2"
+                },
+                "type": "minecraft:block_state_property"
+              },
+              "count": 2,
+              "type": "minecraft:set_count"
+            },
+            {
+              "add": false,
+              "condition": {
+                "block": "spelunkery:mineomite",
+                "properties": {
+                  "sticks": "3"
+                },
+                "type": "minecraft:block_state_property"
+              },
+              "count": 3,
+              "type": "minecraft:set_count"
+            },
+            {
+              "add": false,
+              "condition": {
+                "block": "spelunkery:mineomite",
+                "properties": {
+                  "sticks": "4"
+                },
+                "type": "minecraft:block_state_property"
+              },
+              "count": 4,
+              "type": "minecraft:set_count"
+            },
+            {
+              "add": false,
+              "condition": {
+                "block": "spelunkery:mineomite",
+                "properties": {
+                  "sticks": "5"
+                },
+                "type": "minecraft:block_state_property"
+              },
+              "count": 5,
+              "type": "minecraft:set_count"
+            },
+            {
+              "add": false,
+              "condition": {
+                "block": "spelunkery:mineomite",
+                "properties": {
+                  "sticks": "6"
+                },
+                "type": "minecraft:block_state_property"
+              },
+              "count": 6,
+              "type": "minecraft:set_count"
+            },
+            {
+              "add": false,
+              "condition": {
+                "block": "spelunkery:mineomite",
+                "properties": {
+                  "sticks": "7"
+                },
+                "type": "minecraft:block_state_property"
+              },
+              "count": 7,
+              "type": "minecraft:set_count"
+            },
+            {
+              "add": false,
+              "condition": {
+                "block": "spelunkery:mineomite",
+                "properties": {
+                  "sticks": "8"
+                },
+                "type": "minecraft:block_state_property"
+              },
+              "count": 8,
+              "type": "minecraft:set_count"
+            },
+            {
+              "add": false,
+              "condition": {
+                "block": "spelunkery:mineomite",
+                "properties": {
+                  "sticks": "9"
+                },
+                "type": "minecraft:block_state_property"
+              },
+              "count": 9,
+              "type": "minecraft:set_count"
+            },
+            {
+              "type": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "spelunkery:mineomite",
+          "type": "minecraft:item"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "type": "minecraft:block"
+}

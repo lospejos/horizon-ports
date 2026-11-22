@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:rough_diamond_shard"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "spelunkery:rough_diamond"
+  },
+  "type": "minecraft:crafting_shaped"
+}

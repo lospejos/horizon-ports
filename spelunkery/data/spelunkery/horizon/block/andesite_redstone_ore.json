@@ -1,0 +1,22 @@
+{
+  "template": "minecraft:redstone_ore",
+  "state_light": {
+    "properties": [
+      "lit"
+    ],
+    "values": {
+      "false": 0
+    },
+    "default": 9
+  },
+  "properties": {
+    "hardness": 3.0,
+    "explosion_resistance": 3.0,
+    "requires_tool": true,
+    "map_color": 11,
+    "sounds": "minecraft:stone"
+  },
+  "default_state": {
+    "lit": "false"
+  }
+}

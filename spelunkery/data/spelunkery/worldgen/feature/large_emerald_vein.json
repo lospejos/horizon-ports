@@ -1,0 +1,74 @@
+{
+  "features": [
+    {
+      "feature": {
+        "to_place": {
+          "default_state": {
+            "id": "spelunkery:rough_emerald_block"
+          },
+          "high_chance": 0.9,
+          "high_states": [
+            {
+              "id": "minecraft:infested_stone"
+            },
+            {
+              "id": "minecraft:emerald_ore"
+            }
+          ],
+          "low_states": [
+            {
+              "id": "minecraft:infested_stone"
+            },
+            {
+              "id": "minecraft:emerald_ore"
+            }
+          ],
+          "noise": {
+            "base_octave": -3,
+            "base_amplitude": 0.955388882960065
+          },
+          "scale": 1,
+          "seed": 69,
+          "threshold": 0.2,
+          "type": "minecraft:noise_threshold"
+        },
+        "type": "minecraft:simple_block"
+      },
+      "placement": [
+        {
+          "count": 16,
+          "type": "minecraft:count"
+        },
+        {
+          "type": "minecraft:offset",
+          "x": {
+            "max": 3,
+            "min": -3,
+            "plateau": 0,
+            "type": "minecraft:trapezoid"
+          },
+          "y": {
+            "max": 3,
+            "min": -3,
+            "plateau": 0,
+            "type": "minecraft:trapezoid"
+          },
+          "z": {
+            "max": 3,
+            "min": -3,
+            "plateau": 0,
+            "type": "minecraft:trapezoid"
+          }
+        },
+        {
+          "predicate": {
+            "blocks": "#minecraft:base_stone_overworld",
+            "type": "minecraft:matching_blocks"
+          },
+          "type": "minecraft:block_predicate_filter"
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:simple_random_selector"
+}

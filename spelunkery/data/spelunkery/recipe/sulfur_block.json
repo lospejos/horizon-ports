@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:sulfur"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "spelunkery:sulfur_block"
+  },
+  "type": "minecraft:crafting_shaped"
+}

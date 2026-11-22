@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:simple_random_selector",
+  "features": [
+    "mythicupgrades:jade_crystal_buds_down",
+    "mythicupgrades:jade_crystal_buds_up",
+    "mythicupgrades:jade_crystal_buds_north",
+    "mythicupgrades:jade_crystal_buds_south",
+    "mythicupgrades:jade_crystal_buds_east",
+    "mythicupgrades:jade_crystal_buds_west"
+  ]
+}

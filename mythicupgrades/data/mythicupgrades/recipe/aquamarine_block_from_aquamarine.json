@@ -1,0 +1,16 @@
+{
+  "category": "building",
+  "key": {
+    "#": "mythicupgrades:aquamarine_ingot"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "mythicupgrades:aquamarine_block"
+  },
+  "show_notification": true,
+  "type": "minecraft:crafting_shaped"
+}

@@ -1,0 +1,91 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "name": "minecraft:stick",
+          "type": "minecraft:item",
+          "weight": 20
+        },
+        {
+          "name": "minecraft:dead_bush",
+          "type": "minecraft:item",
+          "weight": 20
+        },
+        {
+          "name": "minecraft:bone",
+          "type": "minecraft:item",
+          "weight": 20
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "biome": "minecraft:badlands"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:wooded_badlands"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:eroded_badlands"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "minecraft:skeleton_skull",
+          "type": "minecraft:item",
+          "weight": 5
+        },
+        {
+          "name": "spelunkery:raw_gold_nugget",
+          "type": "minecraft:item",
+          "weight": 10
+        },
+        {
+          "name": "spelunkery:raw_iron_nugget",
+          "type": "minecraft:item",
+          "weight": 10
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "biome": "minecraft:badlands"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:wooded_badlands"
+                },
+                "type": "minecraft:location_check"
+              },
+              {
+                "predicate": {
+                  "biome": "minecraft:eroded_badlands"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "spelunkery:rough_cinnabar_shard",
+          "type": "minecraft:item",
+          "weight": 5
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

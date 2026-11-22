@@ -1,0 +1,69 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "additions": {
+        "sound": "mythicupgrades:ambient.mythic_chime",
+        "tick_chance": 0.0111
+      },
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:gameplay/creature_world_gen_spawn_probability": 0.0,
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {
+          "ambient": [],
+          "axolotls": [],
+          "creature": [],
+          "misc": [],
+          "monster": [],
+          "underground_water_creature": [],
+          "water_ambient": [],
+          "water_creature": []
+        }
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/fog_color": "#78307b",
+    "minecraft:visual/sky_color": "#210021",
+    "minecraft:visual/water_fog_color": "#050533"
+  },
+  "carvers": [],
+  "downfall": 0.0,
+  "effects": {
+    "water_color": "#a147fc"
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "mythicupgrades:ruby_stone_blobs",
+      "mythicupgrades:ruby_ore",
+      "mythicupgrades:sapphire_stone_blobs",
+      "mythicupgrades:sapphire_ore"
+    ],
+    [
+      "minecraft:ore_gravel_nether",
+      "minecraft:ore_blackstone",
+      "minecraft:ore_gold_nether",
+      "minecraft:ore_quartz_nether",
+      "minecraft:ore_ancient_debris_large",
+      "minecraft:ore_debris_small",
+      "mythicupgrades:ruby_crystal_blobs",
+      "mythicupgrades:ruby_crystal_buds",
+      "mythicupgrades:sapphire_crystal_blobs",
+      "mythicupgrades:sapphire_crystal_buds"
+    ]
+  ],
+  "has_precipitation": false,
+  "temperature": 2.0
+}

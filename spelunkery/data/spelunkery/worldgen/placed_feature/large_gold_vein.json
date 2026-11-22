@@ -1,0 +1,20 @@
+{
+  "feature": "spelunkery:large_gold_vein",
+  "placement": [
+    {
+      "noise_factor": 100,
+      "noise_offset": -0.5,
+      "noise_to_count_ratio": 50,
+      "type": "minecraft:noise_based_count"
+    },
+    {
+      "noise_factor": 5,
+      "noise_to_count_ratio": 1,
+      "type": "minecraft:noise_based_count"
+    },
+    {
+      "count": 1,
+      "type": "minecraft:count_on_every_layer"
+    }
+  ]
+}

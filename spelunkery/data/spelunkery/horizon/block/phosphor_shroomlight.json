@@ -1,0 +1,43 @@
+{
+  "template": "minecraft:shroomlight",
+  "properties": {
+    "hardness": 1.0,
+    "explosion_resistance": 1.0,
+    "requires_tool": false,
+    "map_color": 23,
+    "sounds": "minecraft:shroomlight",
+    "light": 8
+  },
+  "components": {
+    "minecraft:compostable": {
+      "layers": {
+        "type": "minecraft:number_dispatcher",
+        "cases": [
+          {
+            "condition": {
+              "type": "minecraft:match_block",
+              "blocks": "minecraft:composter",
+              "state": {
+                "level": "0"
+              }
+            },
+            "value": 1
+          }
+        ],
+        "default": {
+          "type": "minecraft:weighted_list",
+          "distribution": [
+            {
+              "data": 1,
+              "weight": 65
+            },
+            {
+              "data": 0,
+              "weight": 35
+            }
+          ]
+        }
+      }
+    }
+  }
+}

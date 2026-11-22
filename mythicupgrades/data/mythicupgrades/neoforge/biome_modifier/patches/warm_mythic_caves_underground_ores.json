@@ -1,0 +1,14 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#mythicupgrades:has_warm_mythic_caves",
+  "features": [
+    "mythicupgrades:necoium_ore_extra_patch",
+    "mythicupgrades:deepslate_necoium_ore_extra_patch",
+    "mythicupgrades:raw_necoium_block_caves_patch",
+    "mythicupgrades:citrine_stone_blobs_patch",
+    "mythicupgrades:citrine_ore_patch",
+    "mythicupgrades:topaz_stone_blobs_patch",
+    "mythicupgrades:topaz_ore_patch"
+  ],
+  "step": "underground_ores"
+}

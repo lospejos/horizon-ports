@@ -1,0 +1,29 @@
+{
+  "feature": "mythicupgrades:sapphire_crystal_buds",
+  "placement": [
+    {
+      "type": "minecraft:noise_threshold_count",
+      "noise_level": 0.68,
+      "below_noise": 0,
+      "above_noise": 14
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "height": {
+        "max_inclusive": {
+          "absolute": 120
+        },
+        "min_inclusive": {
+          "absolute": 5
+        },
+        "type": "minecraft:uniform"
+      },
+      "type": "minecraft:height_range"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#spelunkery:has_nether_noise",
+  "features": "spelunkery:large_gold_vein",
+  "step": "raw_generation"
+}

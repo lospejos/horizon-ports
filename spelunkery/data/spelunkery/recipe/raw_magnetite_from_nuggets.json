@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:raw_magnetite_nugget"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "spelunkery:raw_magnetite"
+  },
+  "type": "minecraft:crafting_shaped"
+}

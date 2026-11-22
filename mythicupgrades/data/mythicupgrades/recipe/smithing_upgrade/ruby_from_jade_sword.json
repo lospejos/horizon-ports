@@ -1,0 +1,9 @@
+{
+  "addition": "mythicupgrades:ruby_ingot",
+  "base": "mythicupgrades:jade_sword",
+  "result": {
+    "id": "mythicupgrades:ruby_sword"
+  },
+  "template": "mythicupgrades:mythic_upgrade_smithing_template",
+  "type": "minecraft:smithing_transform"
+}

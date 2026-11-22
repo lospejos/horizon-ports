@@ -1,0 +1,103 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "condition": {
+        "terms": [
+          {
+            "block": "spelunkery:tall_sporophyte",
+            "properties": {
+              "half": "lower"
+            },
+            "type": "minecraft:block_state_property"
+          },
+          {
+            "offsetY": 1,
+            "predicate": {
+              "block": {
+                "blocks": [
+                  "spelunkery:tall_sporophyte"
+                ],
+                "state": {
+                  "half": "upper"
+                }
+              }
+            },
+            "type": "minecraft:location_check"
+          }
+        ],
+        "type": "minecraft:all_of"
+      },
+      "entries": [
+        {
+          "children": [
+            {
+              "condition": "minecraft:tool/can_shear",
+              "modifier": [
+                {
+                  "add": false,
+                  "count": 2,
+                  "type": "minecraft:set_count"
+                }
+              ],
+              "name": "spelunkery:sporophyte",
+              "type": "minecraft:item"
+            }
+          ],
+          "type": "minecraft:alternatives"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "bonus_rolls": 0,
+      "condition": {
+        "terms": [
+          {
+            "block": "spelunkery:tall_sporophyte",
+            "properties": {
+              "half": "upper"
+            },
+            "type": "minecraft:block_state_property"
+          },
+          {
+            "offsetY": -1,
+            "predicate": {
+              "block": {
+                "blocks": [
+                  "spelunkery:tall_sporophyte"
+                ],
+                "state": {
+                  "half": "lower"
+                }
+              }
+            },
+            "type": "minecraft:location_check"
+          }
+        ],
+        "type": "minecraft:all_of"
+      },
+      "entries": [
+        {
+          "children": [
+            {
+              "condition": "minecraft:tool/can_shear",
+              "modifier": [
+                {
+                  "add": false,
+                  "count": 2,
+                  "type": "minecraft:set_count"
+                }
+              ],
+              "name": "spelunkery:sporophyte",
+              "type": "minecraft:item"
+            }
+          ],
+          "type": "minecraft:alternatives"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "type": "minecraft:block"
+}

@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:emerald_shard"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "minecraft:emerald"
+  },
+  "type": "minecraft:crafting_shaped"
+}

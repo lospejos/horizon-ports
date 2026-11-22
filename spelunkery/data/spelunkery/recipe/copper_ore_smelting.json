@@ -1,0 +1,9 @@
+{
+  "cookingtime": 200,
+  "experience": 0.7,
+  "ingredient": "#spelunkery:copper_ores",
+  "result": {
+    "id": "minecraft:copper_ingot"
+  },
+  "type": "minecraft:smelting"
+}
