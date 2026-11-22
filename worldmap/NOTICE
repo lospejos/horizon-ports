@@ -1,0 +1,8 @@
+Worldmap for Horizon 26.3 (version 0.0.1)
+
+An original WebAssembly mod (the mod API only, no mixins), written from scratch under the MIT licence
+(licence text in LICENSE). Built against Horizon's exact-build SDK 2b77287de099c9316278ba7ac4d83590fdb7ef30.
+
+Inspired by Eternity World Map (https://github.com/qwinterxxx/horizon-eternity-world-map, MIT): the feature
+set is similar; code from it may be reused with its notice kept here. The feature list of
+Minimap-Worldmap-and-waypoints-reworked (GPL-3.0) was also an inspiration; none of its code was read or copied.
