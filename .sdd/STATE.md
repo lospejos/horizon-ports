@@ -1,7 +1,7 @@
 # SDD STATE (keep <= 20 lines)
 Feature: worldmap step 3, fullscreen map (plan in .sdd/features/fullmap/)
-Task: T8 cursor info + teleport (code pushed, CI + in-game check pending)
-Next: T8 cursor info and teleport on map (X Z Y under cursor, click then Teleport via /tp @s, same dimension only). Every key-adding task: Controls check. Python edit scripts via scratchpad Write tool. Game test: game_key needs action=tap; game_drag_at points="x1 y1 x2 y2"; game_scroll_at x,y,steps; game_click_button label; game_click_at x,y,right=true.
+Task: none (T8 done, verified in game)
+Next: T9 README + version 0.3.0 (README: M key, cache, disk use; tag only on the user word). Python edit scripts via scratchpad Write tool.
 Blockers: none
 Open questions: none
 Last ADR: 0004
