@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "spelunkery:tangle_roots_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:tangle_roots"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

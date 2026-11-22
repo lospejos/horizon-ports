@@ -1,0 +1,10 @@
+{
+  "cookingtime": 100,
+  "experience": 0.35,
+  "group": "charcoal",
+  "ingredient": "#spelunkery:blastable_foods",
+  "result": {
+    "id": "spelunkery:charcoal_lump"
+  },
+  "type": "minecraft:blasting"
+}

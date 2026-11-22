@@ -1,0 +1,18 @@
+{
+  "template": "minecraft:cobblestone_wall",
+  "properties": {
+    "hardness": 1.5,
+    "explosion_resistance": 1.5,
+    "requires_tool": true,
+    "map_color": 28,
+    "sounds": "minecraft:amethyst_block"
+  },
+  "default_state": {
+    "east": "none",
+    "north": "none",
+    "south": "none",
+    "up": "true",
+    "waterlogged": "false",
+    "west": "none"
+  }
+}

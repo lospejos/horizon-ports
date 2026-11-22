@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:raw_iron_nugget"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "minecraft:raw_iron"
+  },
+  "type": "minecraft:crafting_shaped"
+}

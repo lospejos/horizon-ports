@@ -1,0 +1,9 @@
+{
+  "cookingtime": 100,
+  "experience": 1.0,
+  "ingredient": "#spelunkery:diamond_ores",
+  "result": {
+    "id": "minecraft:diamond"
+  },
+  "type": "minecraft:blasting"
+}

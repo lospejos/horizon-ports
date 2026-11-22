@@ -1,0 +1,9 @@
+{
+  "addition": "mythicupgrades:sapphire_ingot",
+  "base": "minecraft:netherite_sword",
+  "result": {
+    "id": "mythicupgrades:sapphire_sword"
+  },
+  "template": "mythicupgrades:mythic_upgrade_smithing_template",
+  "type": "minecraft:smithing_transform"
+}

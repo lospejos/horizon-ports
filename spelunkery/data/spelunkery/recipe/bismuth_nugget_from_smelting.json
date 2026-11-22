@@ -1,0 +1,10 @@
+{
+  "cookingtime": 23,
+  "experience": 0.1,
+  "group": "bismuth_nugget",
+  "ingredient": "spelunkery:raw_bismuth_nugget",
+  "result": {
+    "id": "spelunkery:bismuth_nugget"
+  },
+  "type": "minecraft:smelting"
+}

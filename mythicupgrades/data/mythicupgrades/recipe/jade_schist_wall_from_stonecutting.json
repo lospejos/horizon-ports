@@ -1,0 +1,8 @@
+{
+  "ingredient": "mythicupgrades:jade_schist",
+  "result": {
+    "count": 1,
+    "id": "mythicupgrades:jade_schist_wall"
+  },
+  "type": "minecraft:stonecutting"
+}

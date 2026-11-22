@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "salt": 20696932,
+    "separation": 8,
+    "spacing": 24,
+    "type": "minecraft:random_spread"
+  },
+  "structures": [
+    {
+      "structure": "spelunkery:cinnabar_wire",
+      "weight": 1
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "minecraft:charcoal"
+  ],
+  "result": {
+    "count": 8,
+    "id": "spelunkery:charcoal_lump"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

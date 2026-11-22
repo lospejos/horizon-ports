@@ -1,0 +1,74 @@
+{
+  "features": [
+    {
+      "feature": {
+        "to_place": {
+          "default_state": {
+            "id": "minecraft:deepslate_coal_ore"
+          },
+          "high_chance": 0.2,
+          "high_states": [
+            {
+              "id": "minecraft:coal_block"
+            },
+            {
+              "id": "spelunkery:smooth_basalt_diamond_ore"
+            }
+          ],
+          "low_states": [
+            {
+              "id": "minecraft:smooth_basalt"
+            },
+            {
+              "id": "minecraft:deepslate_coal_ore"
+            }
+          ],
+          "noise": {
+            "base_octave": -3,
+            "base_amplitude": 0.955388882960065
+          },
+          "scale": 1,
+          "seed": 66666666,
+          "threshold": 0.2,
+          "type": "minecraft:noise_threshold"
+        },
+        "type": "minecraft:simple_block"
+      },
+      "placement": [
+        {
+          "count": 60,
+          "type": "minecraft:count"
+        },
+        {
+          "type": "minecraft:offset",
+          "x": {
+            "max": 5,
+            "min": -5,
+            "plateau": 0,
+            "type": "minecraft:trapezoid"
+          },
+          "y": {
+            "max": 0,
+            "min": 0,
+            "plateau": 0,
+            "type": "minecraft:trapezoid"
+          },
+          "z": {
+            "max": 5,
+            "min": -5,
+            "plateau": 0,
+            "type": "minecraft:trapezoid"
+          }
+        },
+        {
+          "predicate": {
+            "tag": "minecraft:base_stone_overworld",
+            "type": "minecraft:matching_block_tag"
+          },
+          "type": "minecraft:block_predicate_filter"
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:simple_random_selector"
+}

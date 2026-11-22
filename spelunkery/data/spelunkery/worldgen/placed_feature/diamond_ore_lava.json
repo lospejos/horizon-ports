@@ -1,0 +1,334 @@
+{
+  "feature": "spelunkery:diamond_ore_lava",
+  "placement": [
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "noise_factor": 50,
+      "noise_offset": 0,
+      "noise_to_count_ratio": 5,
+      "type": "minecraft:noise_based_count"
+    },
+    {
+      "above_noise": 1,
+      "below_noise": 1,
+      "noise_level": 1,
+      "type": "minecraft:noise_threshold_count"
+    },
+    {
+      "count": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 5,
+        "min_inclusive": 1
+      },
+      "type": "minecraft:count_on_every_layer"
+    },
+    {
+      "height": {
+        "max_inclusive": {
+          "above_bottom": 80
+        },
+        "min_inclusive": {
+          "above_bottom": -80
+        },
+        "type": "minecraft:uniform"
+      },
+      "type": "minecraft:height_range"
+    },
+    {
+      "predicate": {
+        "predicates": [
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              0,
+              -2,
+              0
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              0,
+              0,
+              -2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              -2,
+              0,
+              0
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              0,
+              0,
+              2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              2,
+              0,
+              0
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              0,
+              2,
+              0
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              -2,
+              -2,
+              0
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              -2,
+              0,
+              -2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              0,
+              -2,
+              -2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              2,
+              2,
+              0
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              2,
+              0,
+              2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              0,
+              2,
+              2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              -2,
+              -2,
+              -2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              2,
+              -2,
+              0
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              2,
+              0,
+              -2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              0,
+              2,
+              -2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              -2,
+              2,
+              0
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              -2,
+              0,
+              2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              0,
+              -2,
+              2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              2,
+              2,
+              2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              -2,
+              2,
+              2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              2,
+              -2,
+              2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              2,
+              2,
+              -2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              2,
+              -2,
+              -2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              -2,
+              2,
+              -2
+            ],
+            "type": "minecraft:matching_fluids"
+          },
+          {
+            "fluids": [
+              "minecraft:lava"
+            ],
+            "offset": [
+              -2,
+              -2,
+              2
+            ],
+            "type": "minecraft:matching_fluids"
+          }
+        ],
+        "type": "minecraft:any_of"
+      },
+      "type": "minecraft:block_predicate_filter"
+    }
+  ]
+}

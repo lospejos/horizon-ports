@@ -1,0 +1,5 @@
+{
+  "template": "minecraft:stick",
+  "crafting_remainder": "minecraft:bucket",
+  "max_stack_size": 1
+}

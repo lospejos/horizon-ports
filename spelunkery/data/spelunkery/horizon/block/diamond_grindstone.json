@@ -1,0 +1,26 @@
+{
+  "template": "minecraft:grindstone",
+  "state_properties": {
+    "depletion": {
+      "type": "enum",
+      "values": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ]
+    }
+  },
+  "properties": {
+    "hardness": 2.0,
+    "explosion_resistance": 6.0,
+    "requires_tool": true,
+    "map_color": 6,
+    "sounds": "minecraft:stone"
+  },
+  "default_state": {
+    "depletion": "0",
+    "face": "wall",
+    "facing": "north"
+  }
+}

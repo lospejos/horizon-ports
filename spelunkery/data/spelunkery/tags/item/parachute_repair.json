@@ -1,0 +1,9 @@
+{
+  "values": [
+    {
+      "id": "farmersdelight:canvas",
+      "required": false
+    },
+    "#minecraft:wool"
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "children": [
+            {
+              "condition": "minecraft:tool/can_silk_touch",
+              "name": "mythicupgrades:topaz_crystal_cluster",
+              "type": "minecraft:item"
+            },
+            {
+              "children": [
+                {
+                  "condition": {
+                    "predicate": {
+                      "items": "#minecraft:pickaxes"
+                    },
+                    "type": "minecraft:match_tool"
+                  },
+                  "modifier": [
+                    {
+                      "add": false,
+                      "count": 4.0,
+                      "type": "minecraft:set_count"
+                    },
+                    {
+                      "enchantment": "minecraft:fortune",
+                      "formula": "minecraft:ore_drops",
+                      "type": "minecraft:apply_bonus"
+                    }
+                  ],
+                  "name": "mythicupgrades:topaz_crystal_shard",
+                  "type": "minecraft:item"
+                },
+                {
+                  "modifier": [
+                    {
+                      "add": false,
+                      "count": 2.0,
+                      "type": "minecraft:set_count"
+                    },
+                    {
+                      "type": "minecraft:explosion_decay"
+                    }
+                  ],
+                  "name": "mythicupgrades:topaz_crystal_shard",
+                  "type": "minecraft:item"
+                }
+              ],
+              "type": "minecraft:alternatives"
+            }
+          ],
+          "type": "minecraft:alternatives"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "mythicupgrades:blocks/topaz_crystal_cluster",
+  "type": "minecraft:block"
+}

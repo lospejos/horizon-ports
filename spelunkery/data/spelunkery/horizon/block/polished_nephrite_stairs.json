@@ -1,0 +1,16 @@
+{
+  "template": "minecraft:stone_stairs",
+  "properties": {
+    "hardness": 3.0,
+    "explosion_resistance": 2.0,
+    "requires_tool": true,
+    "map_color": 33,
+    "sounds": "minecraft:stone"
+  },
+  "default_state": {
+    "facing": "north",
+    "half": "bottom",
+    "shape": "straight",
+    "waterlogged": "false"
+  }
+}

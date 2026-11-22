@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": "spelunkery:diamond_ore_lava",
+  "step": "underground_ores"
+}

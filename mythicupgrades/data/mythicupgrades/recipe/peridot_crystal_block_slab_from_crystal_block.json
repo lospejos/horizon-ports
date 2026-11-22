@@ -1,0 +1,15 @@
+{
+  "category": "building",
+  "key": {
+    "B": "mythicupgrades:peridot_crystal_block"
+  },
+  "pattern": [
+    "BBB"
+  ],
+  "result": {
+    "count": 6,
+    "id": "mythicupgrades:peridot_crystal_block_slab"
+  },
+  "show_notification": true,
+  "type": "minecraft:crafting_shaped"
+}

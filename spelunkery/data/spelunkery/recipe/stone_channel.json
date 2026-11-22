@@ -1,0 +1,17 @@
+{
+  "key": {
+    "#": "minecraft:stone_brick_slab",
+    "/": "minecraft:stone_brick_wall",
+    "H": "minecraft:honeycomb"
+  },
+  "pattern": [
+    "#H#",
+    "###",
+    "/ /"
+  ],
+  "result": {
+    "count": 4,
+    "id": "spelunkery:stone_channel"
+  },
+  "type": "minecraft:crafting_shaped"
+}

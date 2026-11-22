@@ -1,0 +1,46 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "name": "minecraft:flint",
+          "type": "minecraft:item",
+          "weight": 20
+        },
+        {
+          "name": "spelunkery:stone_pebble",
+          "type": "minecraft:item",
+          "weight": 15
+        },
+        {
+          "name": "minecraft:melon_seeds",
+          "type": "minecraft:item",
+          "weight": 10
+        },
+        {
+          "name": "minecraft:pumpkin_seeds",
+          "type": "minecraft:item",
+          "weight": 10
+        },
+        {
+          "condition": {
+            "terms": [
+              {
+                "predicate": {
+                  "structure": "minecraft:mineshaft"
+                },
+                "type": "minecraft:location_check"
+              }
+            ],
+            "type": "minecraft:any_of"
+          },
+          "name": "spelunkery:dust_bunny_spawn_egg",
+          "type": "minecraft:item",
+          "weight": 1
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

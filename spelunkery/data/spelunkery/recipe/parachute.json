@@ -1,0 +1,15 @@
+{
+  "key": {
+    "C": "#spelunkery:parachute_repair",
+    "S": "minecraft:string"
+  },
+  "pattern": [
+    "CCC",
+    "S S",
+    " S "
+  ],
+  "result": {
+    "id": "spelunkery:parachute"
+  },
+  "type": "minecraft:crafting_shaped"
+}

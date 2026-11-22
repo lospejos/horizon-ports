@@ -1,0 +1,18 @@
+{
+  "template": "minecraft:brown_mushroom_block",
+  "properties": {
+    "hardness": 3.0,
+    "explosion_resistance": 2.0,
+    "requires_tool": true,
+    "map_color": 33,
+    "sounds": "minecraft:stone"
+  },
+  "default_state": {
+    "down": "true",
+    "east": "true",
+    "north": "true",
+    "south": "true",
+    "up": "true",
+    "west": "true"
+  }
+}

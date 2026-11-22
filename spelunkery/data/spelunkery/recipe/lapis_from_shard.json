@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:lapis_lazuli_shard"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "minecraft:lapis_lazuli"
+  },
+  "type": "minecraft:crafting_shaped"
+}

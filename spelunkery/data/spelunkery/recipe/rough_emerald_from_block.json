@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "spelunkery:rough_emerald_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:rough_emerald"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

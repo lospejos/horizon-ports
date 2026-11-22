@@ -1,0 +1,8 @@
+{
+  "ingredient": "mythicupgrades:sapphire_schist",
+  "result": {
+    "count": 1,
+    "id": "mythicupgrades:sapphire_schist_stairs"
+  },
+  "type": "minecraft:stonecutting"
+}

@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:saltpeter"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "spelunkery:saltpeter_block"
+  },
+  "type": "minecraft:crafting_shaped"
+}

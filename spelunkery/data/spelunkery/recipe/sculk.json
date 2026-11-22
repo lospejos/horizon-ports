@@ -1,0 +1,13 @@
+{
+  "key": {
+    "X": "minecraft:sculk_vein"
+  },
+  "pattern": [
+    "XX",
+    "XX"
+  ],
+  "result": {
+    "id": "minecraft:sculk"
+  },
+  "type": "minecraft:crafting_shaped"
+}

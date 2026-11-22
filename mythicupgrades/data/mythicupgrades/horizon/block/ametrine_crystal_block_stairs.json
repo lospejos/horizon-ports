@@ -1,0 +1,16 @@
+{
+  "template": "minecraft:stone_stairs",
+  "properties": {
+    "hardness": 1.5,
+    "explosion_resistance": 1.5,
+    "requires_tool": true,
+    "map_color": 24,
+    "sounds": "minecraft:amethyst_block"
+  },
+  "default_state": {
+    "facing": "north",
+    "half": "bottom",
+    "shape": "straight",
+    "waterlogged": "false"
+  }
+}

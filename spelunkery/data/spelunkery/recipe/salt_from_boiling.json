@@ -1,0 +1,9 @@
+{
+  "cookingtime": 200,
+  "experience": 0.2,
+  "ingredient": "minecraft:water_bucket",
+  "result": {
+    "id": "spelunkery:salt_bucket"
+  },
+  "type": "minecraft:smelting"
+}

@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:weighted",
+    "entries": [
+      {
+        "data": {
+          "id": "mythicupgrades:medium_aquamarine_crystal_bud",
+          "properties": {
+            "facing": "north",
+            "waterlogged": "false"
+          }
+        },
+        "weight": 3
+      },
+      {
+        "data": {
+          "id": "mythicupgrades:large_aquamarine_crystal_bud",
+          "properties": {
+            "facing": "north",
+            "waterlogged": "false"
+          }
+        },
+        "weight": 2
+      },
+      {
+        "data": {
+          "id": "mythicupgrades:aquamarine_crystal_cluster",
+          "properties": {
+            "facing": "north",
+            "waterlogged": "false"
+          }
+        },
+        "weight": 1
+      }
+    ]
+  }
+}

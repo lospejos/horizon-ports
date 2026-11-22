@@ -1,0 +1,59 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "children": [
+            {
+              "condition": {
+                "chance": 0.125,
+                "type": "minecraft:random_chance"
+              },
+              "name": "spelunkery:echo_fork",
+              "type": "minecraft:item"
+            },
+            {
+              "condition": {
+                "chance": 0.25,
+                "type": "minecraft:random_chance"
+              },
+              "modifier": [
+                {
+                  "count": {
+                    "max": 16,
+                    "min": 4,
+                    "type": "minecraft:uniform"
+                  },
+                  "type": "minecraft:set_count"
+                }
+              ],
+              "name": "spelunkery:nephrite_chunk",
+              "type": "minecraft:item"
+            },
+            {
+              "condition": {
+                "chance": 0.2,
+                "type": "minecraft:random_chance"
+              },
+              "modifier": [
+                {
+                  "count": {
+                    "max": 8,
+                    "min": 2,
+                    "type": "minecraft:uniform"
+                  },
+                  "type": "minecraft:set_count"
+                }
+              ],
+              "name": "spelunkery:carved_nephrite",
+              "type": "minecraft:item"
+            }
+          ],
+          "type": "minecraft:alternatives"
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

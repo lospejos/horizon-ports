@@ -1,0 +1,16 @@
+{
+  "discard_chance_on_air_exposure": 0.0,
+  "size": 5,
+  "targets": [
+    {
+      "state": {
+        "id": "mythicupgrades:necoium_ore"
+      },
+      "target": {
+        "predicate_type": "minecraft:tag_match",
+        "tag": "minecraft:stone_ore_replaceables"
+      }
+    }
+  ],
+  "type": "minecraft:ore"
+}

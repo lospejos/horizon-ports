@@ -1,0 +1,16 @@
+{
+  "key": {
+    "#": "minecraft:sculk",
+    "X": "spelunkery:polished_nephrite"
+  },
+  "pattern": [
+    "XXX",
+    "X#X",
+    "XXX"
+  ],
+  "result": {
+    "count": 8,
+    "id": "spelunkery:carved_nephrite"
+  },
+  "type": "minecraft:crafting_shaped"
+}

@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": "spelunkery:rare_huge_mushroom",
+  "step": "vegetal_decoration"
+}

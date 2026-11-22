@@ -1,0 +1,14 @@
+{
+  "key": {
+    "#": "spelunkery:rough_lazurite_shard"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "spelunkery:rough_lazurite"
+  },
+  "type": "minecraft:crafting_shaped"
+}

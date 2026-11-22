@@ -1,0 +1,84 @@
+{
+  "template": "minecraft:activator_rail",
+  "state_properties": {
+    "bottom": {
+      "type": "boolean"
+    },
+    "distance": {
+      "type": "enum",
+      "values": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ]
+    }
+  },
+  "properties": {
+    "hardness": 0.0,
+    "explosion_resistance": 0.0,
+    "requires_tool": false,
+    "map_color": 0,
+    "sounds": "minecraft:oak_planks",
+    "occludes": false
+  },
+  "shapes": {
+    "properties": [
+      "shape"
+    ],
+    "values": {
+      "north_south": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.125,
+          1.0
+        ]
+      ],
+      "east_west": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.125,
+          1.0
+        ]
+      ]
+    },
+    "default": [
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.5,
+        1.0
+      ]
+    ]
+  },
+  "collision_shapes": {
+    "default": [
+      [
+        0.0,
+        -0.0625,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  "default_state": {
+    "bottom": "true",
+    "distance": "0",
+    "shape": "north_south",
+    "waterlogged": "false"
+  }
+}

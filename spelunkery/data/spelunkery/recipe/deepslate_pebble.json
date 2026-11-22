@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "minecraft:cobbled_deepslate"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:deepslate_pebble"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

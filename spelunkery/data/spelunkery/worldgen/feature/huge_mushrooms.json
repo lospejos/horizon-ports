@@ -1,0 +1,11 @@
+{
+  "feature_false": {
+    "feature": "spelunkery:huge_inkcap_mushroom",
+    "placement": []
+  },
+  "feature_true": {
+    "feature": "spelunkery:huge_white_inkcap_mushroom",
+    "placement": []
+  },
+  "type": "minecraft:random_boolean_selector"
+}

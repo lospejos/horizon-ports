@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "minecraft:quartz"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:rough_quartz_shard"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

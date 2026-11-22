@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:simple_random_selector",
+  "features": [
+    "mythicupgrades:citrine_crystal_buds_down",
+    "mythicupgrades:citrine_crystal_buds_up",
+    "mythicupgrades:citrine_crystal_buds_north",
+    "mythicupgrades:citrine_crystal_buds_south",
+    "mythicupgrades:citrine_crystal_buds_east",
+    "mythicupgrades:citrine_crystal_buds_west"
+  ]
+}

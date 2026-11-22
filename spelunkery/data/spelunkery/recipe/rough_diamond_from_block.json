@@ -1,0 +1,10 @@
+{
+  "ingredients": [
+    "spelunkery:rough_diamond_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "spelunkery:rough_diamond"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

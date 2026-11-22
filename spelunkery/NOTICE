@@ -1,0 +1,20 @@
+Spelunkery for Horizon 26.3 (version 0.2.0)
+
+A port of Spelunkery 1.20.1-0.3.16 (Fabric) by Ordana and Keybounce, with contributions from Bobisnotaperson,
+ElBones, Nerjal Nosk, ChromaPIE and Mikeliro (fabric.mod.json).
+Original source: https://github.com/AstralOrdana/Spelunkery
+Homepage: https://www.curseforge.com/minecraft/mc-mods/spelunkery
+Original licence: LGPL-3.0 ("LGPLv3" in fabric.mod.json; the jar ships no licence file)
+
+Ported to Horizon by lavoide: the rules are re-implemented in Rust on Horizon's mod API, and the content (blocks,
+items, textures, models, sounds, loot, recipes, tags, worldgen) is carried over from the original jar and converted
+to 26.3's formats. This port is distributed under the same licence as the original (LGPL-3.0); the licence text is in
+LICENSE, and COPYING is the GNU GPL v3 text the LGPL builds on. Built against Horizon's exact-build SDK
+dd67b76ff23e28c6d8e21859df600d31572f81a0.
+
+Sound attributions (from the original repository's ATTRIBUTIONS file):
+- Spring water ambient bubbling (assets/spelunkery/sounds/block/spring_water/) is modified from "[remix] Hot Tub Loop"
+  by AnLorenzo, https://freesound.org/s/339514/, licensed under Creative Commons Attribution 3.0
+  (https://creativecommons.org/licenses/by/3.0/).
+- The bell jangle sound (assets/spelunkery/sounds/entity/jangle*.ogg) is modified from "bell 5.wav" by patchytherat,
+  https://freesound.org/s/534260/, Creative Commons 0.

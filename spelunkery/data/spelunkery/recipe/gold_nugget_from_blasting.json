@@ -1,0 +1,10 @@
+{
+  "cookingtime": 12,
+  "experience": 0.1,
+  "group": "gold_nugget",
+  "ingredient": "spelunkery:raw_gold_nugget",
+  "result": {
+    "id": "minecraft:gold_nugget"
+  },
+  "type": "minecraft:blasting"
+}

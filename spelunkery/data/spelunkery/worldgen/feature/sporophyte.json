@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:weighted",
+    "entries": [
+      {
+        "data": {
+          "id": "spelunkery:sporophyte"
+        },
+        "weight": 5
+      },
+      {
+        "data": {
+          "id": "spelunkery:tall_sporophyte",
+          "properties": {
+            "half": "lower"
+          }
+        },
+        "weight": 1
+      }
+    ]
+  }
+}

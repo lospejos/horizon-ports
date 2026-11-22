@@ -1,0 +1,121 @@
+{
+  "depth": 1,
+  "extra_bottom_block_chance": 0,
+  "extra_edge_column_chance": 0.75,
+  "ground_state": {
+    "entries": [
+      {
+        "data": {
+          "id": "minecraft:mycelium",
+          "properties": {
+            "snowy": "false"
+          }
+        },
+        "weight": 3
+      },
+      {
+        "data": {
+          "id": "minecraft:coarse_dirt"
+        },
+        "weight": 2
+      }
+    ],
+    "type": "minecraft:weighted"
+  },
+  "replaceable": "#minecraft:moss_replaceable",
+  "surface": "floor",
+  "type": "minecraft:vegetation_patch",
+  "vegetation_chance": 0.6,
+  "vegetation_feature": {
+    "feature": {
+      "default": {
+        "feature": {
+          "cap_provider": {
+            "id": "spelunkery:milly_bubcap_block",
+            "properties": {
+              "down": "false"
+            }
+          },
+          "foliage_radius": 1,
+          "stem_provider": {
+            "id": "minecraft:mushroom_stem",
+            "properties": {
+              "down": "false",
+              "east": "true",
+              "north": "true",
+              "south": "true",
+              "up": "true",
+              "west": "true"
+            }
+          },
+          "type": "minecraft:huge_brown_mushroom",
+          "can_place_on": {
+            "type": "minecraft:matching_block_tag",
+            "tag": "minecraft:huge_brown_mushroom_can_place_on"
+          }
+        },
+        "placement": []
+      },
+      "features": [
+        {
+          "chance": 0.5,
+          "feature": {
+            "feature": {
+              "to_place": {
+                "entries": [
+                  {
+                    "data": {
+                      "id": "spelunkery:milly_bubcap",
+                      "properties": {
+                        "caps": "1"
+                      }
+                    },
+                    "weight": 1
+                  },
+                  {
+                    "data": {
+                      "id": "spelunkery:milly_bubcap",
+                      "properties": {
+                        "caps": "2"
+                      }
+                    },
+                    "weight": 1
+                  },
+                  {
+                    "data": {
+                      "id": "spelunkery:milly_bubcap",
+                      "properties": {
+                        "caps": "3"
+                      }
+                    },
+                    "weight": 1
+                  },
+                  {
+                    "data": {
+                      "id": "spelunkery:milly_bubcap",
+                      "properties": {
+                        "caps": "4"
+                      }
+                    },
+                    "weight": 1
+                  }
+                ],
+                "type": "minecraft:weighted"
+              },
+              "type": "minecraft:simple_block"
+            },
+            "placement": []
+          }
+        }
+      ],
+      "type": "minecraft:random_selector"
+    },
+    "placement": []
+  },
+  "vertical_range": 5,
+  "xz_radius": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 5,
+    "min_inclusive": 4
+  }
+}

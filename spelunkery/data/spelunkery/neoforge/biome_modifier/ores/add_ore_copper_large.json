@@ -1,0 +1,8 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": [
+    "minecraft:dripstone_caves"
+  ],
+  "features": "spelunkery:ore_copper_large",
+  "step": "underground_ores"
+}

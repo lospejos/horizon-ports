@@ -1,0 +1,59 @@
+{
+  "template": "minecraft:stone",
+  "state_properties": {
+    "facing": {
+      "type": "enum",
+      "values": [
+        "north",
+        "east",
+        "south",
+        "west",
+        "up",
+        "down"
+      ]
+    }
+  },
+  "properties": {
+    "hardness": 3.0,
+    "explosion_resistance": 0.5,
+    "requires_tool": false,
+    "map_color": 34,
+    "sounds": "minecraft:mangrove_roots",
+    "random_ticks": true
+  },
+  "default_state": {
+    "facing": "north"
+  },
+  "components": {
+    "minecraft:compostable": {
+      "layers": {
+        "type": "minecraft:number_dispatcher",
+        "cases": [
+          {
+            "condition": {
+              "type": "minecraft:match_block",
+              "blocks": "minecraft:composter",
+              "state": {
+                "level": "0"
+              }
+            },
+            "value": 1
+          }
+        ],
+        "default": {
+          "type": "minecraft:weighted_list",
+          "distribution": [
+            {
+              "data": 1,
+              "weight": 85
+            },
+            {
+              "data": 0,
+              "weight": 15
+            }
+          ]
+        }
+      }
+    }
+  }
+}

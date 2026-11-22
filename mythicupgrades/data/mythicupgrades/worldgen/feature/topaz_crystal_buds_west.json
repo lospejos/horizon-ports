@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:weighted",
+    "entries": [
+      {
+        "data": {
+          "id": "mythicupgrades:medium_topaz_crystal_bud",
+          "properties": {
+            "facing": "west",
+            "waterlogged": "false"
+          }
+        },
+        "weight": 3
+      },
+      {
+        "data": {
+          "id": "mythicupgrades:large_topaz_crystal_bud",
+          "properties": {
+            "facing": "west",
+            "waterlogged": "false"
+          }
+        },
+        "weight": 2
+      },
+      {
+        "data": {
+          "id": "mythicupgrades:topaz_crystal_cluster",
+          "properties": {
+            "facing": "west",
+            "waterlogged": "false"
+          }
+        },
+        "weight": 1
+      }
+    ]
+  }
+}

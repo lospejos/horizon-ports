@@ -1,0 +1,8 @@
+{
+  "ingredient": "spelunkery:nephrite",
+  "result": {
+    "count": 1,
+    "id": "spelunkery:nephrite_stairs"
+  },
+  "type": "minecraft:stonecutting"
+}

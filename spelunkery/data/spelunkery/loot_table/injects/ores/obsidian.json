@@ -1,0 +1,26 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "condition": {
+        "terms": [
+          {
+            "term": "minecraft:tool/can_silk_touch",
+            "type": "minecraft:inverted"
+          },
+          {
+            "type": "minecraft:survives_explosion"
+          }
+        ],
+        "type": "minecraft:all_of"
+      },
+      "entries": [
+        {
+          "name": "minecraft:obsidian",
+          "type": "minecraft:item"
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}
