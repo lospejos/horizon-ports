@@ -1,7 +1,7 @@
 # SDD STATE (keep <= 20 lines)
 Feature: worldmap step 3, fullscreen map (plan in .sdd/features/fullmap/)
 Task: none
-Next: T4 persistence (load tile on demand, write dirty ones; T3 loses dirty evicted tiles until then). Every key-adding task: check Options > Controls for conflicts. gh needs -R lospejos/horizon-ports.
+Next: T5 fullscreen screen on M (needs the key, screen, image of visible tiles via mod_image; load tiles for the view from disk too). Every key-adding task: check Options > Controls for conflicts. gh needs -R lospejos/horizon-ports.
 Blockers: none
 Open questions: none
 Last ADR: 0003
