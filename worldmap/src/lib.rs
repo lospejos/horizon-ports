@@ -1,7 +1,7 @@
 //! Worldmap for Horizon: a minimap drawn over the GUI.
 mod sampler;
 use mod_api::*;
-use sampler::{map_rgba, slope_brightness, water_brightness, Scan, WATER};
+use sampler::{map_rgba, marker_cell, slope_brightness, water_brightness, Scan, WATER};
 use std::collections::HashMap;
 use std::sync::Mutex;
 
@@ -135,5 +135,24 @@ impl Hooks for Mod {
         let x = if corner % 2 == 0 { w - side - MARGIN } else { MARGIN };
         let y = if corner < 2 { MARGIN } else { h - side - MARGIN };
         event.batch.sprite(SPRITE, [0.0, 0.0, SIDE as f32, SIDE as f32], [x, y, side, side], None);
+        let Some(cam) = host.camera() else { return };
+        let (centre, scale) = {
+            let s = lock(&self.0);
+            (s.centre, s.scale)
+        };
+        // The image is centred on where the last pass began, so the marker moves off-centre between passes.
+        let half = SIDE / 2;
+        let px = |pos: f64, c: i32| marker_cell(pos, c, scale, half).clamp(0.0, SIDE as f32) * side / SIDE as f32;
+        let (mx, my) = (x + px(cam.position[0], centre.0), y + px(cam.position[2], centre.1));
+        // Yaw 0 looks along +z; the red tip points where the player looks.
+        let yaw = cam.yaw.to_radians();
+        let (tx, ty) = (mx - yaw.sin() * 6.0, my + yaw.cos() * 6.0);
+        event.batch.fill([mx - 3.0, my - 3.0, 6.0, 6.0], 0xFF000000);
+        event.batch.fill([mx - 2.0, my - 2.0, 4.0, 4.0], 0xFFFFFFFF);
+        event.batch.fill([tx - 1.5, ty - 1.5, 3.0, 3.0], 0xFFFF2020);
+        let text = format!("{} {} {}", cam.position[0].floor(), cam.position[1].floor(), cam.position[2].floor());
+        let tw = event.batch.text_width(&text);
+        let ty = if corner < 2 { y + side + 2.0 } else { y - 10.0 };
+        event.batch.text(&text, [x + (side - tw) / 2.0, ty], 0xFFFFFFFF, true);
     }
 }

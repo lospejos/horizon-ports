@@ -1,6 +1,6 @@
 # SDD STATE (keep <= 20 lines)
 Feature: worldmap (.sdd/features/worldmap/)
-Task: none
+Task: T6 (CI + in-game check pending)
 Next: T6 player marker and coordinates text, T7 offsets, T8 info lines, T9 README. Also fix jerky scroll: draw offset by (camera - pass centre) per frame, needs clipping.
 Blockers: none
 Open questions: none

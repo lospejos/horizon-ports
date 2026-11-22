@@ -44,6 +44,12 @@ pub fn slope_brightness(height: i32, north: Option<i32>) -> u32 {
     }
 }
 
+/// Position along one map axis, in cells from the map's low edge, of world coordinate `pos` on a map
+/// centred on block `centre` with `half` cells to each side and `scale` blocks per cell.
+pub fn marker_cell(pos: f64, centre: i32, scale: i32, half: u32) -> f32 {
+    half as f32 + ((pos - centre as f64) / scale as f64) as f32
+}
+
 /// Walks a `size` x `size` grid row by row, `budget` columns per call, wrapping at the end.
 pub struct Scan {
     pub size: u32,
@@ -124,6 +130,13 @@ mod tests {
         assert_eq!(s.column(15, 100, 200, 1), (101, 201));
         assert_eq!(s.column(0, 100, 200, 2), (96, 196));
         assert_eq!(s.column(15, 100, 200, 2), (102, 202));
+    }
+
+    #[test]
+    fn marker_follows_player_between_passes() {
+        assert_eq!(marker_cell(100.0, 100, 1, 64), 64.0);
+        assert_eq!(marker_cell(110.0, 100, 1, 64), 74.0);
+        assert_eq!(marker_cell(108.0, 100, 4, 64), 66.0);
     }
 
     #[test]
