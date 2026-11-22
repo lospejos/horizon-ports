@@ -1,7 +1,7 @@
 # SDD STATE (keep <= 20 lines)
 Feature: worldmap step 2, waypoints (plan in .sdd/features/worldmap/)
-Task: T10 code written and pushed, waiting for CI (tick when green)
-Next: T11 after T10 CI green. Old next: run /sdd-new <feature description>. Candidates: worldmap step 2 waypoints (T10-T15 in plan, A11-A14 in spec), worldmap jerky-scroll fix (see Follow-ups in worldmap/spec.md), tag worldmap-wasm-v0.1.0 on the user's word, README row in root README.
+Task: none (T10 done, CI green on 69013383)
+Next: T11 create/edit/delete waypoint UI (needs design: key bind, edit screen widgets, how a screen opens). gh needs -R lospejos/horizon-ports (default repo resolves to lavoide).
 Blockers: none
 Open questions: none
 Last ADR: 0002
