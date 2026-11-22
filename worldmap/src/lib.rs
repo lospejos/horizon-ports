@@ -1,7 +1,9 @@
 //! Worldmap for Horizon: a minimap drawn over the GUI.
 mod sampler;
+mod waypoints;
 use mod_api::*;
 use sampler::{clock, map_rgba, pretty_id, marker_cell, slope_brightness, water_brightness, Scan, WATER};
+use waypoints::Waypoints;
 use std::collections::HashMap;
 use std::sync::Mutex;
 
@@ -28,6 +30,9 @@ struct State {
     round: bool,
     /// True once a finished pass was uploaded.
     ready: bool,
+    /// Waypoints of the world in `world` (the key their file is named by).
+    waypoints: Waypoints,
+    world: Option<String>,
 }
 
 struct Mod(Mutex<State>);
@@ -43,12 +48,35 @@ impl Default for Mod {
             scale: 1,
             round: false,
             ready: false,
+            waypoints: Waypoints::default(),
+            world: None,
         }))
     }
 }
 
 fn lock(m: &Mutex<State>) -> std::sync::MutexGuard<'_, State> {
     m.lock().unwrap_or_else(|e| e.into_inner())
+}
+
+/// The key of the world the player is in: its save folder, else the server address.
+fn world_key(host: &dyn ClientHost) -> Option<String> {
+    let server = host.client_session().client_server()?;
+    server.save_folder.or(server.address)
+}
+
+/// Loads the waypoint file of the current world when the world changed; a missing or broken file gives an empty list.
+fn load_waypoints(host: &dyn ClientHost, s: &mut State) {
+    let key = world_key(host);
+    if key == s.world {
+        return;
+    }
+    s.waypoints = key
+        .as_deref()
+        .and_then(|k| ConfigPath::new(&waypoints::file_name(k)).ok())
+        .and_then(|path| host.data_files().read(&path).ok())
+        .and_then(|bytes| Waypoints::parse(&String::from_utf8_lossy(&bytes)))
+        .unwrap_or_default();
+    s.world = key;
 }
 
 #[mod_api::horizon_mod]
@@ -59,6 +87,7 @@ impl Hooks for Mod {
         }
         let Some(pos) = host.camera().map(|c| c.position) else { return };
         let mut s = lock(&self.0);
+        load_waypoints(host, &mut s);
         let range = s.scan.batch(BUDGET);
         if range.start == 0 {
             s.centre = (pos[0].floor() as i32, pos[2].floor() as i32);
