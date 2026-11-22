@@ -10,7 +10,7 @@ const SIDE: u32 = 128;
 /// Columns read per tick (spec A6).
 const BUDGET: u32 = 4096;
 /// The HUD atlas slot `native_mod_image` fills.
-/// Gap to the screen edge in GUI pixels.
+/// Default gap to the screen edge in GUI pixels (the offset settings' default).
 const MARGIN: f32 = 4.0;
 const SPRITE: &str = "horizon/modimage";
 
@@ -114,6 +114,8 @@ impl Hooks for Mod {
                 ["worldmap.corner.top_right", "worldmap.corner.top_left", "worldmap.corner.bottom_right", "worldmap.corner.bottom_left"],
                 0,
             ),
+            SettingSpec::range("offset_x", "worldmap.setting.offset_x", 0.0, 640.0, 1.0, f64::from(MARGIN)),
+            SettingSpec::range("offset_y", "worldmap.setting.offset_y", 0.0, 360.0, 1.0, f64::from(MARGIN)),
             SettingSpec::range("size", "worldmap.setting.size", 64.0, 256.0, 16.0, 128.0),
             SettingSpec::choice("scale", "worldmap.setting.scale", ["worldmap.scale.1", "worldmap.scale.2", "worldmap.scale.4"], 0),
             SettingSpec::choice("shape", "worldmap.setting.shape", ["worldmap.shape.square", "worldmap.shape.round"], 0),
@@ -132,8 +134,11 @@ impl Hooks for Mod {
         let [w, h] = event.batch.size();
         let side = host.setting_f64("size").unwrap_or(128.0).clamp(64.0, 256.0) as f32;
         let corner = host.setting_choice("corner").unwrap_or(0);
-        let x = if corner % 2 == 0 { w - side - MARGIN } else { MARGIN };
-        let y = if corner < 2 { MARGIN } else { h - side - MARGIN };
+        let ox = host.setting_f64("offset_x").unwrap_or(MARGIN as f64) as f32;
+        let oy = host.setting_f64("offset_y").unwrap_or(MARGIN as f64) as f32;
+        // Offsets count inward from the corner; the clamp keeps the map on screen at any GUI scale.
+        let x = (if corner % 2 == 0 { w - side - ox } else { ox }).clamp(0.0, (w - side).max(0.0));
+        let y = (if corner < 2 { oy } else { h - side - oy }).clamp(0.0, (h - side).max(0.0));
         event.batch.sprite(SPRITE, [0.0, 0.0, SIDE as f32, SIDE as f32], [x, y, side, side], None);
         let Some(cam) = host.camera() else { return };
         let (centre, scale) = {

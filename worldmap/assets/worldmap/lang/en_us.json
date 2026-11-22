@@ -1,6 +1,8 @@
 {
   "worldmap.setting.enabled": "Show minimap",
   "worldmap.setting.corner": "Corner",
+  "worldmap.setting.offset_x": "Offset X (pixels from the corner)",
+  "worldmap.setting.offset_y": "Offset Y (pixels from the corner)",
   "worldmap.setting.size": "Size (pixels)",
   "worldmap.setting.scale": "Blocks per cell",
   "worldmap.setting.shape": "Shape",

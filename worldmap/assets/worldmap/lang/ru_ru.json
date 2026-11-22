@@ -1,6 +1,8 @@
 {
   "worldmap.setting.enabled": "Показывать миникарту",
   "worldmap.setting.corner": "Угол",
+  "worldmap.setting.offset_x": "Смещение X (пикселей от угла)",
+  "worldmap.setting.offset_y": "Смещение Y (пикселей от угла)",
   "worldmap.setting.size": "Размер (пикселей)",
   "worldmap.setting.scale": "Блоков на клетку",
   "worldmap.setting.shape": "Форма",
