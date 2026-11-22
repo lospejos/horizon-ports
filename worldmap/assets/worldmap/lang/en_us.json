@@ -19,5 +19,13 @@
   "worldmap.scale.2": "2",
   "worldmap.scale.4": "4",
   "worldmap.shape.square": "Square",
-  "worldmap.shape.round": "Round"
+  "worldmap.shape.round": "Round",
+  "worldmap.key.waypoints": "Waypoints",
+  "worldmap.wp.new": "New",
+  "worldmap.wp.save": "Save",
+  "worldmap.wp.delete": "Delete",
+  "worldmap.wp.sure": "Sure?",
+  "worldmap.wp.close": "Close",
+  "worldmap.wp.name": "Name",
+  "worldmap.wp.fresh": "New waypoint"
 }

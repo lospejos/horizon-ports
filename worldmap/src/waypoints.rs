@@ -113,6 +113,20 @@ fn unescape(s: &str) -> String {
     out
 }
 
+/// The waypoint shown after a step: `None` is the blank "new" entry. From a waypoint it moves to the next or
+/// previous one, wrapping; from the blank entry, forward goes to the first and back to the last.
+pub fn step(index: Option<usize>, len: usize, forward: bool) -> Option<usize> {
+    if len == 0 {
+        return None;
+    }
+    Some(match (index, forward) {
+        (None, true) => 0,
+        (None, false) => len - 1,
+        (Some(i), true) => (i + 1) % len,
+        (Some(i), false) => (i + len - 1) % len,
+    })
+}
+
 /// A file name for a world key (a save folder or a server address): safe characters stay, the rest become `_`.
 /// The key's FNV-1a hash is appended so two keys that differ only in unsafe characters keep separate files.
 pub fn file_name(key: &str) -> String {
@@ -162,6 +176,15 @@ mod tests {
         let good = Waypoints(vec![wp("a")]).serialize();
         let text = format!("{good}garbage\na\t1\t2\tx\td\tFFFFFF\ti\t1\na\t1\t2\t3\td\t1000000\ti\t1\n");
         assert_eq!(Waypoints::parse(&text).unwrap().list().len(), 1);
+    }
+
+    #[test]
+    fn step_wraps() {
+        assert_eq!(step(None, 0, true), None);
+        assert_eq!(step(None, 3, true), Some(0));
+        assert_eq!(step(None, 3, false), Some(2));
+        assert_eq!(step(Some(2), 3, true), Some(0));
+        assert_eq!(step(Some(0), 3, false), Some(2));
     }
 
     #[test]

@@ -1,8 +1,10 @@
 //! Worldmap for Horizon: a minimap drawn over the GUI.
 mod sampler;
+mod screen;
 mod waypoints;
 use mod_api::*;
 use sampler::{clock, map_rgba, pretty_id, marker_cell, slope_brightness, water_brightness, Scan, WATER};
+use mod_api::client::widgets::Outcome;
 use waypoints::Waypoints;
 use std::collections::HashMap;
 use std::sync::Mutex;
@@ -33,6 +35,10 @@ struct State {
     /// Waypoints of the world in `world` (the key their file is named by).
     waypoints: Waypoints,
     world: Option<String>,
+    /// The waypoint screen while it is open.
+    screen: Option<screen::Screen>,
+    /// A button asked to close the screen; the next client tick does it (input hooks only read).
+    want_close: bool,
 }
 
 struct Mod(Mutex<State>);
@@ -50,12 +56,44 @@ impl Default for Mod {
             ready: false,
             waypoints: Waypoints::default(),
             world: None,
+            screen: None,
+            want_close: false,
         }))
     }
 }
 
 fn lock(m: &Mutex<State>) -> std::sync::MutexGuard<'_, State> {
     m.lock().unwrap_or_else(|e| e.into_inner())
+}
+
+/// This mod's id: names its screen and its key mapping.
+const ID: &str = "worldmap";
+
+/// Writes the world's waypoint file; a failure is logged and the list stays in memory.
+fn save_waypoints(host: &dyn ClientHost, s: &State) {
+    let Some(key) = s.world.as_deref() else { return };
+    let Ok(path) = ConfigPath::new(&waypoints::file_name(key)) else { return };
+    if let Err(e) = host.data_files().write(&path, s.waypoints.serialize().as_bytes()) {
+        eprintln!("[worldmap] waypoints not saved: {e:?}");
+    }
+}
+
+/// Runs `input` on the open waypoint screen's widgets, acts on the answer, and says whether the game should drop the input.
+fn screen_input(m: &Mutex<State>, host: &dyn ClientHost, input: impl FnOnce(&mut mod_api::client::widgets::Widgets) -> Outcome) -> Flow {
+    if host.mod_screen() != Some(ID) {
+        return Flow::Continue;
+    }
+    let mut guard = lock(m);
+    let s = &mut *guard;
+    let Some(screen) = s.screen.as_mut() else { return Flow::Continue };
+    let outcome = input(&mut screen.widgets);
+    let act = screen.act(outcome, &mut s.waypoints);
+    screen.refresh();
+    if act.save {
+        save_waypoints(host, s);
+    }
+    s.want_close |= act.close;
+    if outcome.handled() { Flow::Cancel } else { Flow::Continue }
 }
 
 /// The key of the world the player is in: its save folder, else the server address.
@@ -81,6 +119,18 @@ fn load_waypoints(host: &dyn ClientHost, s: &mut State) {
 
 #[mod_api::horizon_mod]
 impl Hooks for Mod {
+    fn client_tick_pre(&self, host: &mut dyn ClientHost, _: &mut ClientTickPreEvent) {
+        let mut s = lock(&self.0);
+        if std::mem::take(&mut s.want_close) {
+            host.mod_screen_close(ID);
+        }
+        // The key counts only while no screen is open.
+        if host.consume_click(ID, "waypoints") {
+            s.screen = None;
+            host.mod_screen_open(ID);
+        }
+    }
+
     fn client_tick_post(&self, host: &mut dyn ClientHost, _: &mut ClientTickPostEvent) {
         if host.setting_bool("enabled") == Some(false) {
             return;
@@ -154,11 +204,67 @@ impl Hooks for Mod {
             SettingSpec::choice("scale", "worldmap.setting.scale", ["worldmap.scale.1", "worldmap.scale.2", "worldmap.scale.4"], 0),
             SettingSpec::choice("shape", "worldmap.setting.shape", ["worldmap.shape.square", "worldmap.shape.round"], 0),
         ];
+        if let Err(e) = registrar.register_key_mapping(KeyRegistration::new("waypoints", "key.keyboard.b").label("worldmap.key.waypoints")) {
+            eprintln!("[worldmap] key refused: {e:?}");
+        }
         for s in settings {
             if let Err(e) = registrar.register_setting(s) {
                 eprintln!("[worldmap] setting refused: {e:?}");
             }
         }
+    }
+
+    fn screen_render_post(&self, host: &dyn ClientHost, event: &mut ScreenRenderPostEvent<'_>) {
+        if host.mod_screen() != Some(ID) {
+            return;
+        }
+        let [width, _] = event.draw.size();
+        let mut guard = lock(&self.0);
+        let s = &mut *guard;
+        let screen = s.screen.get_or_insert_with(|| {
+            let here = host.camera().map_or([0; 3], |c| c.position.map(|v| v.floor() as i32));
+            screen::Screen::new(width, here, host.dimension().to_string())
+        });
+        let x = (width / 2.0 - 100.0).floor();
+        event.draw.fill([x - 6.0, 20.0, 212.0, 166.0], 0x80000000);
+        let tr = |key: &str, fallback: &str| host.translate(key).unwrap_or_else(|| fallback.to_owned());
+        let title = match screen.number() {
+            Some(n) => format!("{n} / {}", s.waypoints.list().len()),
+            None => tr("worldmap.wp.fresh", "New waypoint"),
+        };
+        let tw = event.draw.text_width(&title);
+        event.draw.text(&title, [x + (200.0 - tw) / 2.0, 36.0], 0xFFFFFFFF, true);
+        for (text, dx, y) in screen::Screen::CAPTIONS {
+            let text = if text.is_empty() { tr("worldmap.wp.name", "Name") } else { text.to_owned() };
+            event.draw.text(&text, [x + dx, y], 0xFFA0A0A0, true);
+        }
+        // A refused label is not drawn; the screen stays usable.
+        let _ = screen.widgets.draw(&mut *event.draw, host, event.screen.mouse);
+    }
+
+    fn screen_mouse_button_pressed_pre(&self, host: &dyn ClientHost, event: &mut ScreenMouseButtonPressedPreEvent<'_>) -> Flow {
+        let (at, button, modifiers) = (event.screen.mouse, event.button, event.modifiers);
+        screen_input(&self.0, host, |w| w.mouse_pressed(host, at, button, modifiers))
+    }
+
+    fn screen_mouse_button_released_pre(&self, host: &dyn ClientHost, event: &mut ScreenMouseButtonReleasedPreEvent<'_>) -> Flow {
+        let button = event.button;
+        screen_input(&self.0, host, |w| w.mouse_released(button))
+    }
+
+    fn screen_mouse_dragged_pre(&self, host: &dyn ClientHost, event: &mut ScreenMouseDraggedPreEvent<'_>) -> Flow {
+        let (at, button) = (event.screen.mouse, event.button);
+        screen_input(&self.0, host, |w| w.mouse_dragged(host, at, button))
+    }
+
+    fn screen_key_pressed_pre(&self, host: &dyn ClientHost, event: &mut ScreenKeyPressedPreEvent<'_>) -> Flow {
+        let (key, modifiers) = (event.key, event.modifiers);
+        screen_input(&self.0, host, |w| w.key_pressed(host, key, modifiers))
+    }
+
+    fn screen_char_typed_pre(&self, host: &dyn ClientHost, event: &mut ScreenCharTypedPreEvent<'_>) -> Flow {
+        let c = event.c;
+        screen_input(&self.0, host, |w| w.char_typed(host, c))
     }
 
     fn gui_render_post(&self, host: &dyn ClientHost, event: &mut GuiRenderPostEvent<'_>) {

@@ -19,5 +19,13 @@
   "worldmap.scale.2": "2",
   "worldmap.scale.4": "4",
   "worldmap.shape.square": "Квадрат",
-  "worldmap.shape.round": "Круг"
+  "worldmap.shape.round": "Круг",
+  "worldmap.key.waypoints": "Метки",
+  "worldmap.wp.new": "Новая",
+  "worldmap.wp.save": "Сохранить",
+  "worldmap.wp.delete": "Удалить",
+  "worldmap.wp.sure": "Точно?",
+  "worldmap.wp.close": "Закрыть",
+  "worldmap.wp.name": "Название",
+  "worldmap.wp.fresh": "Новая метка"
 }
