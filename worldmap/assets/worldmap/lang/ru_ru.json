@@ -11,6 +11,7 @@
   "worldmap.setting.size": "Размер (пикселей)",
   "worldmap.setting.scale": "Блоков на клетку",
   "worldmap.setting.shape": "Форма",
+  "worldmap.setting.explored_only": "Карта только из загруженных чанков",
   "worldmap.corner.top_right": "Справа сверху",
   "worldmap.corner.top_left": "Слева сверху",
   "worldmap.corner.bottom_right": "Справа снизу",

@@ -11,6 +11,7 @@
   "worldmap.setting.size": "Size (pixels)",
   "worldmap.setting.scale": "Blocks per cell",
   "worldmap.setting.shape": "Shape",
+  "worldmap.setting.explored_only": "Map from loaded chunks only",
   "worldmap.corner.top_right": "Top right",
   "worldmap.corner.top_left": "Top left",
   "worldmap.corner.bottom_right": "Bottom right",

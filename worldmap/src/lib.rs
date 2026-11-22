@@ -217,8 +217,17 @@ fn explore(host: &dyn ClientHost, s: &mut State, player: (i32, i32)) {
         put(host, s, key, tiles::Tile::default());
     }
     let Some(tile) = s.store.get_mut(key) else { return };
+    // Option: keep only columns of chunks the client has loaded, since far terrain of unvisited areas is approximate.
+    // Skipped columns keep what the tile holds (old data is not erased).
+    let only_loaded = host.setting_bool("explored_only") == Some(true);
+    let y = host.camera().map_or(64, |c| c.position[1].floor() as i32);
+    let base: &dyn Host = host;
+    let mut chunks = std::collections::HashMap::new();
     for (&(x, z), col) in cols.iter().zip(found) {
         let Some(c) = col else { continue };
+        if only_loaded && !*chunks.entry((x >> 4, z >> 4)).or_insert_with(|| host.level(host.dimension()).and_then(|l| l.client_biome(base, [x, y, z])).is_some()) {
+            continue;
+        }
         let id = map_color(host, &mut s.colors, c.block);
         let (id, brightness, level) = shade(id, c.height, c.water, tile.north_height(x, z));
         tile.set(x, z, tiles::Column { color: id, shade: tiles::shade_of(brightness), height: level.clamp(i16::MIN.into(), i16::MAX.into()) as i16 });
@@ -586,6 +595,7 @@ impl Hooks for Mod {
             SettingSpec::range("size", "worldmap.setting.size", 64.0, 256.0, 16.0, 128.0),
             SettingSpec::choice("scale", "worldmap.setting.scale", ["worldmap.scale.1", "worldmap.scale.2", "worldmap.scale.4"], 0),
             SettingSpec::choice("shape", "worldmap.setting.shape", ["worldmap.shape.square", "worldmap.shape.round"], 0),
+            SettingSpec::toggle("explored_only", "worldmap.setting.explored_only", false),
         ];
         registrar.register_key_mapping(KeyRegistration::new("waypoints", "key.keyboard.n").label("worldmap.key.waypoints"));
         registrar.register_key_mapping(KeyRegistration::new("map", "key.keyboard.m").label("worldmap.key.map"));
