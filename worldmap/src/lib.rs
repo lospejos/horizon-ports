@@ -224,8 +224,12 @@ fn explore(host: &dyn ClientHost, s: &mut State, player: (i32, i32)) {
     }
 }
 
-/// Surface height stored for world column `(x, z)`; None when the tile or the column is unknown.
-fn surface(store: &tiles::Store, x: i32, z: i32) -> Option<i32> {
+/// Surface height stored for world column `(x, z)`; None when the tile or the column is unknown,
+/// and in the Nether, where the scan sees the bedrock roof, not a place to stand.
+fn surface(host: &dyn ClientHost, store: &tiles::Store, x: i32, z: i32) -> Option<i32> {
+    if host.dimension() == "minecraft:the_nether" {
+        return None;
+    }
     store.peek(tiles::tile_of(x, z)).map(|t| t.get(x, z)).filter(|c| c.color != 0).map(|c| i32::from(c.height))
 }
 
@@ -364,12 +368,13 @@ fn draw_map(host: &dyn ClientHost, event: &mut ScreenRenderPostEvent<'_>, m: &mu
     let mouse = event.screen.mouse;
     if mouse[1] < size[1] - 30.0 {
         let (x, z) = m.to_world(mouse);
-        let y = surface(store, x, z);
+        let y = surface(host, store, x, z);
         let mut line = format!("X {x}  Z {z}");
         if let Some(y) = y {
             line.push_str(&format!("  Y {y}"));
         }
-        if let Some(y) = y {
+        // Without a stored Y the biome is asked at the player's height.
+        if let Some(y) = y.or_else(|| host.camera().map(|c| c.position[1].floor() as i32)) {
             let base: &dyn Host = host;
             if let Some(b) = host.level(host.dimension()).and_then(|l| l.client_biome(base, [x, y, z])) {
                 line.push_str("  ");
@@ -621,7 +626,7 @@ impl Hooks for Mod {
         } else if button == 1 {
             // A right click starts a new waypoint here, at the stored surface (Y = height + 1), else at the player's height.
             let (x, z) = m.to_world(at);
-            let y = surface(&s.store, x, z).map_or_else(|| host.camera().map_or(64, |c| c.position[1].floor() as i32), |h| h + 1);
+            let y = surface(host, &s.store, x, z).map_or_else(|| host.camera().map_or(64, |c| c.position[1].floor() as i32), |h| h + 1);
             s.open_here = Some([x, y, z]);
             s.open = Some(None);
             return Flow::Cancel;
@@ -641,7 +646,7 @@ impl Hooks for Mod {
         // A press and release with no drag between is a click: choose that point for Teleport (Y: stored surface + 1, else the player's).
         if let Some(at) = m.press.take().filter(|_| !m.moved) {
             let (x, z) = m.to_world(at);
-            let y = surface(&s.store, x, z).map_or_else(|| host.camera().map_or(64, |c| c.position[1].floor() as i32), |h| h + 1);
+            let y = surface(host, &s.store, x, z).map_or_else(|| host.camera().map_or(64, |c| c.position[1].floor() as i32), |h| h + 1);
             m.set_target(Some([x, y, z]));
         }
         flow
