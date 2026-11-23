@@ -15,3 +15,5 @@ gh release download trinkets-wasm-v0.5.2 -R lospejos/horizon-ports -p "*.hmod" -
 ```
 
 For a newer version, change only the tag. `gh release list -R lospejos/horizon-ports` lists the tags. Or download `trinkets.hmod` from the release page by hand.
+
+To follow the latest CI build instead (branch builds without a release too), use [horizon-mod-updater](https://github.com/lospejos/horizon-mod-updater): `.\update_mod.ps1 -Mod trinkets`.
