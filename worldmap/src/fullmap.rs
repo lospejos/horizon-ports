@@ -127,7 +127,8 @@ impl MapView {
 
     /// Moves the view with the mouse: content follows a drag of `delta` GUI pixels.
     pub fn pan(&mut self, delta: [f32; 2]) {
-        let per_pixel = self.scale as f32 / image_factor(self.gui);
+        // The image is stretched over the whole screen, so a GUI pixel is `factor` image pixels.
+        let per_pixel = self.scale as f32 * image_factor(self.gui);
         for (axis, d) in delta.into_iter().enumerate() {
             let blocks = self.frac[axis] - d * per_pixel;
             let whole = blocks.trunc();
@@ -166,14 +167,13 @@ impl MapView {
 
     /// GUI position of world point `(x, z)`.
     pub fn to_gui(&self, x: f64, z: f64) -> [f32; 2] {
-        let f = image_factor(self.gui);
-        let k = f / self.scale as f32;
+        let k = 1.0 / (image_factor(self.gui) * self.scale as f32);
         [self.gui[0] / 2.0 + (x - f64::from(self.centre.0)) as f32 * k, self.gui[1] / 2.0 + (z - f64::from(self.centre.1)) as f32 * k]
     }
 
     /// World column under GUI position `at`; the inverse of `to_gui`.
     pub fn to_world(&self, at: [f32; 2]) -> (i32, i32) {
-        let k = image_factor(self.gui) / self.scale as f32;
+        let k = 1.0 / (image_factor(self.gui) * self.scale as f32);
         (self.centre.0 + ((at[0] - self.gui[0] / 2.0) / k).floor() as i32, self.centre.1 + ((at[1] - self.gui[1] / 2.0) / k).floor() as i32)
     }
 
@@ -286,6 +286,16 @@ mod tests {
         assert!(v.act(Outcome::Pressed(v.close), (0, 0)).teleport.is_none());
         v.set_target(None);
         assert!(!v.widgets.button_mut(v.tp_btn).unwrap().active);
+    }
+
+    #[test]
+    fn big_screen_maps_the_stretched_image() {
+        // 2560 wide: the image is 1024 px (factor 0.4) stretched over the screen, 2.5 GUI px a block.
+        let mut v = MapView::new([2560.0, 1440.0], (100, 100));
+        assert_eq!(v.to_world([1280.0 + 25.0, 720.0]), (110, 100));
+        assert_eq!(v.to_gui(110.0, 100.0), [1305.0, 720.0]);
+        v.pan([-25.0, 0.0]);
+        assert_eq!(v.centre, (110, 100), "dragging 25 GUI px moves 10 blocks");
     }
 
     #[test]
