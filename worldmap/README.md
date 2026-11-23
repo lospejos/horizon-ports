@@ -23,7 +23,7 @@ Not done yet: radar, cave mode, sharing maps. The minimap image moves in small j
 Download the release into the game's mods folder (the `horizon-mods` folder of the instance or of the launcher's data directory; `--clobber` replaces the old file), then restart the game:
 
 ```powershell
-gh release download worldmap-wasm-v0.3.0 -R lospejos/horizon-ports -p "*.hmod" -D "C:\Users\User\AppData\Roaming\horizon\horizon-mods" --clobber
+gh release download worldmap-wasm-v0.3.1 -R lospejos/horizon-ports -p "*.hmod" -D "C:\Users\User\AppData\Roaming\horizon\horizon-mods" --clobber
 ```
 
 For a newer version, change only the tag. `gh release list -R lospejos/horizon-ports` lists the tags. Or download `worldmap.hmod` from the release page by hand.
